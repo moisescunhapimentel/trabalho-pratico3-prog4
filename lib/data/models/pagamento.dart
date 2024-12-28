@@ -3,19 +3,23 @@ import 'dart:convert';
 import 'package:trabalho3/data/enums/tipo_pagamento.dart';
 
 class Pagamento {
+  final int? id;
   final double valor;
   final TipoPagamento tipoPagamento;
 
   Pagamento({
+    this.id,
     required this.valor,
     required this.tipoPagamento,
   });
 
   Pagamento copyWith({
+    int? id,
     double? valor,
     TipoPagamento? tipoPagamento,
   }) {
     return Pagamento(
+      id: id ?? this.id,
       valor: valor ?? this.valor,
       tipoPagamento: tipoPagamento ?? this.tipoPagamento,
     );
@@ -23,6 +27,7 @@ class Pagamento {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'valor': valor,
       'tipoPagamento': tipoPagamento.name,
     };
@@ -30,6 +35,7 @@ class Pagamento {
 
   factory Pagamento.fromMap(Map<String, dynamic> map) {
     return Pagamento(
+      id: map['id'],
       valor: map['valor'] as double,
       tipoPagamento: TipoPagamentoExtension.byName(map['tipoPagamento']),
     );
@@ -42,15 +48,17 @@ class Pagamento {
 
   @override
   String toString() =>
-      'Pagamento(valor: $valor, tipoPagamento: $tipoPagamento)';
+      'Pagamento(id: $id, valor: $valor, tipoPagamento: $tipoPagamento)';
 
   @override
   bool operator ==(covariant Pagamento other) {
     if (identical(this, other)) return true;
 
-    return other.valor == valor && other.tipoPagamento == tipoPagamento;
+    return other.id == id &&
+        other.valor == valor &&
+        other.tipoPagamento == tipoPagamento;
   }
 
   @override
-  int get hashCode => valor.hashCode ^ tipoPagamento.hashCode;
+  int get hashCode => id.hashCode ^ valor.hashCode ^ tipoPagamento.hashCode;
 }

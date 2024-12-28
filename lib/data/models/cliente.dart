@@ -3,11 +3,14 @@ import 'dart:convert';
 import 'package:trabalho3/data/models/contato.dart';
 
 class Cliente {
+  final int id;
   final String nome;
   final String cPF;
   final Contato contato;
   final String dataNascimento;
+
   Cliente({
+    required this.id,
     required this.nome,
     required this.cPF,
     required this.contato,
@@ -15,12 +18,14 @@ class Cliente {
   });
 
   Cliente copyWith({
+    int? id,
     String? nome,
     String? cPF,
     Contato? contato,
     String? dataNascimento,
   }) {
     return Cliente(
+      id: id ?? this.id,
       nome: nome ?? this.nome,
       cPF: cPF ?? this.cPF,
       contato: contato ?? this.contato,
@@ -30,6 +35,7 @@ class Cliente {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'nome': nome,
       'cPF': cPF,
       'contato': contato.toMap(),
@@ -39,6 +45,7 @@ class Cliente {
 
   factory Cliente.fromMap(Map<String, dynamic> map) {
     return Cliente(
+      id: map['id'] as int,
       nome: map['nome'] as String,
       cPF: map['cPF'] as String,
       contato: Contato.fromMap(map['contato'] as Map<String, dynamic>),
@@ -53,14 +60,15 @@ class Cliente {
 
   @override
   String toString() {
-    return 'Cliente(nome: $nome, cPF: $cPF, contato: $contato, dataNascimento: $dataNascimento)';
+    return 'Cliente(id: $id, nome: $nome, cPF: $cPF, contato: $contato, dataNascimento: $dataNascimento)';
   }
 
   @override
   bool operator ==(covariant Cliente other) {
     if (identical(this, other)) return true;
 
-    return other.nome == nome &&
+    return other.id == id &&
+        other.nome == nome &&
         other.cPF == cPF &&
         other.contato == contato &&
         other.dataNascimento == dataNascimento;
@@ -68,7 +76,8 @@ class Cliente {
 
   @override
   int get hashCode {
-    return nome.hashCode ^
+    return id.hashCode ^
+        nome.hashCode ^
         cPF.hashCode ^
         contato.hashCode ^
         dataNascimento.hashCode;

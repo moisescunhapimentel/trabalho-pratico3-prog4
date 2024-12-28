@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 class Endereco {
+  final int id;
   final String rua;
   final String bairro;
   final String numero;
   final String cEP;
+
   Endereco({
+    required this.id,
     required this.rua,
     required this.bairro,
     required this.numero,
@@ -13,12 +16,14 @@ class Endereco {
   });
 
   Endereco copyWith({
+    int? id,
     String? rua,
     String? bairro,
     String? numero,
     String? cEP,
   }) {
     return Endereco(
+      id: id ?? this.id,
       rua: rua ?? this.rua,
       bairro: bairro ?? this.bairro,
       numero: numero ?? this.numero,
@@ -28,6 +33,7 @@ class Endereco {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'rua': rua,
       'bairro': bairro,
       'numero': numero,
@@ -37,6 +43,7 @@ class Endereco {
 
   factory Endereco.fromMap(Map<String, dynamic> map) {
     return Endereco(
+      id: map['id'] as int,
       rua: map['rua'] as String,
       bairro: map['bairro'] as String,
       numero: map['numero'] as String,
@@ -51,14 +58,15 @@ class Endereco {
 
   @override
   String toString() {
-    return 'Endereco(rua: $rua, bairro: $bairro, numero: $numero, cEP: $cEP)';
+    return 'Endereco(id: $id, rua: $rua, bairro: $bairro, numero: $numero, cEP: $cEP)';
   }
 
   @override
   bool operator ==(covariant Endereco other) {
     if (identical(this, other)) return true;
 
-    return other.rua == rua &&
+    return other.id == id &&
+        other.rua == rua &&
         other.bairro == bairro &&
         other.numero == numero &&
         other.cEP == cEP;
@@ -66,6 +74,10 @@ class Endereco {
 
   @override
   int get hashCode {
-    return rua.hashCode ^ bairro.hashCode ^ numero.hashCode ^ cEP.hashCode;
+    return id.hashCode ^
+        rua.hashCode ^
+        bairro.hashCode ^
+        numero.hashCode ^
+        cEP.hashCode;
   }
 }
