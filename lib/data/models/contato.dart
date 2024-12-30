@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-class Contato {
-  final int id;
+import 'package:trabalho3/data/my_data_class.dart';
+
+class Contato extends MyDataClass {
   final String numero;
   final String dDD;
   Contato({
-    required this.id,
     required this.numero,
     required this.dDD,
   });
@@ -16,7 +16,6 @@ class Contato {
     String? dDD,
   }) {
     return Contato(
-      id: id ?? this.id,
       numero: numero ?? this.numero,
       dDD: dDD ?? this.dDD,
     );
@@ -24,7 +23,6 @@ class Contato {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
       'numero': numero,
       'dDD': dDD,
     };
@@ -32,7 +30,6 @@ class Contato {
 
   factory Contato.fromMap(Map<String, dynamic> map) {
     return Contato(
-      id: map['id'] as int,
       numero: map['numero'] as String,
       dDD: map['dDD'] as String,
     );
@@ -44,15 +41,15 @@ class Contato {
       Contato.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() => 'Contato(id: $id, numero: $numero, dDD: $dDD)';
+  String toString() => 'Contato(numero: $numero, dDD: $dDD)';
 
   @override
   bool operator ==(covariant Contato other) {
     if (identical(this, other)) return true;
 
-    return other.id == id && other.numero == numero && other.dDD == dDD;
+    return other.numero == numero && other.dDD == dDD;
   }
 
   @override
-  int get hashCode => id.hashCode ^ numero.hashCode ^ dDD.hashCode;
+  int get hashCode => numero.hashCode ^ dDD.hashCode;
 }
