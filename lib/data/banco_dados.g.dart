@@ -558,21 +558,169 @@ class ComodoTableCompanion extends UpdateCompanion<Comodo> {
   }
 }
 
+class $PagamentoTableTable extends PagamentoTable
+    with TableInfo<$PagamentoTableTable, Pagamento> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PagamentoTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _tipoPagamentoMeta =
+      const VerificationMeta('tipoPagamento');
+  @override
+  late final GeneratedColumnWithTypeConverter<TipoPagamento, String>
+      tipoPagamento = GeneratedColumn<String>(
+              'tipo_pagamento', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<TipoPagamento>(
+              $PagamentoTableTable.$convertertipoPagamento);
+  static const VerificationMeta _valorMeta = const VerificationMeta('valor');
+  @override
+  late final GeneratedColumn<double> valor = GeneratedColumn<double>(
+      'valor', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, tipoPagamento, valor];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'pagamento_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<Pagamento> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    context.handle(_tipoPagamentoMeta, const VerificationResult.success());
+    if (data.containsKey('valor')) {
+      context.handle(
+          _valorMeta, valor.isAcceptableOrUnknown(data['valor']!, _valorMeta));
+    } else if (isInserting) {
+      context.missing(_valorMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Pagamento map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Pagamento(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      valor: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}valor'])!,
+      tipoPagamento: $PagamentoTableTable.$convertertipoPagamento.fromSql(
+          attachedDatabase.typeMapping.read(
+              DriftSqlType.string, data['${effectivePrefix}tipo_pagamento'])!),
+    );
+  }
+
+  @override
+  $PagamentoTableTable createAlias(String alias) {
+    return $PagamentoTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<TipoPagamento, String, String>
+      $convertertipoPagamento =
+      const EnumNameConverter<TipoPagamento>(TipoPagamento.values);
+}
+
+class PagamentoTableCompanion extends UpdateCompanion<Pagamento> {
+  final Value<int> id;
+  final Value<TipoPagamento> tipoPagamento;
+  final Value<double> valor;
+  const PagamentoTableCompanion({
+    this.id = const Value.absent(),
+    this.tipoPagamento = const Value.absent(),
+    this.valor = const Value.absent(),
+  });
+  PagamentoTableCompanion.insert({
+    this.id = const Value.absent(),
+    required TipoPagamento tipoPagamento,
+    required double valor,
+  })  : tipoPagamento = Value(tipoPagamento),
+        valor = Value(valor);
+  static Insertable<Pagamento> custom({
+    Expression<int>? id,
+    Expression<String>? tipoPagamento,
+    Expression<double>? valor,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (tipoPagamento != null) 'tipo_pagamento': tipoPagamento,
+      if (valor != null) 'valor': valor,
+    });
+  }
+
+  PagamentoTableCompanion copyWith(
+      {Value<int>? id,
+      Value<TipoPagamento>? tipoPagamento,
+      Value<double>? valor}) {
+    return PagamentoTableCompanion(
+      id: id ?? this.id,
+      tipoPagamento: tipoPagamento ?? this.tipoPagamento,
+      valor: valor ?? this.valor,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (tipoPagamento.present) {
+      map['tipo_pagamento'] = Variable<String>($PagamentoTableTable
+          .$convertertipoPagamento
+          .toSql(tipoPagamento.value));
+    }
+    if (valor.present) {
+      map['valor'] = Variable<double>(valor.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PagamentoTableCompanion(')
+          ..write('id: $id, ')
+          ..write('tipoPagamento: $tipoPagamento, ')
+          ..write('valor: $valor')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$BancoDados extends GeneratedDatabase {
   _$BancoDados(QueryExecutor e) : super(e);
   $BancoDadosManager get managers => $BancoDadosManager(this);
   late final $EnderecoTableTable enderecoTable = $EnderecoTableTable(this);
   late final $ClienteTableTable clienteTable = $ClienteTableTable(this);
   late final $ComodoTableTable comodoTable = $ComodoTableTable(this);
+  late final $PagamentoTableTable pagamentoTable = $PagamentoTableTable(this);
   late final EnderecoDao enderecoDao = EnderecoDao(this as BancoDados);
   late final ClienteDao clienteDao = ClienteDao(this as BancoDados);
   late final ComodoDao comodoDao = ComodoDao(this as BancoDados);
+  late final PagamentoDao pagamentoDao = PagamentoDao(this as BancoDados);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [enderecoTable, clienteTable, comodoTable];
+      [enderecoTable, clienteTable, comodoTable, pagamentoTable];
 }
 
 typedef $$EnderecoTableTableCreateCompanionBuilder = EnderecoTableCompanion
@@ -1050,6 +1198,141 @@ typedef $$ComodoTableTableProcessedTableManager = ProcessedTableManager<
     (Comodo, BaseReferences<_$BancoDados, $ComodoTableTable, Comodo>),
     Comodo,
     PrefetchHooks Function()>;
+typedef $$PagamentoTableTableCreateCompanionBuilder = PagamentoTableCompanion
+    Function({
+  Value<int> id,
+  required TipoPagamento tipoPagamento,
+  required double valor,
+});
+typedef $$PagamentoTableTableUpdateCompanionBuilder = PagamentoTableCompanion
+    Function({
+  Value<int> id,
+  Value<TipoPagamento> tipoPagamento,
+  Value<double> valor,
+});
+
+class $$PagamentoTableTableFilterComposer
+    extends Composer<_$BancoDados, $PagamentoTableTable> {
+  $$PagamentoTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<TipoPagamento, TipoPagamento, String>
+      get tipoPagamento => $composableBuilder(
+          column: $table.tipoPagamento,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnFilters<double> get valor => $composableBuilder(
+      column: $table.valor, builder: (column) => ColumnFilters(column));
+}
+
+class $$PagamentoTableTableOrderingComposer
+    extends Composer<_$BancoDados, $PagamentoTableTable> {
+  $$PagamentoTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get tipoPagamento => $composableBuilder(
+      column: $table.tipoPagamento,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get valor => $composableBuilder(
+      column: $table.valor, builder: (column) => ColumnOrderings(column));
+}
+
+class $$PagamentoTableTableAnnotationComposer
+    extends Composer<_$BancoDados, $PagamentoTableTable> {
+  $$PagamentoTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<TipoPagamento, String> get tipoPagamento =>
+      $composableBuilder(
+          column: $table.tipoPagamento, builder: (column) => column);
+
+  GeneratedColumn<double> get valor =>
+      $composableBuilder(column: $table.valor, builder: (column) => column);
+}
+
+class $$PagamentoTableTableTableManager extends RootTableManager<
+    _$BancoDados,
+    $PagamentoTableTable,
+    Pagamento,
+    $$PagamentoTableTableFilterComposer,
+    $$PagamentoTableTableOrderingComposer,
+    $$PagamentoTableTableAnnotationComposer,
+    $$PagamentoTableTableCreateCompanionBuilder,
+    $$PagamentoTableTableUpdateCompanionBuilder,
+    (Pagamento, BaseReferences<_$BancoDados, $PagamentoTableTable, Pagamento>),
+    Pagamento,
+    PrefetchHooks Function()> {
+  $$PagamentoTableTableTableManager(_$BancoDados db, $PagamentoTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PagamentoTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PagamentoTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PagamentoTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<TipoPagamento> tipoPagamento = const Value.absent(),
+            Value<double> valor = const Value.absent(),
+          }) =>
+              PagamentoTableCompanion(
+            id: id,
+            tipoPagamento: tipoPagamento,
+            valor: valor,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required TipoPagamento tipoPagamento,
+            required double valor,
+          }) =>
+              PagamentoTableCompanion.insert(
+            id: id,
+            tipoPagamento: tipoPagamento,
+            valor: valor,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$PagamentoTableTableProcessedTableManager = ProcessedTableManager<
+    _$BancoDados,
+    $PagamentoTableTable,
+    Pagamento,
+    $$PagamentoTableTableFilterComposer,
+    $$PagamentoTableTableOrderingComposer,
+    $$PagamentoTableTableAnnotationComposer,
+    $$PagamentoTableTableCreateCompanionBuilder,
+    $$PagamentoTableTableUpdateCompanionBuilder,
+    (Pagamento, BaseReferences<_$BancoDados, $PagamentoTableTable, Pagamento>),
+    Pagamento,
+    PrefetchHooks Function()>;
 
 class $BancoDadosManager {
   final _$BancoDados _db;
@@ -1060,4 +1343,6 @@ class $BancoDadosManager {
       $$ClienteTableTableTableManager(_db, _db.clienteTable);
   $$ComodoTableTableTableManager get comodoTable =>
       $$ComodoTableTableTableManager(_db, _db.comodoTable);
+  $$PagamentoTableTableTableManager get pagamentoTable =>
+      $$PagamentoTableTableTableManager(_db, _db.pagamentoTable);
 }
