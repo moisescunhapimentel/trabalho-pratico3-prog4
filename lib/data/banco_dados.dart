@@ -7,18 +7,22 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:trabalho3/data/converters/generic_converter.dart';
 import 'package:trabalho3/data/dao/cliente_dao.dart';
+import 'package:trabalho3/data/dao/comodo_dao.dart';
 import 'package:trabalho3/data/dao/endereco_dao.dart';
+import 'package:trabalho3/data/enums/tipo_comodo.dart';
 import 'package:trabalho3/data/models/cliente.dart';
+import 'package:trabalho3/data/models/comodo.dart';
 import 'package:trabalho3/data/models/contato.dart';
 import 'package:trabalho3/data/models/endereco.dart';
 import 'package:trabalho3/data/tables/cliente_table.dart';
+import 'package:trabalho3/data/tables/comodo_table.dart';
 import 'package:trabalho3/data/tables/endereco_table.dart';
 
 part 'banco_dados.g.dart';
 
 @DriftDatabase(
-  tables: [EnderecoTable, ClienteTable],
-  daos: [EnderecoDao, ClienteDao],
+  tables: [EnderecoTable, ClienteTable, ComodoTable],
+  daos: [EnderecoDao, ClienteDao, ComodoDao],
 )
 class BancoDados extends _$BancoDados {
   BancoDados() : super(_openConnection());

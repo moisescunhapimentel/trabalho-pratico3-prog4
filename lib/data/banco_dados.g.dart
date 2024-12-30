@@ -415,19 +415,164 @@ class ClienteTableCompanion extends UpdateCompanion<Cliente> {
   }
 }
 
+class $ComodoTableTable extends ComodoTable
+    with TableInfo<$ComodoTableTable, Comodo> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ComodoTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _tipoComodoMeta =
+      const VerificationMeta('tipoComodo');
+  @override
+  late final GeneratedColumnWithTypeConverter<TipoComodo, String> tipoComodo =
+      GeneratedColumn<String>('tipo_comodo', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<TipoComodo>($ComodoTableTable.$convertertipoComodo);
+  static const VerificationMeta _quantidadeMeta =
+      const VerificationMeta('quantidade');
+  @override
+  late final GeneratedColumn<int> quantidade = GeneratedColumn<int>(
+      'quantidade', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, tipoComodo, quantidade];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'comodo_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<Comodo> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    context.handle(_tipoComodoMeta, const VerificationResult.success());
+    if (data.containsKey('quantidade')) {
+      context.handle(
+          _quantidadeMeta,
+          quantidade.isAcceptableOrUnknown(
+              data['quantidade']!, _quantidadeMeta));
+    } else if (isInserting) {
+      context.missing(_quantidadeMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Comodo map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Comodo(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      tipoComodo: $ComodoTableTable.$convertertipoComodo.fromSql(
+          attachedDatabase.typeMapping.read(
+              DriftSqlType.string, data['${effectivePrefix}tipo_comodo'])!),
+      quantidade: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}quantidade'])!,
+    );
+  }
+
+  @override
+  $ComodoTableTable createAlias(String alias) {
+    return $ComodoTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<TipoComodo, String, String> $convertertipoComodo =
+      const EnumNameConverter<TipoComodo>(TipoComodo.values);
+}
+
+class ComodoTableCompanion extends UpdateCompanion<Comodo> {
+  final Value<int> id;
+  final Value<TipoComodo> tipoComodo;
+  final Value<int> quantidade;
+  const ComodoTableCompanion({
+    this.id = const Value.absent(),
+    this.tipoComodo = const Value.absent(),
+    this.quantidade = const Value.absent(),
+  });
+  ComodoTableCompanion.insert({
+    this.id = const Value.absent(),
+    required TipoComodo tipoComodo,
+    required int quantidade,
+  })  : tipoComodo = Value(tipoComodo),
+        quantidade = Value(quantidade);
+  static Insertable<Comodo> custom({
+    Expression<int>? id,
+    Expression<String>? tipoComodo,
+    Expression<int>? quantidade,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (tipoComodo != null) 'tipo_comodo': tipoComodo,
+      if (quantidade != null) 'quantidade': quantidade,
+    });
+  }
+
+  ComodoTableCompanion copyWith(
+      {Value<int>? id, Value<TipoComodo>? tipoComodo, Value<int>? quantidade}) {
+    return ComodoTableCompanion(
+      id: id ?? this.id,
+      tipoComodo: tipoComodo ?? this.tipoComodo,
+      quantidade: quantidade ?? this.quantidade,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (tipoComodo.present) {
+      map['tipo_comodo'] = Variable<String>(
+          $ComodoTableTable.$convertertipoComodo.toSql(tipoComodo.value));
+    }
+    if (quantidade.present) {
+      map['quantidade'] = Variable<int>(quantidade.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ComodoTableCompanion(')
+          ..write('id: $id, ')
+          ..write('tipoComodo: $tipoComodo, ')
+          ..write('quantidade: $quantidade')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$BancoDados extends GeneratedDatabase {
   _$BancoDados(QueryExecutor e) : super(e);
   $BancoDadosManager get managers => $BancoDadosManager(this);
   late final $EnderecoTableTable enderecoTable = $EnderecoTableTable(this);
   late final $ClienteTableTable clienteTable = $ClienteTableTable(this);
+  late final $ComodoTableTable comodoTable = $ComodoTableTable(this);
   late final EnderecoDao enderecoDao = EnderecoDao(this as BancoDados);
   late final ClienteDao clienteDao = ClienteDao(this as BancoDados);
+  late final ComodoDao comodoDao = ComodoDao(this as BancoDados);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [enderecoTable, clienteTable];
+      [enderecoTable, clienteTable, comodoTable];
 }
 
 typedef $$EnderecoTableTableCreateCompanionBuilder = EnderecoTableCompanion
@@ -771,6 +916,140 @@ typedef $$ClienteTableTableProcessedTableManager = ProcessedTableManager<
     (Cliente, BaseReferences<_$BancoDados, $ClienteTableTable, Cliente>),
     Cliente,
     PrefetchHooks Function()>;
+typedef $$ComodoTableTableCreateCompanionBuilder = ComodoTableCompanion
+    Function({
+  Value<int> id,
+  required TipoComodo tipoComodo,
+  required int quantidade,
+});
+typedef $$ComodoTableTableUpdateCompanionBuilder = ComodoTableCompanion
+    Function({
+  Value<int> id,
+  Value<TipoComodo> tipoComodo,
+  Value<int> quantidade,
+});
+
+class $$ComodoTableTableFilterComposer
+    extends Composer<_$BancoDados, $ComodoTableTable> {
+  $$ComodoTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<TipoComodo, TipoComodo, String>
+      get tipoComodo => $composableBuilder(
+          column: $table.tipoComodo,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnFilters<int> get quantidade => $composableBuilder(
+      column: $table.quantidade, builder: (column) => ColumnFilters(column));
+}
+
+class $$ComodoTableTableOrderingComposer
+    extends Composer<_$BancoDados, $ComodoTableTable> {
+  $$ComodoTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get tipoComodo => $composableBuilder(
+      column: $table.tipoComodo, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get quantidade => $composableBuilder(
+      column: $table.quantidade, builder: (column) => ColumnOrderings(column));
+}
+
+class $$ComodoTableTableAnnotationComposer
+    extends Composer<_$BancoDados, $ComodoTableTable> {
+  $$ComodoTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<TipoComodo, String> get tipoComodo =>
+      $composableBuilder(
+          column: $table.tipoComodo, builder: (column) => column);
+
+  GeneratedColumn<int> get quantidade => $composableBuilder(
+      column: $table.quantidade, builder: (column) => column);
+}
+
+class $$ComodoTableTableTableManager extends RootTableManager<
+    _$BancoDados,
+    $ComodoTableTable,
+    Comodo,
+    $$ComodoTableTableFilterComposer,
+    $$ComodoTableTableOrderingComposer,
+    $$ComodoTableTableAnnotationComposer,
+    $$ComodoTableTableCreateCompanionBuilder,
+    $$ComodoTableTableUpdateCompanionBuilder,
+    (Comodo, BaseReferences<_$BancoDados, $ComodoTableTable, Comodo>),
+    Comodo,
+    PrefetchHooks Function()> {
+  $$ComodoTableTableTableManager(_$BancoDados db, $ComodoTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ComodoTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ComodoTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ComodoTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<TipoComodo> tipoComodo = const Value.absent(),
+            Value<int> quantidade = const Value.absent(),
+          }) =>
+              ComodoTableCompanion(
+            id: id,
+            tipoComodo: tipoComodo,
+            quantidade: quantidade,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required TipoComodo tipoComodo,
+            required int quantidade,
+          }) =>
+              ComodoTableCompanion.insert(
+            id: id,
+            tipoComodo: tipoComodo,
+            quantidade: quantidade,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$ComodoTableTableProcessedTableManager = ProcessedTableManager<
+    _$BancoDados,
+    $ComodoTableTable,
+    Comodo,
+    $$ComodoTableTableFilterComposer,
+    $$ComodoTableTableOrderingComposer,
+    $$ComodoTableTableAnnotationComposer,
+    $$ComodoTableTableCreateCompanionBuilder,
+    $$ComodoTableTableUpdateCompanionBuilder,
+    (Comodo, BaseReferences<_$BancoDados, $ComodoTableTable, Comodo>),
+    Comodo,
+    PrefetchHooks Function()>;
 
 class $BancoDadosManager {
   final _$BancoDados _db;
@@ -779,4 +1058,6 @@ class $BancoDadosManager {
       $$EnderecoTableTableTableManager(_db, _db.enderecoTable);
   $$ClienteTableTableTableManager get clienteTable =>
       $$ClienteTableTableTableManager(_db, _db.clienteTable);
+  $$ComodoTableTableTableManager get comodoTable =>
+      $$ComodoTableTableTableManager(_db, _db.comodoTable);
 }
