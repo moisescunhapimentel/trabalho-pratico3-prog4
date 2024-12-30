@@ -967,6 +967,369 @@ class ImovelTableCompanion extends UpdateCompanion<ImovelTableData> {
   }
 }
 
+class $ContratoTableTable extends ContratoTable
+    with TableInfo<$ContratoTableTable, ContratoTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ContratoTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _tipoIntervaloMeta =
+      const VerificationMeta('tipoIntervalo');
+  @override
+  late final GeneratedColumnWithTypeConverter<TipoIntervalo, String>
+      tipoIntervalo = GeneratedColumn<String>(
+              'tipo_intervalo', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<TipoIntervalo>(
+              $ContratoTableTable.$convertertipoIntervalo);
+  static const VerificationMeta _dataInicioMeta =
+      const VerificationMeta('dataInicio');
+  @override
+  late final GeneratedColumn<DateTime> dataInicio = GeneratedColumn<DateTime>(
+      'data_inicio', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _dataFimMeta =
+      const VerificationMeta('dataFim');
+  @override
+  late final GeneratedColumn<DateTime> dataFim = GeneratedColumn<DateTime>(
+      'data_fim', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _diaPagamentoMeta =
+      const VerificationMeta('diaPagamento');
+  @override
+  late final GeneratedColumn<int> diaPagamento = GeneratedColumn<int>(
+      'dia_pagamento', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _mesPagamentoMeta =
+      const VerificationMeta('mesPagamento');
+  @override
+  late final GeneratedColumn<int> mesPagamento = GeneratedColumn<int>(
+      'mes_pagamento', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, tipoIntervalo, dataInicio, dataFim, diaPagamento, mesPagamento];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'contrato_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<ContratoTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    context.handle(_tipoIntervaloMeta, const VerificationResult.success());
+    if (data.containsKey('data_inicio')) {
+      context.handle(
+          _dataInicioMeta,
+          dataInicio.isAcceptableOrUnknown(
+              data['data_inicio']!, _dataInicioMeta));
+    } else if (isInserting) {
+      context.missing(_dataInicioMeta);
+    }
+    if (data.containsKey('data_fim')) {
+      context.handle(_dataFimMeta,
+          dataFim.isAcceptableOrUnknown(data['data_fim']!, _dataFimMeta));
+    } else if (isInserting) {
+      context.missing(_dataFimMeta);
+    }
+    if (data.containsKey('dia_pagamento')) {
+      context.handle(
+          _diaPagamentoMeta,
+          diaPagamento.isAcceptableOrUnknown(
+              data['dia_pagamento']!, _diaPagamentoMeta));
+    } else if (isInserting) {
+      context.missing(_diaPagamentoMeta);
+    }
+    if (data.containsKey('mes_pagamento')) {
+      context.handle(
+          _mesPagamentoMeta,
+          mesPagamento.isAcceptableOrUnknown(
+              data['mes_pagamento']!, _mesPagamentoMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ContratoTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ContratoTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      tipoIntervalo: $ContratoTableTable.$convertertipoIntervalo.fromSql(
+          attachedDatabase.typeMapping.read(
+              DriftSqlType.string, data['${effectivePrefix}tipo_intervalo'])!),
+      dataInicio: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}data_inicio'])!,
+      dataFim: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}data_fim'])!,
+      diaPagamento: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}dia_pagamento'])!,
+      mesPagamento: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}mes_pagamento']),
+    );
+  }
+
+  @override
+  $ContratoTableTable createAlias(String alias) {
+    return $ContratoTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<TipoIntervalo, String, String>
+      $convertertipoIntervalo =
+      const EnumNameConverter<TipoIntervalo>(TipoIntervalo.values);
+}
+
+class ContratoTableData extends DataClass
+    implements Insertable<ContratoTableData> {
+  final int id;
+  final TipoIntervalo tipoIntervalo;
+  final DateTime dataInicio;
+  final DateTime dataFim;
+  final int diaPagamento;
+  final int? mesPagamento;
+  const ContratoTableData(
+      {required this.id,
+      required this.tipoIntervalo,
+      required this.dataInicio,
+      required this.dataFim,
+      required this.diaPagamento,
+      this.mesPagamento});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    {
+      map['tipo_intervalo'] = Variable<String>(
+          $ContratoTableTable.$convertertipoIntervalo.toSql(tipoIntervalo));
+    }
+    map['data_inicio'] = Variable<DateTime>(dataInicio);
+    map['data_fim'] = Variable<DateTime>(dataFim);
+    map['dia_pagamento'] = Variable<int>(diaPagamento);
+    if (!nullToAbsent || mesPagamento != null) {
+      map['mes_pagamento'] = Variable<int>(mesPagamento);
+    }
+    return map;
+  }
+
+  ContratoTableCompanion toCompanion(bool nullToAbsent) {
+    return ContratoTableCompanion(
+      id: Value(id),
+      tipoIntervalo: Value(tipoIntervalo),
+      dataInicio: Value(dataInicio),
+      dataFim: Value(dataFim),
+      diaPagamento: Value(diaPagamento),
+      mesPagamento: mesPagamento == null && nullToAbsent
+          ? const Value.absent()
+          : Value(mesPagamento),
+    );
+  }
+
+  factory ContratoTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ContratoTableData(
+      id: serializer.fromJson<int>(json['id']),
+      tipoIntervalo: $ContratoTableTable.$convertertipoIntervalo
+          .fromJson(serializer.fromJson<String>(json['tipoIntervalo'])),
+      dataInicio: serializer.fromJson<DateTime>(json['dataInicio']),
+      dataFim: serializer.fromJson<DateTime>(json['dataFim']),
+      diaPagamento: serializer.fromJson<int>(json['diaPagamento']),
+      mesPagamento: serializer.fromJson<int?>(json['mesPagamento']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'tipoIntervalo': serializer.toJson<String>(
+          $ContratoTableTable.$convertertipoIntervalo.toJson(tipoIntervalo)),
+      'dataInicio': serializer.toJson<DateTime>(dataInicio),
+      'dataFim': serializer.toJson<DateTime>(dataFim),
+      'diaPagamento': serializer.toJson<int>(diaPagamento),
+      'mesPagamento': serializer.toJson<int?>(mesPagamento),
+    };
+  }
+
+  ContratoTableData copyWith(
+          {int? id,
+          TipoIntervalo? tipoIntervalo,
+          DateTime? dataInicio,
+          DateTime? dataFim,
+          int? diaPagamento,
+          Value<int?> mesPagamento = const Value.absent()}) =>
+      ContratoTableData(
+        id: id ?? this.id,
+        tipoIntervalo: tipoIntervalo ?? this.tipoIntervalo,
+        dataInicio: dataInicio ?? this.dataInicio,
+        dataFim: dataFim ?? this.dataFim,
+        diaPagamento: diaPagamento ?? this.diaPagamento,
+        mesPagamento:
+            mesPagamento.present ? mesPagamento.value : this.mesPagamento,
+      );
+  ContratoTableData copyWithCompanion(ContratoTableCompanion data) {
+    return ContratoTableData(
+      id: data.id.present ? data.id.value : this.id,
+      tipoIntervalo: data.tipoIntervalo.present
+          ? data.tipoIntervalo.value
+          : this.tipoIntervalo,
+      dataInicio:
+          data.dataInicio.present ? data.dataInicio.value : this.dataInicio,
+      dataFim: data.dataFim.present ? data.dataFim.value : this.dataFim,
+      diaPagamento: data.diaPagamento.present
+          ? data.diaPagamento.value
+          : this.diaPagamento,
+      mesPagamento: data.mesPagamento.present
+          ? data.mesPagamento.value
+          : this.mesPagamento,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ContratoTableData(')
+          ..write('id: $id, ')
+          ..write('tipoIntervalo: $tipoIntervalo, ')
+          ..write('dataInicio: $dataInicio, ')
+          ..write('dataFim: $dataFim, ')
+          ..write('diaPagamento: $diaPagamento, ')
+          ..write('mesPagamento: $mesPagamento')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id, tipoIntervalo, dataInicio, dataFim, diaPagamento, mesPagamento);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ContratoTableData &&
+          other.id == this.id &&
+          other.tipoIntervalo == this.tipoIntervalo &&
+          other.dataInicio == this.dataInicio &&
+          other.dataFim == this.dataFim &&
+          other.diaPagamento == this.diaPagamento &&
+          other.mesPagamento == this.mesPagamento);
+}
+
+class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
+  final Value<int> id;
+  final Value<TipoIntervalo> tipoIntervalo;
+  final Value<DateTime> dataInicio;
+  final Value<DateTime> dataFim;
+  final Value<int> diaPagamento;
+  final Value<int?> mesPagamento;
+  const ContratoTableCompanion({
+    this.id = const Value.absent(),
+    this.tipoIntervalo = const Value.absent(),
+    this.dataInicio = const Value.absent(),
+    this.dataFim = const Value.absent(),
+    this.diaPagamento = const Value.absent(),
+    this.mesPagamento = const Value.absent(),
+  });
+  ContratoTableCompanion.insert({
+    this.id = const Value.absent(),
+    required TipoIntervalo tipoIntervalo,
+    required DateTime dataInicio,
+    required DateTime dataFim,
+    required int diaPagamento,
+    this.mesPagamento = const Value.absent(),
+  })  : tipoIntervalo = Value(tipoIntervalo),
+        dataInicio = Value(dataInicio),
+        dataFim = Value(dataFim),
+        diaPagamento = Value(diaPagamento);
+  static Insertable<ContratoTableData> custom({
+    Expression<int>? id,
+    Expression<String>? tipoIntervalo,
+    Expression<DateTime>? dataInicio,
+    Expression<DateTime>? dataFim,
+    Expression<int>? diaPagamento,
+    Expression<int>? mesPagamento,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (tipoIntervalo != null) 'tipo_intervalo': tipoIntervalo,
+      if (dataInicio != null) 'data_inicio': dataInicio,
+      if (dataFim != null) 'data_fim': dataFim,
+      if (diaPagamento != null) 'dia_pagamento': diaPagamento,
+      if (mesPagamento != null) 'mes_pagamento': mesPagamento,
+    });
+  }
+
+  ContratoTableCompanion copyWith(
+      {Value<int>? id,
+      Value<TipoIntervalo>? tipoIntervalo,
+      Value<DateTime>? dataInicio,
+      Value<DateTime>? dataFim,
+      Value<int>? diaPagamento,
+      Value<int?>? mesPagamento}) {
+    return ContratoTableCompanion(
+      id: id ?? this.id,
+      tipoIntervalo: tipoIntervalo ?? this.tipoIntervalo,
+      dataInicio: dataInicio ?? this.dataInicio,
+      dataFim: dataFim ?? this.dataFim,
+      diaPagamento: diaPagamento ?? this.diaPagamento,
+      mesPagamento: mesPagamento ?? this.mesPagamento,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (tipoIntervalo.present) {
+      map['tipo_intervalo'] = Variable<String>($ContratoTableTable
+          .$convertertipoIntervalo
+          .toSql(tipoIntervalo.value));
+    }
+    if (dataInicio.present) {
+      map['data_inicio'] = Variable<DateTime>(dataInicio.value);
+    }
+    if (dataFim.present) {
+      map['data_fim'] = Variable<DateTime>(dataFim.value);
+    }
+    if (diaPagamento.present) {
+      map['dia_pagamento'] = Variable<int>(diaPagamento.value);
+    }
+    if (mesPagamento.present) {
+      map['mes_pagamento'] = Variable<int>(mesPagamento.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ContratoTableCompanion(')
+          ..write('id: $id, ')
+          ..write('tipoIntervalo: $tipoIntervalo, ')
+          ..write('dataInicio: $dataInicio, ')
+          ..write('dataFim: $dataFim, ')
+          ..write('diaPagamento: $diaPagamento, ')
+          ..write('mesPagamento: $mesPagamento')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$BancoDados extends GeneratedDatabase {
   _$BancoDados(QueryExecutor e) : super(e);
   $BancoDadosManager get managers => $BancoDadosManager(this);
@@ -975,17 +1338,25 @@ abstract class _$BancoDados extends GeneratedDatabase {
   late final $ComodoTableTable comodoTable = $ComodoTableTable(this);
   late final $PagamentoTableTable pagamentoTable = $PagamentoTableTable(this);
   late final $ImovelTableTable imovelTable = $ImovelTableTable(this);
+  late final $ContratoTableTable contratoTable = $ContratoTableTable(this);
   late final EnderecoDao enderecoDao = EnderecoDao(this as BancoDados);
   late final ClienteDao clienteDao = ClienteDao(this as BancoDados);
   late final ComodoDao comodoDao = ComodoDao(this as BancoDados);
   late final PagamentoDao pagamentoDao = PagamentoDao(this as BancoDados);
   late final ImovelDao imovelDao = ImovelDao(this as BancoDados);
+  late final ContratoDao contratoDao = ContratoDao(this as BancoDados);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [enderecoTable, clienteTable, comodoTable, pagamentoTable, imovelTable];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        enderecoTable,
+        clienteTable,
+        comodoTable,
+        pagamentoTable,
+        imovelTable,
+        contratoTable
+      ];
 }
 
 typedef $$EnderecoTableTableCreateCompanionBuilder = EnderecoTableCompanion
@@ -1938,6 +2309,194 @@ typedef $$ImovelTableTableProcessedTableManager = ProcessedTableManager<
     (ImovelTableData, $$ImovelTableTableReferences),
     ImovelTableData,
     PrefetchHooks Function({bool enderecoId})>;
+typedef $$ContratoTableTableCreateCompanionBuilder = ContratoTableCompanion
+    Function({
+  Value<int> id,
+  required TipoIntervalo tipoIntervalo,
+  required DateTime dataInicio,
+  required DateTime dataFim,
+  required int diaPagamento,
+  Value<int?> mesPagamento,
+});
+typedef $$ContratoTableTableUpdateCompanionBuilder = ContratoTableCompanion
+    Function({
+  Value<int> id,
+  Value<TipoIntervalo> tipoIntervalo,
+  Value<DateTime> dataInicio,
+  Value<DateTime> dataFim,
+  Value<int> diaPagamento,
+  Value<int?> mesPagamento,
+});
+
+class $$ContratoTableTableFilterComposer
+    extends Composer<_$BancoDados, $ContratoTableTable> {
+  $$ContratoTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<TipoIntervalo, TipoIntervalo, String>
+      get tipoIntervalo => $composableBuilder(
+          column: $table.tipoIntervalo,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnFilters<DateTime> get dataInicio => $composableBuilder(
+      column: $table.dataInicio, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get dataFim => $composableBuilder(
+      column: $table.dataFim, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get diaPagamento => $composableBuilder(
+      column: $table.diaPagamento, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get mesPagamento => $composableBuilder(
+      column: $table.mesPagamento, builder: (column) => ColumnFilters(column));
+}
+
+class $$ContratoTableTableOrderingComposer
+    extends Composer<_$BancoDados, $ContratoTableTable> {
+  $$ContratoTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get tipoIntervalo => $composableBuilder(
+      column: $table.tipoIntervalo,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get dataInicio => $composableBuilder(
+      column: $table.dataInicio, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get dataFim => $composableBuilder(
+      column: $table.dataFim, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get diaPagamento => $composableBuilder(
+      column: $table.diaPagamento,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get mesPagamento => $composableBuilder(
+      column: $table.mesPagamento,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$ContratoTableTableAnnotationComposer
+    extends Composer<_$BancoDados, $ContratoTableTable> {
+  $$ContratoTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<TipoIntervalo, String> get tipoIntervalo =>
+      $composableBuilder(
+          column: $table.tipoIntervalo, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get dataInicio => $composableBuilder(
+      column: $table.dataInicio, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get dataFim =>
+      $composableBuilder(column: $table.dataFim, builder: (column) => column);
+
+  GeneratedColumn<int> get diaPagamento => $composableBuilder(
+      column: $table.diaPagamento, builder: (column) => column);
+
+  GeneratedColumn<int> get mesPagamento => $composableBuilder(
+      column: $table.mesPagamento, builder: (column) => column);
+}
+
+class $$ContratoTableTableTableManager extends RootTableManager<
+    _$BancoDados,
+    $ContratoTableTable,
+    ContratoTableData,
+    $$ContratoTableTableFilterComposer,
+    $$ContratoTableTableOrderingComposer,
+    $$ContratoTableTableAnnotationComposer,
+    $$ContratoTableTableCreateCompanionBuilder,
+    $$ContratoTableTableUpdateCompanionBuilder,
+    (
+      ContratoTableData,
+      BaseReferences<_$BancoDados, $ContratoTableTable, ContratoTableData>
+    ),
+    ContratoTableData,
+    PrefetchHooks Function()> {
+  $$ContratoTableTableTableManager(_$BancoDados db, $ContratoTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ContratoTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ContratoTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ContratoTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<TipoIntervalo> tipoIntervalo = const Value.absent(),
+            Value<DateTime> dataInicio = const Value.absent(),
+            Value<DateTime> dataFim = const Value.absent(),
+            Value<int> diaPagamento = const Value.absent(),
+            Value<int?> mesPagamento = const Value.absent(),
+          }) =>
+              ContratoTableCompanion(
+            id: id,
+            tipoIntervalo: tipoIntervalo,
+            dataInicio: dataInicio,
+            dataFim: dataFim,
+            diaPagamento: diaPagamento,
+            mesPagamento: mesPagamento,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required TipoIntervalo tipoIntervalo,
+            required DateTime dataInicio,
+            required DateTime dataFim,
+            required int diaPagamento,
+            Value<int?> mesPagamento = const Value.absent(),
+          }) =>
+              ContratoTableCompanion.insert(
+            id: id,
+            tipoIntervalo: tipoIntervalo,
+            dataInicio: dataInicio,
+            dataFim: dataFim,
+            diaPagamento: diaPagamento,
+            mesPagamento: mesPagamento,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$ContratoTableTableProcessedTableManager = ProcessedTableManager<
+    _$BancoDados,
+    $ContratoTableTable,
+    ContratoTableData,
+    $$ContratoTableTableFilterComposer,
+    $$ContratoTableTableOrderingComposer,
+    $$ContratoTableTableAnnotationComposer,
+    $$ContratoTableTableCreateCompanionBuilder,
+    $$ContratoTableTableUpdateCompanionBuilder,
+    (
+      ContratoTableData,
+      BaseReferences<_$BancoDados, $ContratoTableTable, ContratoTableData>
+    ),
+    ContratoTableData,
+    PrefetchHooks Function()>;
 
 class $BancoDadosManager {
   final _$BancoDados _db;
@@ -1952,4 +2511,6 @@ class $BancoDadosManager {
       $$PagamentoTableTableTableManager(_db, _db.pagamentoTable);
   $$ImovelTableTableTableManager get imovelTable =>
       $$ImovelTableTableTableManager(_db, _db.imovelTable);
+  $$ContratoTableTableTableManager get contratoTable =>
+      $$ContratoTableTableTableManager(_db, _db.contratoTable);
 }

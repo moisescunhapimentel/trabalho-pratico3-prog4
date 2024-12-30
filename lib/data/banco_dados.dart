@@ -8,10 +8,12 @@ import 'package:path/path.dart' as p;
 import 'package:trabalho3/data/converters/generic_converter.dart';
 import 'package:trabalho3/data/dao/cliente_dao.dart';
 import 'package:trabalho3/data/dao/comodo_dao.dart';
+import 'package:trabalho3/data/dao/contrato_dao.dart';
 import 'package:trabalho3/data/dao/endereco_dao.dart';
 import 'package:trabalho3/data/dao/imovel_dao.dart';
 import 'package:trabalho3/data/dao/pagamento_dao.dart';
 import 'package:trabalho3/data/enums/tipo_comodo.dart';
+import 'package:trabalho3/data/enums/tipo_intervalo.dart';
 import 'package:trabalho3/data/enums/tipo_pagamento.dart';
 import 'package:trabalho3/data/models/cliente.dart';
 import 'package:trabalho3/data/models/comodo.dart';
@@ -20,6 +22,7 @@ import 'package:trabalho3/data/models/endereco.dart';
 import 'package:trabalho3/data/models/pagamento.dart';
 import 'package:trabalho3/data/tables/cliente_table.dart';
 import 'package:trabalho3/data/tables/comodo_table.dart';
+import 'package:trabalho3/data/tables/contrato_table.dart';
 import 'package:trabalho3/data/tables/endereco_table.dart';
 import 'package:trabalho3/data/tables/imovel_table.dart';
 import 'package:trabalho3/data/tables/pagamento_table.dart';
@@ -32,9 +35,17 @@ part 'banco_dados.g.dart';
     ClienteTable,
     ComodoTable,
     PagamentoTable,
-    ImovelTable
+    ImovelTable,
+    ContratoTable,
   ],
-  daos: [EnderecoDao, ClienteDao, ComodoDao, PagamentoDao, ImovelDao],
+  daos: [
+    EnderecoDao,
+    ClienteDao,
+    ComodoDao,
+    PagamentoDao,
+    ImovelDao,
+    ContratoDao
+  ],
 )
 class BancoDados extends _$BancoDados {
   BancoDados() : super(_openConnection());
