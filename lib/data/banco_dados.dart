@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:trabalho3/data/dao/endereco_dao.dart';
 import 'package:trabalho3/data/models/endereco.dart';
-import 'package:trabalho3/data/tables/endereco.dart';
+import 'package:trabalho3/data/tables/endereco_table.dart';
 
 part 'banco_dados.g.dart';
 
