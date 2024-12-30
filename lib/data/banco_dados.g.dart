@@ -196,16 +196,238 @@ class EnderecoTableCompanion extends UpdateCompanion<Endereco> {
   }
 }
 
+class $ClienteTableTable extends ClienteTable
+    with TableInfo<$ClienteTableTable, Cliente> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ClienteTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _nomeMeta = const VerificationMeta('nome');
+  @override
+  late final GeneratedColumn<String> nome = GeneratedColumn<String>(
+      'nome', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _cPFMeta = const VerificationMeta('cPF');
+  @override
+  late final GeneratedColumn<String> cPF = GeneratedColumn<String>(
+      'c_p_f', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _ruaMeta = const VerificationMeta('rua');
+  @override
+  late final GeneratedColumn<String> rua = GeneratedColumn<String>(
+      'rua', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _dataNascimentoMeta =
+      const VerificationMeta('dataNascimento');
+  @override
+  late final GeneratedColumn<DateTime> dataNascimento =
+      GeneratedColumn<DateTime>('data_nascimento', aliasedName, false,
+          type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _contatoMeta =
+      const VerificationMeta('contato');
+  @override
+  late final GeneratedColumnWithTypeConverter<Contato, String> contato =
+      GeneratedColumn<String>('contato', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<Contato>($ClienteTableTable.$convertercontato);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, nome, cPF, rua, dataNascimento, contato];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'cliente_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<Cliente> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('nome')) {
+      context.handle(
+          _nomeMeta, nome.isAcceptableOrUnknown(data['nome']!, _nomeMeta));
+    } else if (isInserting) {
+      context.missing(_nomeMeta);
+    }
+    if (data.containsKey('c_p_f')) {
+      context.handle(
+          _cPFMeta, cPF.isAcceptableOrUnknown(data['c_p_f']!, _cPFMeta));
+    } else if (isInserting) {
+      context.missing(_cPFMeta);
+    }
+    if (data.containsKey('rua')) {
+      context.handle(
+          _ruaMeta, rua.isAcceptableOrUnknown(data['rua']!, _ruaMeta));
+    } else if (isInserting) {
+      context.missing(_ruaMeta);
+    }
+    if (data.containsKey('data_nascimento')) {
+      context.handle(
+          _dataNascimentoMeta,
+          dataNascimento.isAcceptableOrUnknown(
+              data['data_nascimento']!, _dataNascimentoMeta));
+    } else if (isInserting) {
+      context.missing(_dataNascimentoMeta);
+    }
+    context.handle(_contatoMeta, const VerificationResult.success());
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Cliente map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Cliente(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      nome: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}nome'])!,
+      cPF: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}c_p_f'])!,
+      contato: $ClienteTableTable.$convertercontato.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}contato'])!),
+      dataNascimento: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}data_nascimento'])!,
+    );
+  }
+
+  @override
+  $ClienteTableTable createAlias(String alias) {
+    return $ClienteTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<Contato, String, String> $convertercontato =
+      GenericConverter<Contato>((value) => Contato.fromJson(value));
+}
+
+class ClienteTableCompanion extends UpdateCompanion<Cliente> {
+  final Value<int> id;
+  final Value<String> nome;
+  final Value<String> cPF;
+  final Value<String> rua;
+  final Value<DateTime> dataNascimento;
+  final Value<Contato> contato;
+  const ClienteTableCompanion({
+    this.id = const Value.absent(),
+    this.nome = const Value.absent(),
+    this.cPF = const Value.absent(),
+    this.rua = const Value.absent(),
+    this.dataNascimento = const Value.absent(),
+    this.contato = const Value.absent(),
+  });
+  ClienteTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String nome,
+    required String cPF,
+    required String rua,
+    required DateTime dataNascimento,
+    required Contato contato,
+  })  : nome = Value(nome),
+        cPF = Value(cPF),
+        rua = Value(rua),
+        dataNascimento = Value(dataNascimento),
+        contato = Value(contato);
+  static Insertable<Cliente> custom({
+    Expression<int>? id,
+    Expression<String>? nome,
+    Expression<String>? cPF,
+    Expression<String>? rua,
+    Expression<DateTime>? dataNascimento,
+    Expression<String>? contato,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (nome != null) 'nome': nome,
+      if (cPF != null) 'c_p_f': cPF,
+      if (rua != null) 'rua': rua,
+      if (dataNascimento != null) 'data_nascimento': dataNascimento,
+      if (contato != null) 'contato': contato,
+    });
+  }
+
+  ClienteTableCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? nome,
+      Value<String>? cPF,
+      Value<String>? rua,
+      Value<DateTime>? dataNascimento,
+      Value<Contato>? contato}) {
+    return ClienteTableCompanion(
+      id: id ?? this.id,
+      nome: nome ?? this.nome,
+      cPF: cPF ?? this.cPF,
+      rua: rua ?? this.rua,
+      dataNascimento: dataNascimento ?? this.dataNascimento,
+      contato: contato ?? this.contato,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (nome.present) {
+      map['nome'] = Variable<String>(nome.value);
+    }
+    if (cPF.present) {
+      map['c_p_f'] = Variable<String>(cPF.value);
+    }
+    if (rua.present) {
+      map['rua'] = Variable<String>(rua.value);
+    }
+    if (dataNascimento.present) {
+      map['data_nascimento'] = Variable<DateTime>(dataNascimento.value);
+    }
+    if (contato.present) {
+      map['contato'] = Variable<String>(
+          $ClienteTableTable.$convertercontato.toSql(contato.value));
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ClienteTableCompanion(')
+          ..write('id: $id, ')
+          ..write('nome: $nome, ')
+          ..write('cPF: $cPF, ')
+          ..write('rua: $rua, ')
+          ..write('dataNascimento: $dataNascimento, ')
+          ..write('contato: $contato')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$BancoDados extends GeneratedDatabase {
   _$BancoDados(QueryExecutor e) : super(e);
   $BancoDadosManager get managers => $BancoDadosManager(this);
   late final $EnderecoTableTable enderecoTable = $EnderecoTableTable(this);
+  late final $ClienteTableTable clienteTable = $ClienteTableTable(this);
   late final EnderecoDao enderecoDao = EnderecoDao(this as BancoDados);
+  late final ClienteDao clienteDao = ClienteDao(this as BancoDados);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [enderecoTable];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [enderecoTable, clienteTable];
 }
 
 typedef $$EnderecoTableTableCreateCompanionBuilder = EnderecoTableCompanion
@@ -369,10 +591,192 @@ typedef $$EnderecoTableTableProcessedTableManager = ProcessedTableManager<
     (Endereco, BaseReferences<_$BancoDados, $EnderecoTableTable, Endereco>),
     Endereco,
     PrefetchHooks Function()>;
+typedef $$ClienteTableTableCreateCompanionBuilder = ClienteTableCompanion
+    Function({
+  Value<int> id,
+  required String nome,
+  required String cPF,
+  required String rua,
+  required DateTime dataNascimento,
+  required Contato contato,
+});
+typedef $$ClienteTableTableUpdateCompanionBuilder = ClienteTableCompanion
+    Function({
+  Value<int> id,
+  Value<String> nome,
+  Value<String> cPF,
+  Value<String> rua,
+  Value<DateTime> dataNascimento,
+  Value<Contato> contato,
+});
+
+class $$ClienteTableTableFilterComposer
+    extends Composer<_$BancoDados, $ClienteTableTable> {
+  $$ClienteTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get nome => $composableBuilder(
+      column: $table.nome, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get cPF => $composableBuilder(
+      column: $table.cPF, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get rua => $composableBuilder(
+      column: $table.rua, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get dataNascimento => $composableBuilder(
+      column: $table.dataNascimento,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<Contato, Contato, String> get contato =>
+      $composableBuilder(
+          column: $table.contato,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+}
+
+class $$ClienteTableTableOrderingComposer
+    extends Composer<_$BancoDados, $ClienteTableTable> {
+  $$ClienteTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get nome => $composableBuilder(
+      column: $table.nome, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get cPF => $composableBuilder(
+      column: $table.cPF, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get rua => $composableBuilder(
+      column: $table.rua, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get dataNascimento => $composableBuilder(
+      column: $table.dataNascimento,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get contato => $composableBuilder(
+      column: $table.contato, builder: (column) => ColumnOrderings(column));
+}
+
+class $$ClienteTableTableAnnotationComposer
+    extends Composer<_$BancoDados, $ClienteTableTable> {
+  $$ClienteTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get nome =>
+      $composableBuilder(column: $table.nome, builder: (column) => column);
+
+  GeneratedColumn<String> get cPF =>
+      $composableBuilder(column: $table.cPF, builder: (column) => column);
+
+  GeneratedColumn<String> get rua =>
+      $composableBuilder(column: $table.rua, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get dataNascimento => $composableBuilder(
+      column: $table.dataNascimento, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<Contato, String> get contato =>
+      $composableBuilder(column: $table.contato, builder: (column) => column);
+}
+
+class $$ClienteTableTableTableManager extends RootTableManager<
+    _$BancoDados,
+    $ClienteTableTable,
+    Cliente,
+    $$ClienteTableTableFilterComposer,
+    $$ClienteTableTableOrderingComposer,
+    $$ClienteTableTableAnnotationComposer,
+    $$ClienteTableTableCreateCompanionBuilder,
+    $$ClienteTableTableUpdateCompanionBuilder,
+    (Cliente, BaseReferences<_$BancoDados, $ClienteTableTable, Cliente>),
+    Cliente,
+    PrefetchHooks Function()> {
+  $$ClienteTableTableTableManager(_$BancoDados db, $ClienteTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ClienteTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ClienteTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ClienteTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> nome = const Value.absent(),
+            Value<String> cPF = const Value.absent(),
+            Value<String> rua = const Value.absent(),
+            Value<DateTime> dataNascimento = const Value.absent(),
+            Value<Contato> contato = const Value.absent(),
+          }) =>
+              ClienteTableCompanion(
+            id: id,
+            nome: nome,
+            cPF: cPF,
+            rua: rua,
+            dataNascimento: dataNascimento,
+            contato: contato,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String nome,
+            required String cPF,
+            required String rua,
+            required DateTime dataNascimento,
+            required Contato contato,
+          }) =>
+              ClienteTableCompanion.insert(
+            id: id,
+            nome: nome,
+            cPF: cPF,
+            rua: rua,
+            dataNascimento: dataNascimento,
+            contato: contato,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$ClienteTableTableProcessedTableManager = ProcessedTableManager<
+    _$BancoDados,
+    $ClienteTableTable,
+    Cliente,
+    $$ClienteTableTableFilterComposer,
+    $$ClienteTableTableOrderingComposer,
+    $$ClienteTableTableAnnotationComposer,
+    $$ClienteTableTableCreateCompanionBuilder,
+    $$ClienteTableTableUpdateCompanionBuilder,
+    (Cliente, BaseReferences<_$BancoDados, $ClienteTableTable, Cliente>),
+    Cliente,
+    PrefetchHooks Function()>;
 
 class $BancoDadosManager {
   final _$BancoDados _db;
   $BancoDadosManager(this._db);
   $$EnderecoTableTableTableManager get enderecoTable =>
       $$EnderecoTableTableTableManager(_db, _db.enderecoTable);
+  $$ClienteTableTableTableManager get clienteTable =>
+      $$ClienteTableTableTableManager(_db, _db.clienteTable);
 }
