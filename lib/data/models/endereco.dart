@@ -1,6 +1,8 @@
 import 'dart:convert';
 
-class Endereco {
+import 'package:trabalho3/data/my_data_class.dart';
+
+class Endereco extends MyDataClass {
   final int id;
   final String rua;
   final String bairro;

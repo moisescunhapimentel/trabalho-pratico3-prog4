@@ -704,6 +704,269 @@ class PagamentoTableCompanion extends UpdateCompanion<Pagamento> {
   }
 }
 
+class $ImovelTableTable extends ImovelTable
+    with TableInfo<$ImovelTableTable, ImovelTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ImovelTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _nomeMeta = const VerificationMeta('nome');
+  @override
+  late final GeneratedColumn<String> nome = GeneratedColumn<String>(
+      'nome', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _descricaoMeta =
+      const VerificationMeta('descricao');
+  @override
+  late final GeneratedColumn<String> descricao = GeneratedColumn<String>(
+      'descricao', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _enderecoIdMeta =
+      const VerificationMeta('enderecoId');
+  @override
+  late final GeneratedColumn<int> enderecoId = GeneratedColumn<int>(
+      'endereco_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES endereco_table (id)'));
+  @override
+  List<GeneratedColumn> get $columns => [id, nome, descricao, enderecoId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'imovel_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<ImovelTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('nome')) {
+      context.handle(
+          _nomeMeta, nome.isAcceptableOrUnknown(data['nome']!, _nomeMeta));
+    } else if (isInserting) {
+      context.missing(_nomeMeta);
+    }
+    if (data.containsKey('descricao')) {
+      context.handle(_descricaoMeta,
+          descricao.isAcceptableOrUnknown(data['descricao']!, _descricaoMeta));
+    } else if (isInserting) {
+      context.missing(_descricaoMeta);
+    }
+    if (data.containsKey('endereco_id')) {
+      context.handle(
+          _enderecoIdMeta,
+          enderecoId.isAcceptableOrUnknown(
+              data['endereco_id']!, _enderecoIdMeta));
+    } else if (isInserting) {
+      context.missing(_enderecoIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ImovelTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ImovelTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      nome: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}nome'])!,
+      descricao: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}descricao'])!,
+      enderecoId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}endereco_id'])!,
+    );
+  }
+
+  @override
+  $ImovelTableTable createAlias(String alias) {
+    return $ImovelTableTable(attachedDatabase, alias);
+  }
+}
+
+class ImovelTableData extends DataClass implements Insertable<ImovelTableData> {
+  final int id;
+  final String nome;
+  final String descricao;
+  final int enderecoId;
+  const ImovelTableData(
+      {required this.id,
+      required this.nome,
+      required this.descricao,
+      required this.enderecoId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['nome'] = Variable<String>(nome);
+    map['descricao'] = Variable<String>(descricao);
+    map['endereco_id'] = Variable<int>(enderecoId);
+    return map;
+  }
+
+  ImovelTableCompanion toCompanion(bool nullToAbsent) {
+    return ImovelTableCompanion(
+      id: Value(id),
+      nome: Value(nome),
+      descricao: Value(descricao),
+      enderecoId: Value(enderecoId),
+    );
+  }
+
+  factory ImovelTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ImovelTableData(
+      id: serializer.fromJson<int>(json['id']),
+      nome: serializer.fromJson<String>(json['nome']),
+      descricao: serializer.fromJson<String>(json['descricao']),
+      enderecoId: serializer.fromJson<int>(json['enderecoId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'nome': serializer.toJson<String>(nome),
+      'descricao': serializer.toJson<String>(descricao),
+      'enderecoId': serializer.toJson<int>(enderecoId),
+    };
+  }
+
+  ImovelTableData copyWith(
+          {int? id, String? nome, String? descricao, int? enderecoId}) =>
+      ImovelTableData(
+        id: id ?? this.id,
+        nome: nome ?? this.nome,
+        descricao: descricao ?? this.descricao,
+        enderecoId: enderecoId ?? this.enderecoId,
+      );
+  ImovelTableData copyWithCompanion(ImovelTableCompanion data) {
+    return ImovelTableData(
+      id: data.id.present ? data.id.value : this.id,
+      nome: data.nome.present ? data.nome.value : this.nome,
+      descricao: data.descricao.present ? data.descricao.value : this.descricao,
+      enderecoId:
+          data.enderecoId.present ? data.enderecoId.value : this.enderecoId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ImovelTableData(')
+          ..write('id: $id, ')
+          ..write('nome: $nome, ')
+          ..write('descricao: $descricao, ')
+          ..write('enderecoId: $enderecoId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, nome, descricao, enderecoId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ImovelTableData &&
+          other.id == this.id &&
+          other.nome == this.nome &&
+          other.descricao == this.descricao &&
+          other.enderecoId == this.enderecoId);
+}
+
+class ImovelTableCompanion extends UpdateCompanion<ImovelTableData> {
+  final Value<int> id;
+  final Value<String> nome;
+  final Value<String> descricao;
+  final Value<int> enderecoId;
+  const ImovelTableCompanion({
+    this.id = const Value.absent(),
+    this.nome = const Value.absent(),
+    this.descricao = const Value.absent(),
+    this.enderecoId = const Value.absent(),
+  });
+  ImovelTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String nome,
+    required String descricao,
+    required int enderecoId,
+  })  : nome = Value(nome),
+        descricao = Value(descricao),
+        enderecoId = Value(enderecoId);
+  static Insertable<ImovelTableData> custom({
+    Expression<int>? id,
+    Expression<String>? nome,
+    Expression<String>? descricao,
+    Expression<int>? enderecoId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (nome != null) 'nome': nome,
+      if (descricao != null) 'descricao': descricao,
+      if (enderecoId != null) 'endereco_id': enderecoId,
+    });
+  }
+
+  ImovelTableCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? nome,
+      Value<String>? descricao,
+      Value<int>? enderecoId}) {
+    return ImovelTableCompanion(
+      id: id ?? this.id,
+      nome: nome ?? this.nome,
+      descricao: descricao ?? this.descricao,
+      enderecoId: enderecoId ?? this.enderecoId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (nome.present) {
+      map['nome'] = Variable<String>(nome.value);
+    }
+    if (descricao.present) {
+      map['descricao'] = Variable<String>(descricao.value);
+    }
+    if (enderecoId.present) {
+      map['endereco_id'] = Variable<int>(enderecoId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ImovelTableCompanion(')
+          ..write('id: $id, ')
+          ..write('nome: $nome, ')
+          ..write('descricao: $descricao, ')
+          ..write('enderecoId: $enderecoId')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$BancoDados extends GeneratedDatabase {
   _$BancoDados(QueryExecutor e) : super(e);
   $BancoDadosManager get managers => $BancoDadosManager(this);
@@ -711,16 +974,18 @@ abstract class _$BancoDados extends GeneratedDatabase {
   late final $ClienteTableTable clienteTable = $ClienteTableTable(this);
   late final $ComodoTableTable comodoTable = $ComodoTableTable(this);
   late final $PagamentoTableTable pagamentoTable = $PagamentoTableTable(this);
+  late final $ImovelTableTable imovelTable = $ImovelTableTable(this);
   late final EnderecoDao enderecoDao = EnderecoDao(this as BancoDados);
   late final ClienteDao clienteDao = ClienteDao(this as BancoDados);
   late final ComodoDao comodoDao = ComodoDao(this as BancoDados);
   late final PagamentoDao pagamentoDao = PagamentoDao(this as BancoDados);
+  late final ImovelDao imovelDao = ImovelDao(this as BancoDados);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [enderecoTable, clienteTable, comodoTable, pagamentoTable];
+      [enderecoTable, clienteTable, comodoTable, pagamentoTable, imovelTable];
 }
 
 typedef $$EnderecoTableTableCreateCompanionBuilder = EnderecoTableCompanion
@@ -739,6 +1004,27 @@ typedef $$EnderecoTableTableUpdateCompanionBuilder = EnderecoTableCompanion
   Value<String> numero,
   Value<String> cEP,
 });
+
+final class $$EnderecoTableTableReferences
+    extends BaseReferences<_$BancoDados, $EnderecoTableTable, Endereco> {
+  $$EnderecoTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$ImovelTableTable, List<ImovelTableData>>
+      _imovelTableRefsTable(_$BancoDados db) =>
+          MultiTypedResultKey.fromTable(db.imovelTable,
+              aliasName: $_aliasNameGenerator(
+                  db.enderecoTable.id, db.imovelTable.enderecoId));
+
+  $$ImovelTableTableProcessedTableManager get imovelTableRefs {
+    final manager = $$ImovelTableTableTableManager($_db, $_db.imovelTable)
+        .filter((f) => f.enderecoId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_imovelTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
 
 class $$EnderecoTableTableFilterComposer
     extends Composer<_$BancoDados, $EnderecoTableTable> {
@@ -763,6 +1049,27 @@ class $$EnderecoTableTableFilterComposer
 
   ColumnFilters<String> get cEP => $composableBuilder(
       column: $table.cEP, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> imovelTableRefs(
+      Expression<bool> Function($$ImovelTableTableFilterComposer f) f) {
+    final $$ImovelTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.imovelTable,
+        getReferencedColumn: (t) => t.enderecoId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ImovelTableTableFilterComposer(
+              $db: $db,
+              $table: $db.imovelTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$EnderecoTableTableOrderingComposer
@@ -813,6 +1120,27 @@ class $$EnderecoTableTableAnnotationComposer
 
   GeneratedColumn<String> get cEP =>
       $composableBuilder(column: $table.cEP, builder: (column) => column);
+
+  Expression<T> imovelTableRefs<T extends Object>(
+      Expression<T> Function($$ImovelTableTableAnnotationComposer a) f) {
+    final $$ImovelTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.imovelTable,
+        getReferencedColumn: (t) => t.enderecoId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ImovelTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.imovelTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$EnderecoTableTableTableManager extends RootTableManager<
@@ -824,9 +1152,9 @@ class $$EnderecoTableTableTableManager extends RootTableManager<
     $$EnderecoTableTableAnnotationComposer,
     $$EnderecoTableTableCreateCompanionBuilder,
     $$EnderecoTableTableUpdateCompanionBuilder,
-    (Endereco, BaseReferences<_$BancoDados, $EnderecoTableTable, Endereco>),
+    (Endereco, $$EnderecoTableTableReferences),
     Endereco,
-    PrefetchHooks Function()> {
+    PrefetchHooks Function({bool imovelTableRefs})> {
   $$EnderecoTableTableTableManager(_$BancoDados db, $EnderecoTableTable table)
       : super(TableManagerState(
           db: db,
@@ -866,9 +1194,34 @@ class $$EnderecoTableTableTableManager extends RootTableManager<
             cEP: cEP,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map((e) => (
+                    e.readTable(table),
+                    $$EnderecoTableTableReferences(db, table, e)
+                  ))
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({imovelTableRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (imovelTableRefs) db.imovelTable],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (imovelTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$EnderecoTableTableReferences
+                            ._imovelTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$EnderecoTableTableReferences(db, table, p0)
+                                .imovelTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.enderecoId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
         ));
 }
 
@@ -881,9 +1234,9 @@ typedef $$EnderecoTableTableProcessedTableManager = ProcessedTableManager<
     $$EnderecoTableTableAnnotationComposer,
     $$EnderecoTableTableCreateCompanionBuilder,
     $$EnderecoTableTableUpdateCompanionBuilder,
-    (Endereco, BaseReferences<_$BancoDados, $EnderecoTableTable, Endereco>),
+    (Endereco, $$EnderecoTableTableReferences),
     Endereco,
-    PrefetchHooks Function()>;
+    PrefetchHooks Function({bool imovelTableRefs})>;
 typedef $$ClienteTableTableCreateCompanionBuilder = ClienteTableCompanion
     Function({
   Value<int> id,
@@ -1333,6 +1686,258 @@ typedef $$PagamentoTableTableProcessedTableManager = ProcessedTableManager<
     (Pagamento, BaseReferences<_$BancoDados, $PagamentoTableTable, Pagamento>),
     Pagamento,
     PrefetchHooks Function()>;
+typedef $$ImovelTableTableCreateCompanionBuilder = ImovelTableCompanion
+    Function({
+  Value<int> id,
+  required String nome,
+  required String descricao,
+  required int enderecoId,
+});
+typedef $$ImovelTableTableUpdateCompanionBuilder = ImovelTableCompanion
+    Function({
+  Value<int> id,
+  Value<String> nome,
+  Value<String> descricao,
+  Value<int> enderecoId,
+});
+
+final class $$ImovelTableTableReferences
+    extends BaseReferences<_$BancoDados, $ImovelTableTable, ImovelTableData> {
+  $$ImovelTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $EnderecoTableTable _enderecoIdTable(_$BancoDados db) =>
+      db.enderecoTable.createAlias(
+          $_aliasNameGenerator(db.imovelTable.enderecoId, db.enderecoTable.id));
+
+  $$EnderecoTableTableProcessedTableManager get enderecoId {
+    final manager = $$EnderecoTableTableTableManager($_db, $_db.enderecoTable)
+        .filter((f) => f.id($_item.enderecoId!));
+    final item = $_typedResult.readTableOrNull(_enderecoIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$ImovelTableTableFilterComposer
+    extends Composer<_$BancoDados, $ImovelTableTable> {
+  $$ImovelTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get nome => $composableBuilder(
+      column: $table.nome, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get descricao => $composableBuilder(
+      column: $table.descricao, builder: (column) => ColumnFilters(column));
+
+  $$EnderecoTableTableFilterComposer get enderecoId {
+    final $$EnderecoTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.enderecoId,
+        referencedTable: $db.enderecoTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EnderecoTableTableFilterComposer(
+              $db: $db,
+              $table: $db.enderecoTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ImovelTableTableOrderingComposer
+    extends Composer<_$BancoDados, $ImovelTableTable> {
+  $$ImovelTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get nome => $composableBuilder(
+      column: $table.nome, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get descricao => $composableBuilder(
+      column: $table.descricao, builder: (column) => ColumnOrderings(column));
+
+  $$EnderecoTableTableOrderingComposer get enderecoId {
+    final $$EnderecoTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.enderecoId,
+        referencedTable: $db.enderecoTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EnderecoTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.enderecoTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ImovelTableTableAnnotationComposer
+    extends Composer<_$BancoDados, $ImovelTableTable> {
+  $$ImovelTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get nome =>
+      $composableBuilder(column: $table.nome, builder: (column) => column);
+
+  GeneratedColumn<String> get descricao =>
+      $composableBuilder(column: $table.descricao, builder: (column) => column);
+
+  $$EnderecoTableTableAnnotationComposer get enderecoId {
+    final $$EnderecoTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.enderecoId,
+        referencedTable: $db.enderecoTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EnderecoTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.enderecoTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ImovelTableTableTableManager extends RootTableManager<
+    _$BancoDados,
+    $ImovelTableTable,
+    ImovelTableData,
+    $$ImovelTableTableFilterComposer,
+    $$ImovelTableTableOrderingComposer,
+    $$ImovelTableTableAnnotationComposer,
+    $$ImovelTableTableCreateCompanionBuilder,
+    $$ImovelTableTableUpdateCompanionBuilder,
+    (ImovelTableData, $$ImovelTableTableReferences),
+    ImovelTableData,
+    PrefetchHooks Function({bool enderecoId})> {
+  $$ImovelTableTableTableManager(_$BancoDados db, $ImovelTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ImovelTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ImovelTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ImovelTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> nome = const Value.absent(),
+            Value<String> descricao = const Value.absent(),
+            Value<int> enderecoId = const Value.absent(),
+          }) =>
+              ImovelTableCompanion(
+            id: id,
+            nome: nome,
+            descricao: descricao,
+            enderecoId: enderecoId,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String nome,
+            required String descricao,
+            required int enderecoId,
+          }) =>
+              ImovelTableCompanion.insert(
+            id: id,
+            nome: nome,
+            descricao: descricao,
+            enderecoId: enderecoId,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ImovelTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({enderecoId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (enderecoId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.enderecoId,
+                    referencedTable:
+                        $$ImovelTableTableReferences._enderecoIdTable(db),
+                    referencedColumn:
+                        $$ImovelTableTableReferences._enderecoIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$ImovelTableTableProcessedTableManager = ProcessedTableManager<
+    _$BancoDados,
+    $ImovelTableTable,
+    ImovelTableData,
+    $$ImovelTableTableFilterComposer,
+    $$ImovelTableTableOrderingComposer,
+    $$ImovelTableTableAnnotationComposer,
+    $$ImovelTableTableCreateCompanionBuilder,
+    $$ImovelTableTableUpdateCompanionBuilder,
+    (ImovelTableData, $$ImovelTableTableReferences),
+    ImovelTableData,
+    PrefetchHooks Function({bool enderecoId})>;
 
 class $BancoDadosManager {
   final _$BancoDados _db;
@@ -1345,4 +1950,6 @@ class $BancoDadosManager {
       $$ComodoTableTableTableManager(_db, _db.comodoTable);
   $$PagamentoTableTableTableManager get pagamentoTable =>
       $$PagamentoTableTableTableManager(_db, _db.pagamentoTable);
+  $$ImovelTableTableTableManager get imovelTable =>
+      $$ImovelTableTableTableManager(_db, _db.imovelTable);
 }
