@@ -7,7 +7,7 @@ class Cliente {
   final String nome;
   final String cPF;
   final Contato contato;
-  final String dataNascimento;
+  final DateTime dataNascimento;
 
   Cliente({
     required this.id,
@@ -22,7 +22,7 @@ class Cliente {
     String? nome,
     String? cPF,
     Contato? contato,
-    String? dataNascimento,
+    DateTime? dataNascimento,
   }) {
     return Cliente(
       id: id ?? this.id,
@@ -49,7 +49,7 @@ class Cliente {
       nome: map['nome'] as String,
       cPF: map['cPF'] as String,
       contato: Contato.fromMap(map['contato'] as Map<String, dynamic>),
-      dataNascimento: map['dataNascimento'] as String,
+      dataNascimento: DateTime.parse(map['dataNascimento']),
     );
   }
 
