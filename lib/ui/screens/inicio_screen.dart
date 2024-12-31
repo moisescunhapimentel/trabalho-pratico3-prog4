@@ -33,7 +33,7 @@ class InicioScreenState extends State<InicioScreen> {
                     );
                   },
                 ),
-                SizedBox(width: larguraScreen * 0.1),
+                SizedBox(width: larguraScreen * 0.07),
                 TextoIconeButton(
                   icone: Icons.person,
                   texto: 'Clientes',
