@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:trabalho3/ui/screens/inicio_screen.dart';
+import 'package:trabalho3/ui/theme/app_theme.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -11,11 +12,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const Placeholder(),
+       theme: AppTheme.theme,
+      home: const InicioScreen(),       
     );
   }
 }
