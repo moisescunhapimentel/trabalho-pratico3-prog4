@@ -9,14 +9,13 @@ class ImovelItemButton extends StatelessWidget {
   final TipoIntervalo tipoIntervalo;
   final int diaPagamento;
   final DateTime dataVencimento;
-
-  const ImovelItemButton({super.key, required this.nome, required this.parcelas, required this.tipoIntervalo, required this.diaPagamento, required this.dataVencimento});
+  final Function() funcao;
+  const ImovelItemButton({super.key, required this.nome, required this.parcelas, required this.tipoIntervalo, required this.diaPagamento, required this.dataVencimento, required this.funcao});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-      },
+      onTap: funcao,
       child: Container(
         padding: const EdgeInsets.all(16),
         margin: const EdgeInsets.symmetric(vertical: 8),
