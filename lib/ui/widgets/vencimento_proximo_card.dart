@@ -83,7 +83,7 @@ class VencimentoProximoCard extends StatelessWidget {
                 ),
               ],
             ),
-            PadraoTextoButton(texto: "cobrar", onPressed: () {}),
+            PadraoTextoButton(texto: "cobrar", funcao: () {}),
           ],
         ),
       ),
