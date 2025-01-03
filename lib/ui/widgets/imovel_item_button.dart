@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho3/ui/constants/colors.dart';
 import 'package:intl/intl.dart'; 
-import '../../data/enums/tipo_intervalo.dart';
+import 'package:trabalho3/data/enums/tipo_intervalo.dart';
 
 class ImovelItemButton extends StatelessWidget {
   final String nome;
