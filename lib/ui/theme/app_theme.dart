@@ -15,7 +15,7 @@ class AppTheme {
       ),
 
       textTheme:const TextTheme(
-        displayLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, ), // Titles
+        displayLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, ), // Titles
         bodyLarge: TextStyle(fontSize: 16, ), // body text
         bodyMedium: TextStyle(fontSize: 14, ), // secondary text
       ),
