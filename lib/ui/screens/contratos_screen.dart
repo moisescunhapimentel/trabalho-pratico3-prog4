@@ -18,9 +18,10 @@ class ContratosScreen extends StatelessWidget {
         ImovelItemButton(
           nome: 'Apartamento em Camocim',
           parcelas: '3',
-          tipoIntervalo: TipoIntervalo.anual, // Use o enum TipoIntervalo
-          diaPagamento: 7,
+          tipoIntervalo: TipoIntervalo.anual, 
+          diaPagamento: 02,
           dataVencimento: DateTime(2024, 12, 31),
+          funcao:() => {},
         ),
       ]),
       
