@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:trabalho3/ui/screens/clientes_screen.dart';
 import 'package:trabalho3/ui/screens/imoveis_screen.dart';
 import 'package:trabalho3/ui/widgets/texto_icone_button.dart';
+import 'package:trabalho3/ui/widgets/vencimento_proximo_list.dart';
+import 'package:trabalho3/ui/theme/app_theme.dart';
 
 class InicioScreen extends StatefulWidget {
   const InicioScreen({super.key});
@@ -16,10 +18,13 @@ class InicioScreenState extends State<InicioScreen> {
     var larguraScreen = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: Center(
+      body: Container(
+        padding: const EdgeInsets.all(10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            VencimentoProximoList(),
+            SizedBox(width: larguraScreen * 0.1),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -29,18 +34,20 @@ class InicioScreenState extends State<InicioScreen> {
                   funcao: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const ImoveisScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const ImoveisScreen()),
                     );
                   },
                 ),
-                SizedBox(width: larguraScreen * 0.07),
+                SizedBox(width: larguraScreen * 0.01),
                 TextoIconeButton(
                   icone: Icons.person,
                   texto: 'Clientes',
                   funcao: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const ClientesScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const ClientesScreen()),
                     );
                   },
                 ),
