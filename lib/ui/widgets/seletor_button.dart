@@ -3,21 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:trabalho3/ui/constants/colors.dart';
 import 'package:trabalho3/ui/widgets/padrao_texto_button.dart';
 
-class SeletorOpcoesButton extends StatefulWidget {
+class SeletorButton extends StatefulWidget {
   final String opcao1;
   final String opcao2;
-  const SeletorOpcoesButton({super.key, required this.opcao1, required this.opcao2});
+  const SeletorButton({super.key, required this.opcao1, required this.opcao2});
 
   @override
-  _SeletorOpcoesButtonState createState() => _SeletorOpcoesButtonState();
+  _SeletorButtonState createState() => _SeletorButtonState();
 }
 
-class _SeletorOpcoesButtonState extends State<SeletorOpcoesButton> {
+class _SeletorButtonState extends State<SeletorButton> {
   String? _opcaoSelecionada;
 
   @override
   Widget build(BuildContext context) {
     return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           PadraoTextoButton(
             texto: widget.opcao1,
