@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:trabalho3/ui/screens/imovel_item_button.dart';
+import 'package:trabalho3/ui/widgets/imovel_item_button.dart';
+import '../../data/enums/tipo_intervalo.dart';
 
 class ContratosScreen extends StatelessWidget {
   const ContratosScreen({super.key});
@@ -10,7 +11,13 @@ class ContratosScreen extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: Column(children: [
         const Text('Vencimento Próximo'),
-        ImovelItemButton(nome: 'Sitio em Capitão de Campos', parcelas: '12', tipo: 'mensal', diaPagamento: '10', dataVencimento: DateTime.now()),
+        ImovelItemButton(
+          nome: 'Apartamento em Camocim',
+          parcelas: '3',
+          tipoIntervalo: TipoIntervalo.anual, // Use o enum TipoIntervalo
+          diaPagamento: 7,
+          dataVencimento: DateTime(2024, 12, 31),
+        ),
       ]),
     );
   }
