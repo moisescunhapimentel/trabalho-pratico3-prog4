@@ -4,9 +4,9 @@ import 'package:trabalho3/ui/constants/colors.dart';
 
 class PadraoTextoButton extends StatelessWidget {
   final String texto;
-  final void Function() onPressed;
+  final void Function() funcao;
   
-  const PadraoTextoButton({super.key, required this.texto, required this.onPressed});
+  const PadraoTextoButton({super.key, required this.texto, required this.funcao});
 
   @override
   Widget build(BuildContext context) {
