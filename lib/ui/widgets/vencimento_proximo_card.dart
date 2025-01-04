@@ -39,26 +39,23 @@ class VencimentoProximoCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        nomeImovel,
+                        nomeImovel,  style: Theme.of(context).textTheme.displayLarge,
                         
                       ),
                       const SizedBox(height: 8),
                       Row(
                         children: [
-                          Text('$valorContrato'),
+                          Text('$valorContrato',  style: Theme.of(context).textTheme.bodyMedium),
                           const SizedBox(width: 4),
                           const Text('|'),
                           const SizedBox(width: 4),
-                          Text(tipoIntervalo.name),
+                          Text(tipoIntervalo.name, style: Theme.of(context).textTheme.bodyMedium),
                         ],
                       ),
                       const SizedBox(height: 4),
                       Text(
                         nomeInquelino,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          
-                        ),
+                        style: Theme.of(context).textTheme.bodyMedium
                       ),
                     ],
                   ),
@@ -67,10 +64,7 @@ class VencimentoProximoCard extends StatelessWidget {
                 Text(
                   DateFormat('dd/MM/yyyy')
                       .format(dataVencimento), 
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.bodyMedium
                 ),
               ],
             ),
