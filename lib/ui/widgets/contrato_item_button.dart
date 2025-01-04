@@ -3,14 +3,14 @@ import 'package:trabalho3/ui/constants/colors.dart';
 import 'package:intl/intl.dart'; 
 import 'package:trabalho3/data/enums/tipo_intervalo.dart';
 
-class ImovelItemButton extends StatelessWidget {
+class ContratoItemButton extends StatelessWidget {
   final String nome;
   final String parcelas;
   final TipoIntervalo tipoIntervalo;
   final int diaPagamento;
   final DateTime dataVencimento;
   final Function() funcao;
-  const ImovelItemButton({super.key, required this.nome, required this.parcelas, required this.tipoIntervalo, required this.diaPagamento, required this.dataVencimento, required this.funcao});
+  const ContratoItemButton({super.key, required this.nome, required this.parcelas, required this.tipoIntervalo, required this.diaPagamento, required this.dataVencimento, required this.funcao});
 
   @override
   Widget build(BuildContext context) {
