@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trabalho3/ui/screens/formulario_imovel_screen.dart';
 import 'package:trabalho3/ui/widgets/icone_flutuante_button.dart';
 
 class ClientesScreen extends StatelessWidget {
@@ -12,8 +13,13 @@ class ClientesScreen extends StatelessWidget {
         ),
         body: const Column(
         ),
-        floatingActionButton: IconeFlutuanteButton(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      );
+        floatingActionButton: IconeFlutuanteButton(
+          funcao: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FormularioImovelScreen()),
+          );
+          },
+        ),);
   }
 }
