@@ -58,12 +58,12 @@ class VencimentoProximoCard extends StatelessWidget {
                           const SizedBox(width: 4),
                           const Text('|'),
                           const SizedBox(width: 4),
-                          Text(tipoIntervalo.toString()),
+                          Text(tipoIntervalo.name),
                         ],
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        (tipoIntervalo.toString()),
+                        nomeInquelino,
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.grey[600],
