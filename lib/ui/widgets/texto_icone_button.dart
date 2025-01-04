@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:trabalho3/ui/constants/colors.dart';
 
 class TextoIconeButton extends StatelessWidget {
   final String texto;
@@ -20,7 +19,6 @@ class TextoIconeButton extends StatelessWidget {
         funcao();
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: surfaceColor,
         padding: EdgeInsets.symmetric(vertical: (larguraScreen * 0.05), horizontal: (larguraScreen * 0.01)),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
@@ -31,10 +29,10 @@ class TextoIconeButton extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icone, color: highlightSoft, size: 50),
+          Icon(icone, size: 50),
           const SizedBox(height: 5),
           Text(texto,
-              style: const TextStyle(color: highlightSoft, fontSize: 20)),
+              style: const TextStyle( fontSize: 20)),
         ],
       ),
     );
