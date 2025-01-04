@@ -10,7 +10,7 @@ class VencimentoProximoList extends StatelessWidget {
     var larguraScreen = MediaQuery.of(context).size.width;
     var alturaScreen = MediaQuery.of(context).size.height;
     return Container(
-      height: alturaScreen * 0.6,
+      height: alturaScreen * 0.55,
         margin: EdgeInsets.symmetric(horizontal: larguraScreen * 0.06), 
         child: ListView(
           children: [

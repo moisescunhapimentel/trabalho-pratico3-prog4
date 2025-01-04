@@ -18,6 +18,7 @@ class InicioScreenState extends State<InicioScreen> {
   @override
   Widget build(BuildContext context) {
     var larguraScreen = MediaQuery.of(context).size.width;
+    var alturaScreen = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -33,13 +34,14 @@ class InicioScreenState extends State<InicioScreen> {
             },
             child: Icon(icon),
           ),
+          SizedBox(height: alturaScreen * 0.01),
           Center(
             child: Text("Vencimento Próximo",
                 style: Theme.of(context).textTheme.displayLarge),
           ),
-          SizedBox(height: larguraScreen * 0.03),
+          SizedBox(height: alturaScreen * 0.01),
           const VencimentoProximoList(),
-          SizedBox(width: larguraScreen * 0.1),
+          SizedBox(width: alturaScreen * 0.1),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

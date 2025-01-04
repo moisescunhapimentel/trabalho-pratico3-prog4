@@ -30,7 +30,7 @@ class TextoIconeButton extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icone, size: 50),
-          const SizedBox(height: 5),
+          const SizedBox(height: 1),
           Text(texto,
               style: const TextStyle( fontSize: 20)),
         ],
