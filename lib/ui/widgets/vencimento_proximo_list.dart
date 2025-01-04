@@ -9,27 +9,12 @@ class VencimentoProximoList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var larguraScreen = MediaQuery.of(context).size.width;
-
-    return Expanded(
-      flex: 2,
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: larguraScreen * 0.06),
-        decoration: BoxDecoration(
-          color: surfaceColor,
-          borderRadius: BorderRadius.circular(6),
-          border: const Border(
-            bottom: BorderSide(
-              width: 2,
-              color: highlightSoft,
-            ),
-          ),
-        ),
+    var alturaScreen = MediaQuery.of(context).size.height;
+    return Container(
+      height: alturaScreen * 0.6,
+        margin: EdgeInsets.symmetric(horizontal: larguraScreen * 0.06), 
         child: ListView(
-
           children: [
-            Center(child: Text("Vencimento Próximo",
-                style: Theme.of(context).textTheme.displayLarge),),
-            
             VencimentoProximoCard(
               nomeImovel: 'Casa do João',
               nomeInquelino: 'João',
@@ -56,7 +41,7 @@ class VencimentoProximoList extends StatelessWidget {
             ),
           ],
         ),
-      ),
+     
     );
   }
 }
