@@ -1,8 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:trabalho3/data/models/navegacao_item.dart';
-import 'package:trabalho3/ui/constants/colors.dart';
-
 import 'package:trabalho3/ui/screens/Estatisticas_screen.dart';
 import 'package:trabalho3/ui/screens/contratos_screen.dart';
 import 'package:trabalho3/ui/screens/inicio_screen.dart';

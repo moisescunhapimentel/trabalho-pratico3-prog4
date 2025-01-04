@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho3/data/enums/tipo_intervalo.dart';
-import 'package:trabalho3/ui/constants/colors.dart';
 import 'package:trabalho3/ui/widgets/vencimento_proximo_card.dart';
 
 class VencimentoProximoList extends StatelessWidget {

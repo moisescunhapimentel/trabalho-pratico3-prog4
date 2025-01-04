@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho3/ui/widgets/contrato_item_button.dart';
 import '../../data/enums/tipo_intervalo.dart';
-import 'package:trabalho3/ui/theme/app_theme.dart';
 import 'package:trabalho3/ui/widgets/icone_flutuante_button.dart';
 class ContratosScreen extends StatelessWidget {
   const ContratosScreen({super.key});
