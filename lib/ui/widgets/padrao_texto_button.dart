@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:trabalho3/ui/constants/colors.dart';
 
@@ -16,9 +15,9 @@ class PadraoTextoButton extends StatelessWidget {
     return TextButton(
       onPressed: funcao,
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(corFundo ?? accentSecondary),
-        padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 16, horizontal: 30)),
-        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+        backgroundColor: WidgetStateProperty.all(corFundo ?? accentSecondary),
+        padding: WidgetStateProperty.all(const EdgeInsets.symmetric(vertical: 16, horizontal: 30)),
+        shape: WidgetStateProperty.all(RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(6),
         )),
       ),
