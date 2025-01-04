@@ -42,86 +42,78 @@ class _FormularioImovelScreenState extends State<FormularioImovelScreen> {
       body: Stack(
         children: [
           Form(
-            child: SingleChildScrollView(
+            child: ListView(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  SeletorButton(
-                      opcao1: 'Sobre',
-                      opcao2: 'Cômodos',
-                      funcao: _updateOption),
+              children: [
+                SeletorButton(
+                    opcao1: 'Sobre', opcao2: 'Cômodos', funcao: _updateOption),
+                const SizedBox(height: 20),
+                if (_selectedOption == 'Sobre') ...[
+                  CampoSimplesTextform(
+                      controller: _nomeController, rotulo: 'nome'),
                   const SizedBox(height: 20),
-                  if (_selectedOption == 'Sobre') ...[
-                    CampoSimplesTextform(
-                        controller: _nomeController, rotulo: 'nome'),
-                    const SizedBox(height: 20),
-                    CampoSimplesTextform(
-                        controller: _descricaoController,
-                        rotulo: 'descricao',
-                        textoLongo: true),
-                    const SizedBox(height: 20),
-                    Text('Endereço',
-                        style: Theme.of(context).textTheme.displayLarge),
-                    const SizedBox(height: 20),
-                    Row(
-                      children: [
-                        Expanded(
-                            flex: 2,
-                            child: CampoSimplesTextform(
-                                controller: _ruaController,
-                                rotulo: 'Logradouro')),
-                        Expanded(
-                            flex: 1,
-                            child: CampoSimplesTextform(
-                                controller: _numeroController,
-                                rotulo: 'Número')),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    CampoSimplesTextform(
-                        controller: _bairroController, rotulo: 'Bairro'),
-                    const SizedBox(height: 20),
-                    CampoSimplesTextform(
-                        controller: _cepController, rotulo: 'CEP'),
-                  ] else if (_selectedOption == 'Cômodos') ...[
-                    Text('Cômodos',
-                        style: Theme.of(context).textTheme.displayLarge),
-                    const SizedBox(height: 20),
-                    const Text('Em breve...'),
-                  ],
+                  CampoSimplesTextform(
+                      controller: _descricaoController,
+                      rotulo: 'descricao',
+                      textoLongo: true),
+                  const SizedBox(height: 20),
+                  Text('Endereço',
+                      style: Theme.of(context).textTheme.displayLarge),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                          flex: 2,
+                          child: CampoSimplesTextform(
+                              controller: _ruaController,
+                              rotulo: 'Logradouro')),
+                      Expanded(
+                          flex: 1,
+                          child: CampoSimplesTextform(
+                              controller: _numeroController, rotulo: 'Número')),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  CampoSimplesTextform(
+                      controller: _bairroController, rotulo: 'Bairro'),
+                  const SizedBox(height: 20),
+                  CampoSimplesTextform(
+                      controller: _cepController, rotulo: 'CEP'),
+                ] else if (_selectedOption == 'Cômodos') ...[
+                  Text('Cômodos',
+                      style: Theme.of(context).textTheme.displayLarge),
+                  const SizedBox(height: 20),
+                  const Text('Em breve...'),
                 ],
-              ),
+              ],
             ),
           ),
           //const Spacer(),
           Container(
-            padding: const EdgeInsets.all(16),
-            alignment: Alignment.bottomCenter,
-            child:  Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              PadraoTextoButton(
-                funcao: () {
-                  Navigator.pop(context);
-                },
-                texto: 'Cancelar',
-                cor: Colors.black,
-                corFundo: surfaceColor,
-              ),
-              PadraoTextoButton(
-                funcao: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                  }
-                },
-                texto: 'Salvar',
-                corFundo: accentPrimary,
-              ),
-            ],
-          )
-            
-            ),
-         
+              padding: const EdgeInsets.all(16),
+              alignment: Alignment.bottomCenter,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  PadraoTextoButton(
+                    funcao: () {
+                      Navigator.pop(context);
+                    },
+                    texto: 'Cancelar',
+                    cor: Colors.black,
+                    corFundo: surfaceColor,
+                  ),
+                  PadraoTextoButton(
+                    funcao: () {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                      }
+                    },
+                    texto: 'Salvar',
+                    corFundo: accentPrimary,
+                  ),
+                ],
+              )),
         ],
       ),
     );
