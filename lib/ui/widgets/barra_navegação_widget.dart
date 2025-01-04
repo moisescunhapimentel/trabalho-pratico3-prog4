@@ -30,6 +30,10 @@ class _BarraNavegacaoWidgetState extends State<BarraNavegacaoWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final Color accentPrimary = theme.colorScheme.primary;
+    final Color highlightSoft = theme.colorScheme.secondary;
+    final Color surfaceColor = theme.colorScheme.onSecondary;
 
   final List<NavegacaoItem> navegacaoInferiorItems= [
     NavegacaoItem(icone: Icons.assignment, screen: const ContratosScreen()),
@@ -45,7 +49,7 @@ class _BarraNavegacaoWidgetState extends State<BarraNavegacaoWidget> {
       body:  navegacaoInferiorItems[_selectIndex].screen,
       bottomNavigationBar: Container(
         height: 60,
-        color: backgroundColor,
+        color: surfaceColor,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children:  navegacaoInferiorItems.map((item) {

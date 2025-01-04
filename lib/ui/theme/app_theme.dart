@@ -7,6 +7,15 @@ class AppTheme {
       useMaterial3: true,
       scaffoldBackgroundColor: backgroundColor,
       primarySwatch: Colors.green,
+      primaryColor: accentPrimary,
+      colorScheme: const ColorScheme.light(
+        primary: accentPrimary,
+        secondary: accentSecondary,
+        surface: highlightNeutral,
+        onSurface: highlightSoft,
+        onPrimary: Colors.black,
+        onSecondary: backgroundColor,
+      ),
       appBarTheme: const AppBarTheme(
         backgroundColor: backgroundColor,
         centerTitle: true,
@@ -16,12 +25,15 @@ class AppTheme {
         displayLarge: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
+          color: Colors.black,
         ), // Titles
         bodyLarge: TextStyle(
           fontSize: 18,
+          color: Colors.black,
         ), // body text
         bodyMedium: TextStyle(
           fontSize: 16,
+          color: Colors.black,
         ), // secondary text
       ),
       fontFamily: 'Concert One',
@@ -42,7 +54,7 @@ class AppTheme {
         ),
       ),
       buttonTheme: ButtonThemeData(
-        buttonColor: accentSecondary,
+        buttonColor: accentPrimary,
         textTheme: ButtonTextTheme.primary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
@@ -54,12 +66,19 @@ class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
-      scaffoldBackgroundColor: Colors.black,
+      scaffoldBackgroundColor: darkBlackgoundColor,
       primarySwatch: Colors.green,
       appBarTheme: const AppBarTheme(
         backgroundColor: darkBlackgoundColor,
         centerTitle: true,
         foregroundColor: Colors.white,
+      ),
+      colorScheme: const ColorScheme.dark(
+        primary: accentPrimary,
+        secondary: accentSecondary,
+        surface: highdarkNeutral,
+      
+        onSecondary: darkBlackgoundColor,
       ),
       textTheme: const TextTheme(
         displayLarge: TextStyle(
@@ -88,7 +107,7 @@ class AppTheme {
         ),
       ),
       buttonTheme: ButtonThemeData(
-        buttonColor: accentSecondary,
+        buttonColor: accentPrimary,
         textTheme: ButtonTextTheme.primary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),

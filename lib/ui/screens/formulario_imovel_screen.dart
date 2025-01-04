@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:trabalho3/ui/constants/colors.dart';
 import 'package:trabalho3/ui/widgets/campo_simples_textform.dart';
 import 'package:trabalho3/ui/widgets/padrao_texto_button.dart';
 import 'package:trabalho3/ui/widgets/seletor_button.dart';
@@ -32,6 +31,10 @@ class _FormularioImovelScreenState extends State<FormularioImovelScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final Color accentPrimary = theme.colorScheme.primary;
+    final Color surfaceColor = theme.colorScheme.surface;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Imóvel'),
@@ -103,7 +106,7 @@ class _FormularioImovelScreenState extends State<FormularioImovelScreen> {
                 },
                 texto: 'Cancelar',
                 cor: Colors.black,
-                corFundo: highlightNeutral,
+                corFundo: surfaceColor,
               ),
               PadraoTextoButton(
                 funcao: () {

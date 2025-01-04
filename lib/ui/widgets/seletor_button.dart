@@ -19,6 +19,10 @@ class _SeletorButtonState extends State<SeletorButton> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final Color accentPrimary = theme.colorScheme.primary;
+    final Color surfaceColor = theme.colorScheme.surface;
+
     return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -26,8 +30,8 @@ class _SeletorButtonState extends State<SeletorButton> {
             texto: widget.opcao1,
             cor: _opcaoSelecionada == widget.opcao1 ? backgroundColor : Colors.black,
             corFundo: _opcaoSelecionada == widget.opcao1
-                ? accentSecondary
-                : highlightNeutral,
+                ? accentPrimary
+                : surfaceColor,
             funcao: () {
               setState(() {
                 _opcaoSelecionada = widget.opcao1;
@@ -40,7 +44,7 @@ class _SeletorButtonState extends State<SeletorButton> {
             cor: _opcaoSelecionada == widget.opcao2 ? backgroundColor : Colors.black,
             corFundo: _opcaoSelecionada == widget.opcao2
                 ? accentSecondary
-                : highlightNeutral,
+                : surfaceColor,
             funcao: () {
               setState(() {
                 _opcaoSelecionada = widget.opcao2;
