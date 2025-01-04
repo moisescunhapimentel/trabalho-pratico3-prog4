@@ -25,7 +25,7 @@ class TextoIconeButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        fixedSize: const Size(170, 150),
+        fixedSize: Size((larguraScreen * 0.45), 150),
         elevation: 8,
       ),
       child: Column(
