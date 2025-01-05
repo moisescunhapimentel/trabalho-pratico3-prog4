@@ -4,19 +4,25 @@ class CampoSimplesTextform extends StatelessWidget {
   final TextEditingController controller;
   final String rotulo;
   final bool textoLongo;
+  final String? Function(String?)? validator;
 
-  const CampoSimplesTextform({super.key, required this.controller, required this.rotulo, this.textoLongo = false});
+  const CampoSimplesTextform({
+    super.key,
+    required this.controller,
+    required this.rotulo,
+    this.textoLongo = false,
+    this.validator,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
-
         labelText: rotulo,
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
       ),
-      validator: (value) {
+      validator: validator ?? (value) {
         if (value == null || value.isEmpty) {
           return 'Por favor, preencha o campo $rotulo';
         }
