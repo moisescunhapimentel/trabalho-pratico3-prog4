@@ -61,7 +61,7 @@ class _SeletorButtonState extends State<SeletorButton> {
             widget.funcao(widget.opcao1);
           },
         ),
-        const SizedBox(width: 10),
+
         PadraoTextoButton(
           texto: widget.opcao2,
           cor: _opcaoSelecionada == widget.opcao2 ? backgroundColor : Colors.black,
