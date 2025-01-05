@@ -7,13 +7,15 @@ class ClienteItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var larguraScreen = MediaQuery.of(context).size.width;
-      return Card(
-      child: Container(
-        width: larguraScreen * 0.9,
-        padding: const EdgeInsets.all(16),
-        
-        child: TextButton(onPressed: funcao, child: Text('Ricardo de Sousaa Araujo Lima', style: Theme.of(context).textTheme.bodyMedium)),
-      ),
-    );
+      return  GestureDetector(
+        onTap: funcao,
+        child: Card(
+          child: Container(
+            width: larguraScreen * 0.9,
+            padding: const EdgeInsets.all(16),
+            child: Text('Ricardo de Sousaa Araujo Lima', style: Theme.of(context).textTheme.bodyMedium),
+          ),
+        ),
+      );
   }
 }
