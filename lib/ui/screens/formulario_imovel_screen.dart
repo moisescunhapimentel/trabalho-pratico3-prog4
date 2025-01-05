@@ -88,7 +88,6 @@ class _FormularioImovelScreenState extends State<FormularioImovelScreen> {
               ],
             ),
           ),
-          //const Spacer(),
           Container(
               padding: const EdgeInsets.all(16),
               alignment: Alignment.bottomCenter,
