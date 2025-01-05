@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho3/ui/widgets/titulo_descricao_text.dart';
 import 'package:trabalho3/data/models/contato.dart';
+import 'package:intl/intl.dart';
 
 class ClienteScreen extends StatelessWidget {
   final String nome;
@@ -9,12 +10,16 @@ class ClienteScreen extends StatelessWidget {
   final DateTime dataNascimento;
 
   const ClienteScreen({
-    Key? key,
+    super.key,
     required this.nome,
     required this.cpf,
     required this.contato,
     required this.dataNascimento,
-  }) : super(key: key);
+  });
+
+    String formatDate(DateTime date) {
+    return DateFormat('dd-MM-yyyy').format(date);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +39,7 @@ class ClienteScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 TituloDescricaoText(
                   titulo: 'Data de Nascimento',
-                  descricao: '${dataNascimento.toLocal()}'.split(' ')[0],
+                  descricao: formatDate(dataNascimento),
                 ),
                 const SizedBox(height: 20),
                 TituloDescricaoText(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho3/ui/widgets/titulo_descricao_text.dart';
 import 'package:trabalho3/data/enums/tipo_intervalo.dart';
+import 'package:intl/intl.dart';
 
 class ContratoScreen extends StatelessWidget {
   final DateTime dataInicio;
@@ -10,16 +11,16 @@ class ContratoScreen extends StatelessWidget {
   final int? mesPagamento;
 
   const ContratoScreen({
-    Key? key,
+    super.key,
     required this.dataInicio,
     required this.dataFim,
     required this.intervaloPagamento,
     required this.diaPagamento,
     this.mesPagamento,
-  }) : super(key: key);
+  });
 
   String formatDate(DateTime date) {
-    return '${date.day}/${date.month}/${date.year}';
+    return DateFormat('dd-MM-yyyy').format(date);
   }
 
   @override
