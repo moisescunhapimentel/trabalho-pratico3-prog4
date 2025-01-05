@@ -46,7 +46,7 @@ class _FormularioImovelScreenState extends State<FormularioImovelScreen> {
               padding: const EdgeInsets.all(16.0),
               children: [
                 SeletorButton(
-                    opcao1: 'Sobre', opcao2: 'Cômodos', funcao: _updateOption),
+                   opcao1: 'Sobre', opcao2: 'Cômodos', funcao: _updateOption, selectedOption: 'Sobre',),
                 const SizedBox(height: 20),
                 if (_selectedOption == 'Sobre') ...[
                   CampoSimplesTextform(
