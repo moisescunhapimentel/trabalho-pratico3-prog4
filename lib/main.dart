@@ -17,20 +17,26 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = ref.watch(themeModelProvider);
+    final theme = ref.watch(themeNotifierProvider);
+    final themeNotifier = ref.read(themeNotifierProvider.notifier);
     final themeDao = ref.read(themeDaoProvider);
 
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: theme.customTheme.brightness == Brightness.light.name
+      theme: theme.brightness == Brightness.light.name
           ? AppTheme.lightTheme.theme
           : AppTheme.darkTheme.theme,
       home: BarraNavegacaoWidget(
         toggleTheme: () {
-          debugPrint(theme.customTheme.brightness);
+          debugPrint(theme.brightness);
 
-          themeDao.toggleTheme();
-          theme.changeTheme(themeDao.getTheme());
+          themeDao.when(
+              data: (data) {
+                data.toggleTheme();
+                themeNotifier.changeTheme(data.getTheme());
+              },
+              error: (error, stack) {},
+              loading: () => const CircularProgressIndicator());
         },
       ),
     );
