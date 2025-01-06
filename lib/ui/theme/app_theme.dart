@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho3/ui/constants/colors.dart';
 
-class AppTheme {
+enum AppTheme { lightTheme, darkTheme }
+
+extension AppThemeExtension on AppTheme {
+  ThemeData get theme {
+    switch (this) {
+      case AppTheme.darkTheme:
+        return darkTheme;
+      default:
+        return lightTheme;
+    }
+  }
+
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
@@ -77,7 +88,6 @@ class AppTheme {
         primary: accentPrimary,
         secondary: accentSecondary,
         surface: highdarkNeutral,
-      
         onSecondary: darkBlackgoundColor,
       ),
       textTheme: const TextTheme(
