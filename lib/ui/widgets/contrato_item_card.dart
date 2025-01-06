@@ -22,6 +22,7 @@ class ContratoItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: funcao,
       child: Card(
         child: Container(
           padding: const EdgeInsets.all(16),
@@ -56,7 +57,7 @@ class ContratoItemCard extends StatelessWidget {
               // Lado direito: Ícone
               Text(
                 DateFormat('dd/MM/yyyy')
-                    .format(dataVencimento), // Formata a data
+                    .format(dataVencimento), 
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
