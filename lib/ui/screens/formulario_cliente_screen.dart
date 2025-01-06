@@ -1,27 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:trabalho3/ui/widgets/campo_simples_textform.dart';
 import 'package:trabalho3/ui/widgets/padrao_texto_button.dart';
+import 'package:trabalho3/ui/models/formulario_cliente_model.dart';
 
-class FormularioClienteScreen extends StatefulWidget {
+class FormularioClienteScreen extends StatelessWidget {
   const FormularioClienteScreen({super.key});
 
   @override
-  State<FormularioClienteScreen> createState() => _FormularioClienteScreenState();
-}
-
-class _FormularioClienteScreenState extends State<FormularioClienteScreen> {
-  final TextEditingController _nomeController = TextEditingController();
-  final TextEditingController _cpfController = TextEditingController();
-  final TextEditingController _telefoneController = TextEditingController();
-  final TextEditingController _dataNascimentoController = TextEditingController();
-
-  final _formKey = GlobalKey<FormState>();
-
-  final _telefoneFormatter = MaskTextInputFormatter(mask: '(##) #####-####', filter: { "#": RegExp(r'[0-9]')});
-
-  @override
   Widget build(BuildContext context) {
+    final formModel = Provider.of<FormularioClienteModel>(context, listen: false);
+    final _telefoneFormatter = MaskTextInputFormatter(mask: '(##) #####-####', filter: { "#": RegExp(r'[0-9]')});
+
     final ThemeData theme = Theme.of(context);
     final Color accentPrimary = theme.colorScheme.primary;
     final Color surfaceColor = theme.colorScheme.surface;
@@ -33,13 +24,13 @@ class _FormularioClienteScreenState extends State<FormularioClienteScreen> {
       body: Stack(
         children: [
           Form(
-            key: _formKey,
+            key: GlobalKey<FormState>(),
             child: ListView(
               padding: const EdgeInsets.all(16.0),
               children: [
                 const SizedBox(height: 20),
                 CampoSimplesTextform(
-                  controller: _nomeController,
+                  controller: formModel.nomeController,
                   rotulo: 'Nome',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -50,7 +41,7 @@ class _FormularioClienteScreenState extends State<FormularioClienteScreen> {
                 ),
                 const SizedBox(height: 20),
                 CampoSimplesTextform(
-                  controller: _cpfController,
+                  controller: formModel.cpfController,
                   rotulo: 'CPF',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -61,7 +52,7 @@ class _FormularioClienteScreenState extends State<FormularioClienteScreen> {
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
-                  controller: _telefoneController,
+                  controller: formModel.telefoneController,
                   decoration: const InputDecoration(
                     labelText: 'Telefone',
                     border: OutlineInputBorder(),
@@ -77,25 +68,14 @@ class _FormularioClienteScreenState extends State<FormularioClienteScreen> {
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
-                  controller: _dataNascimentoController,
+                  controller: formModel.dataNascimentoController,
                   readOnly: true,
                   decoration: const InputDecoration(
                     labelText: 'Data de Nascimento',
                     border: OutlineInputBorder(),
                   ),
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(2100),
-                    );
-
-                    if (pickedDate != null) {
-                      setState(() {
-                        _dataNascimentoController.text = pickedDate.toLocal().toString().split(' ')[0];
-                      });
-                    }
+                  onTap: () {
+                    formModel.selecionarData(context); 
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -124,13 +104,10 @@ class _FormularioClienteScreenState extends State<FormularioClienteScreen> {
                 ),
                 PadraoTextoButton(
                   funcao: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Formulário salvo com sucesso!')),
-                      );
-                      Navigator.pop(context);
-                    }
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Formulário salvo com sucesso!')),
+                    );
+                    Navigator.pop(context);
                   },
                   texto: 'Salvar',
                   corFundo: accentPrimary,
