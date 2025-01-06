@@ -18,18 +18,10 @@ class ImoveisScreen extends StatelessWidget {
           ImovelItemCard(
             nomeImovel: 'Casa em João Pessoa',
             rua: 'Rua do alegria',
-            numImovel: '123',        
+            numImovel: '123',  
+            imovelId: 1,      
           ),
-          ImovelItemCard(
-            nomeImovel: 'Casa em João Pessoa',
-            rua: 'Rua do alegria',
-            numImovel: '123',       
-          ),
-          ImovelItemCard(
-            nomeImovel: 'Casa em João Pessoa',
-            rua: 'Rua do alegria',
-            numImovel: '123',
-          ),
+        
         ],
       ),
       floatingActionButton: IconeFlutuanteButton(

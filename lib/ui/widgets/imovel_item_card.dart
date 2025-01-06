@@ -5,13 +5,15 @@ class ImovelItemCard extends StatelessWidget {
   final String nomeImovel;
   final String rua;
   final String numImovel;
- 
-  const ImovelItemCard(
-      {super.key,
-      required this.nomeImovel,
-      required this.rua,
-      required this.numImovel,
-    });
+  final int imovelId;  
+
+  const ImovelItemCard({
+    super.key,
+    required this.nomeImovel,
+    required this.rua,
+    required this.numImovel,
+    required this.imovelId, 
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,9 @@ class ImovelItemCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ImovelScreen(nomeImovel: nomeImovel, descricao: 'descricao', rua: rua, numImovel: numImovel, bairro: 'bairro', cEP: 'cEP')),
+          MaterialPageRoute(
+            builder: (context) => ImovelScreen(imovelId: imovelId),
+          ),
         );
       },
       child: Card(
@@ -27,28 +31,24 @@ class ImovelItemCard extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           margin: const EdgeInsets.symmetric(vertical: 8),
           child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      nomeImovel,
-                      style: Theme.of(context).textTheme.displayLarge,
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Text(rua),
-                        const SizedBox(width: 4),
-                        const Text('|'),
-                        const SizedBox(width: 4),
-                        Text(numImovel),
-                      ],
-                    ),
-                   
-                  ],
-                ),
-              
-            
-          
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                nomeImovel,
+                style: Theme.of(context).textTheme.displayLarge,
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Text(rua),
+                  const SizedBox(width: 4),
+                  const Text('|'),
+                  const SizedBox(width: 4),
+                  Text(numImovel),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trabalho3/providers/formulario_cliente_provider.dart';
 import 'package:trabalho3/ui/widgets/campo_simples_textform.dart';
 import 'package:trabalho3/ui/widgets/padrao_texto_button.dart';
-import 'package:trabalho3/ui/models/formulario_cliente_model.dart';
 
-class FormularioClienteScreen extends StatelessWidget {
+class FormularioClienteScreen extends ConsumerWidget {
   const FormularioClienteScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final formModel = Provider.of<FormularioClienteModel>(context, listen: false);
-    final _telefoneFormatter = MaskTextInputFormatter(mask: '(##) #####-####', filter: { "#": RegExp(r'[0-9]')});
+  Widget build(BuildContext context, WidgetRef ref) {
+    final formModel = ref.watch(formularioClienteProvider.notifier);
+    final formState = ref.watch(formularioClienteProvider);
 
     final ThemeData theme = Theme.of(context);
     final Color accentPrimary = theme.colorScheme.primary;
@@ -30,7 +29,7 @@ class FormularioClienteScreen extends StatelessWidget {
               children: [
                 const SizedBox(height: 20),
                 CampoSimplesTextform(
-                  controller: formModel.nomeController,
+                  controller: formState.nomeController,
                   rotulo: 'Nome',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -41,7 +40,7 @@ class FormularioClienteScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 CampoSimplesTextform(
-                  controller: formModel.cpfController,
+                  controller: formState.cpfController,
                   rotulo: 'CPF',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -52,12 +51,11 @@ class FormularioClienteScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
-                  controller: formModel.telefoneController,
+                  controller: formState.telefoneController,
                   decoration: const InputDecoration(
                     labelText: 'Telefone',
                     border: OutlineInputBorder(),
                   ),
-                  inputFormatters: [_telefoneFormatter],
                   keyboardType: TextInputType.phone,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -68,14 +66,15 @@ class FormularioClienteScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
-                  controller: formModel.dataNascimentoController,
+                  controller: formState.dataNascimentoController,
                   readOnly: true,
                   decoration: const InputDecoration(
                     labelText: 'Data de Nascimento',
                     border: OutlineInputBorder(),
                   ),
                   onTap: () {
-                    formModel.selecionarData(context); 
+                    formModel.selecionarData(
+                        context); 
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -96,6 +95,7 @@ class FormularioClienteScreen extends StatelessWidget {
               children: [
                 PadraoTextoButton(
                   funcao: () {
+                    formModel.clearForm(); 
                     Navigator.pop(context);
                   },
                   texto: 'Cancelar',
@@ -103,11 +103,24 @@ class FormularioClienteScreen extends StatelessWidget {
                   corFundo: surfaceColor,
                 ),
                 PadraoTextoButton(
-                  funcao: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Formulário salvo com sucesso!')),
-                    );
-                    Navigator.pop(context);
+                  funcao: () async {
+                    if (formState.nomeController.text.isNotEmpty &&
+                        formState.cpfController.text.isNotEmpty) {
+                      bool sucesso = await formModel.salvarCliente();
+                      if (sucesso) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Formulário salvo com sucesso!')),
+                        );
+                        Navigator.pop(context);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text(
+                                  'Erro ao salvar o formulário. Tente novamente.')),
+                        );
+                      }
+                    }
                   },
                   texto: 'Salvar',
                   corFundo: accentPrimary,

@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trabalho3/ui/widgets/campo_simples_textform.dart';
 import 'package:trabalho3/ui/widgets/padrao_texto_button.dart';
 import 'package:trabalho3/ui/widgets/seletor_button.dart';
-import 'package:trabalho3/ui/models/formulario_contrato_model.dart';
 import 'package:trabalho3/data/enums/tipo_intervalo.dart';
+import 'package:trabalho3/providers/formulario_contrato_provider.dart'; 
 
-class FormularioContratoScreen extends StatefulWidget {
+class FormularioContratoScreen extends ConsumerWidget {
   const FormularioContratoScreen({super.key});
 
   @override
-  State<FormularioContratoScreen> createState() => _FormularioContratoScreenState();
-}
-
-class _FormularioContratoScreenState extends State<FormularioContratoScreen> {
-  @override
-  Widget build(BuildContext context) {
-    final formModel = Provider.of<FormularioContratoModel>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final formModel = ref.watch(formularioContratoProvider.notifier);
+    final formState = ref.watch(formularioContratoProvider);
 
     final ThemeData theme = Theme.of(context);
     final Color accentPrimary = theme.colorScheme.primary;
@@ -29,21 +25,21 @@ class _FormularioContratoScreenState extends State<FormularioContratoScreen> {
       body: Stack(
         children: [
           Form(
-            key: formModel.formKey,
+            key: formState.formKey,
             child: ListView(
               padding: const EdgeInsets.all(16.0),
               children: [
                 SeletorButton(
                   opcao1: 'Mensal',
                   opcao2: 'Anual',
-                  selectedOption: formModel.intervaloPagamento.name,
+                  selectedOption: formState.intervaloPagamento.name,
                   funcao: (option) {
                     formModel.updateIntervaloPagamento(TipoIntervaloExtension.byName(option));
                   },
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
-                  controller: formModel.dataInicioController,
+                  controller: formState.dataInicioController,
                   readOnly: true,
                   decoration: const InputDecoration(
                     labelText: 'Data de Início',
@@ -61,7 +57,7 @@ class _FormularioContratoScreenState extends State<FormularioContratoScreen> {
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
-                  controller: formModel.dataFimController,
+                  controller: formState.dataFimController,
                   readOnly: true,
                   decoration: const InputDecoration(
                     labelText: 'Data de Fim',
@@ -79,7 +75,7 @@ class _FormularioContratoScreenState extends State<FormularioContratoScreen> {
                 ),
                 const SizedBox(height: 20),
                 CampoSimplesTextform(
-                  controller: formModel.diaPagamentoController,
+                  controller: formState.diaPagamentoController,
                   rotulo: 'Dia de Pagamento',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -89,9 +85,9 @@ class _FormularioContratoScreenState extends State<FormularioContratoScreen> {
                   },
                 ),
                 const SizedBox(height: 20),
-                if (formModel.intervaloPagamento == TipoIntervalo.anual)
+                if (formState.intervaloPagamento == TipoIntervalo.anual)
                   CampoSimplesTextform(
-                    controller: formModel.mesPagamentoController,
+                    controller: formState.mesPagamentoController,
                     rotulo: 'Mês de Pagamento',
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -100,6 +96,7 @@ class _FormularioContratoScreenState extends State<FormularioContratoScreen> {
                       return null;
                     },
                   ),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -119,8 +116,8 @@ class _FormularioContratoScreenState extends State<FormularioContratoScreen> {
                 ),
                 PadraoTextoButton(
                   funcao: () {
-                    if (formModel.formKey.currentState!.validate()) {
-                      formModel.formKey.currentState!.save();
+                    if (formState.formKey.currentState!.validate()) {
+                      formState.formKey.currentState!.save();
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Formulário salvo com sucesso!')),
                       );
