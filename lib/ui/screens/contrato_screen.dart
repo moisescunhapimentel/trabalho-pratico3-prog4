@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:trabalho3/ui/widgets/imovel_item_card.dart';
 import 'package:trabalho3/ui/widgets/titulo_descricao_text.dart';
 import 'package:trabalho3/data/enums/tipo_intervalo.dart';
+
 import 'package:intl/intl.dart';
 
 class ContratoScreen extends StatelessWidget {
@@ -9,6 +11,9 @@ class ContratoScreen extends StatelessWidget {
   final TipoIntervalo intervaloPagamento;
   final int diaPagamento;
   final int? mesPagamento;
+  final String? nomeImovel;
+  final String? rua;
+  final int? numImovel;
 
   const ContratoScreen({
     super.key,
@@ -17,6 +22,9 @@ class ContratoScreen extends StatelessWidget {
     required this.intervaloPagamento,
     required this.diaPagamento,
     this.mesPagamento,
+    this.nomeImovel,
+    this.rua,
+    this.numImovel,
   });
 
   String formatDate(DateTime date) {
