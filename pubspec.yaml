@@ -34,6 +34,7 @@ dev_dependencies:
 
   flutter_lints: ^4.0.0
   build_runner: ^2.4.13
+  objectbox_generator: ^4.0.3
   drift_dev: ^2.23.1
 
 flutter:
