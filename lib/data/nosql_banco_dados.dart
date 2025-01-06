@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:trabalho3/data/models/custom_theme.dart';
 import 'package:trabalho3/objectbox.g.dart';
@@ -10,7 +11,7 @@ class NosqlBancoDados {
 
   Future<void> init() async {
     final dir = await getApplicationDocumentsDirectory();
-    final storeDir = Directory('${dir.path}/person-db');
+    final storeDir = Directory(join(dir.path, 'nosqltheme-db'));
 
     _store = await openStore(directory: storeDir.path);
 
