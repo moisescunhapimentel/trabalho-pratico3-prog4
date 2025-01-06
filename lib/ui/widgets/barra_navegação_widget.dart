@@ -32,10 +32,10 @@ class _BarraNavegacaoWidgetState extends State<BarraNavegacaoWidget> {
     final Color highlightSoft = theme.colorScheme.secondary;
     final Color surfaceColor = theme.colorScheme.onSecondary;
 
-  final List<NavegacaoItem> navegacaoInferiorItems= [
-    NavegacaoItem(icone: Icons.assignment, screen: const ContratosScreen()),
-    NavegacaoItem(icone: Icons.home, screen: InicioScreen( toggleTheme: widget.toggleTheme)),
-    NavegacaoItem(icone: Icons.bar_chart, screen: const EstatisticasScreen()),
+  final List<NavegacaoItemModel> navegacaoInferiorItems= [
+    NavegacaoItemModel(icone: Icons.assignment, screen: const ContratosScreen()),
+    NavegacaoItemModel(icone: Icons.home, screen: InicioScreen( toggleTheme: widget.toggleTheme)),
+    NavegacaoItemModel(icone: Icons.bar_chart, screen: const EstatisticasScreen()),
   ];
 
     var larguraScreen = MediaQuery.of(context).size.width;

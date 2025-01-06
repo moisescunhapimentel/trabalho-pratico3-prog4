@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class NavegacaoItem {
+class NavegacaoItemModel {
   final IconData icone;
   final Widget screen;
 
-  NavegacaoItem({required this.icone, required this.screen});
+  NavegacaoItemModel({required this.icone, required this.screen});
 }
