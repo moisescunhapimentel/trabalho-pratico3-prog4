@@ -7,6 +7,8 @@ class ContratoTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get tipoIntervalo => textEnum<TipoIntervalo>()();
 
+  RealColumn get valor => real()();
+
   DateTimeColumn get dataInicio => dateTime()();
   DateTimeColumn get dataFim => dateTime()();
 

@@ -1062,6 +1062,11 @@ class $ContratoTableTable extends ContratoTable
               type: DriftSqlType.string, requiredDuringInsert: true)
           .withConverter<TipoIntervalo>(
               $ContratoTableTable.$convertertipoIntervalo);
+  static const VerificationMeta _valorMeta = const VerificationMeta('valor');
+  @override
+  late final GeneratedColumn<double> valor = GeneratedColumn<double>(
+      'valor', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
   static const VerificationMeta _dataInicioMeta =
       const VerificationMeta('dataInicio');
   @override
@@ -1108,6 +1113,7 @@ class $ContratoTableTable extends ContratoTable
   List<GeneratedColumn> get $columns => [
         id,
         tipoIntervalo,
+        valor,
         dataInicio,
         dataFim,
         diaPagamento,
@@ -1129,6 +1135,12 @@ class $ContratoTableTable extends ContratoTable
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     context.handle(_tipoIntervaloMeta, const VerificationResult.success());
+    if (data.containsKey('valor')) {
+      context.handle(
+          _valorMeta, valor.isAcceptableOrUnknown(data['valor']!, _valorMeta));
+    } else if (isInserting) {
+      context.missing(_valorMeta);
+    }
     if (data.containsKey('data_inicio')) {
       context.handle(
           _dataInicioMeta,
@@ -1183,6 +1195,8 @@ class $ContratoTableTable extends ContratoTable
       tipoIntervalo: $ContratoTableTable.$convertertipoIntervalo.fromSql(
           attachedDatabase.typeMapping.read(
               DriftSqlType.string, data['${effectivePrefix}tipo_intervalo'])!),
+      valor: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}valor'])!,
       dataInicio: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}data_inicio'])!,
       dataFim: attachedDatabase.typeMapping
@@ -1212,6 +1226,7 @@ class ContratoTableData extends DataClass
     implements Insertable<ContratoTableData> {
   final int id;
   final TipoIntervalo tipoIntervalo;
+  final double valor;
   final DateTime dataInicio;
   final DateTime dataFim;
   final int diaPagamento;
@@ -1221,6 +1236,7 @@ class ContratoTableData extends DataClass
   const ContratoTableData(
       {required this.id,
       required this.tipoIntervalo,
+      required this.valor,
       required this.dataInicio,
       required this.dataFim,
       required this.diaPagamento,
@@ -1235,6 +1251,7 @@ class ContratoTableData extends DataClass
       map['tipo_intervalo'] = Variable<String>(
           $ContratoTableTable.$convertertipoIntervalo.toSql(tipoIntervalo));
     }
+    map['valor'] = Variable<double>(valor);
     map['data_inicio'] = Variable<DateTime>(dataInicio);
     map['data_fim'] = Variable<DateTime>(dataFim);
     map['dia_pagamento'] = Variable<int>(diaPagamento);
@@ -1250,6 +1267,7 @@ class ContratoTableData extends DataClass
     return ContratoTableCompanion(
       id: Value(id),
       tipoIntervalo: Value(tipoIntervalo),
+      valor: Value(valor),
       dataInicio: Value(dataInicio),
       dataFim: Value(dataFim),
       diaPagamento: Value(diaPagamento),
@@ -1268,6 +1286,7 @@ class ContratoTableData extends DataClass
       id: serializer.fromJson<int>(json['id']),
       tipoIntervalo: $ContratoTableTable.$convertertipoIntervalo
           .fromJson(serializer.fromJson<String>(json['tipoIntervalo'])),
+      valor: serializer.fromJson<double>(json['valor']),
       dataInicio: serializer.fromJson<DateTime>(json['dataInicio']),
       dataFim: serializer.fromJson<DateTime>(json['dataFim']),
       diaPagamento: serializer.fromJson<int>(json['diaPagamento']),
@@ -1283,6 +1302,7 @@ class ContratoTableData extends DataClass
       'id': serializer.toJson<int>(id),
       'tipoIntervalo': serializer.toJson<String>(
           $ContratoTableTable.$convertertipoIntervalo.toJson(tipoIntervalo)),
+      'valor': serializer.toJson<double>(valor),
       'dataInicio': serializer.toJson<DateTime>(dataInicio),
       'dataFim': serializer.toJson<DateTime>(dataFim),
       'diaPagamento': serializer.toJson<int>(diaPagamento),
@@ -1295,6 +1315,7 @@ class ContratoTableData extends DataClass
   ContratoTableData copyWith(
           {int? id,
           TipoIntervalo? tipoIntervalo,
+          double? valor,
           DateTime? dataInicio,
           DateTime? dataFim,
           int? diaPagamento,
@@ -1304,6 +1325,7 @@ class ContratoTableData extends DataClass
       ContratoTableData(
         id: id ?? this.id,
         tipoIntervalo: tipoIntervalo ?? this.tipoIntervalo,
+        valor: valor ?? this.valor,
         dataInicio: dataInicio ?? this.dataInicio,
         dataFim: dataFim ?? this.dataFim,
         diaPagamento: diaPagamento ?? this.diaPagamento,
@@ -1318,6 +1340,7 @@ class ContratoTableData extends DataClass
       tipoIntervalo: data.tipoIntervalo.present
           ? data.tipoIntervalo.value
           : this.tipoIntervalo,
+      valor: data.valor.present ? data.valor.value : this.valor,
       dataInicio:
           data.dataInicio.present ? data.dataInicio.value : this.dataInicio,
       dataFim: data.dataFim.present ? data.dataFim.value : this.dataFim,
@@ -1337,6 +1360,7 @@ class ContratoTableData extends DataClass
     return (StringBuffer('ContratoTableData(')
           ..write('id: $id, ')
           ..write('tipoIntervalo: $tipoIntervalo, ')
+          ..write('valor: $valor, ')
           ..write('dataInicio: $dataInicio, ')
           ..write('dataFim: $dataFim, ')
           ..write('diaPagamento: $diaPagamento, ')
@@ -1348,7 +1372,7 @@ class ContratoTableData extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(id, tipoIntervalo, dataInicio, dataFim,
+  int get hashCode => Object.hash(id, tipoIntervalo, valor, dataInicio, dataFim,
       diaPagamento, mesPagamento, clienteId, imovelId);
   @override
   bool operator ==(Object other) =>
@@ -1356,6 +1380,7 @@ class ContratoTableData extends DataClass
       (other is ContratoTableData &&
           other.id == this.id &&
           other.tipoIntervalo == this.tipoIntervalo &&
+          other.valor == this.valor &&
           other.dataInicio == this.dataInicio &&
           other.dataFim == this.dataFim &&
           other.diaPagamento == this.diaPagamento &&
@@ -1367,6 +1392,7 @@ class ContratoTableData extends DataClass
 class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
   final Value<int> id;
   final Value<TipoIntervalo> tipoIntervalo;
+  final Value<double> valor;
   final Value<DateTime> dataInicio;
   final Value<DateTime> dataFim;
   final Value<int> diaPagamento;
@@ -1376,6 +1402,7 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
   const ContratoTableCompanion({
     this.id = const Value.absent(),
     this.tipoIntervalo = const Value.absent(),
+    this.valor = const Value.absent(),
     this.dataInicio = const Value.absent(),
     this.dataFim = const Value.absent(),
     this.diaPagamento = const Value.absent(),
@@ -1386,6 +1413,7 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
   ContratoTableCompanion.insert({
     this.id = const Value.absent(),
     required TipoIntervalo tipoIntervalo,
+    required double valor,
     required DateTime dataInicio,
     required DateTime dataFim,
     required int diaPagamento,
@@ -1393,6 +1421,7 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
     required int clienteId,
     required int imovelId,
   })  : tipoIntervalo = Value(tipoIntervalo),
+        valor = Value(valor),
         dataInicio = Value(dataInicio),
         dataFim = Value(dataFim),
         diaPagamento = Value(diaPagamento),
@@ -1401,6 +1430,7 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
   static Insertable<ContratoTableData> custom({
     Expression<int>? id,
     Expression<String>? tipoIntervalo,
+    Expression<double>? valor,
     Expression<DateTime>? dataInicio,
     Expression<DateTime>? dataFim,
     Expression<int>? diaPagamento,
@@ -1411,6 +1441,7 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (tipoIntervalo != null) 'tipo_intervalo': tipoIntervalo,
+      if (valor != null) 'valor': valor,
       if (dataInicio != null) 'data_inicio': dataInicio,
       if (dataFim != null) 'data_fim': dataFim,
       if (diaPagamento != null) 'dia_pagamento': diaPagamento,
@@ -1423,6 +1454,7 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
   ContratoTableCompanion copyWith(
       {Value<int>? id,
       Value<TipoIntervalo>? tipoIntervalo,
+      Value<double>? valor,
       Value<DateTime>? dataInicio,
       Value<DateTime>? dataFim,
       Value<int>? diaPagamento,
@@ -1432,6 +1464,7 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
     return ContratoTableCompanion(
       id: id ?? this.id,
       tipoIntervalo: tipoIntervalo ?? this.tipoIntervalo,
+      valor: valor ?? this.valor,
       dataInicio: dataInicio ?? this.dataInicio,
       dataFim: dataFim ?? this.dataFim,
       diaPagamento: diaPagamento ?? this.diaPagamento,
@@ -1451,6 +1484,9 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
       map['tipo_intervalo'] = Variable<String>($ContratoTableTable
           .$convertertipoIntervalo
           .toSql(tipoIntervalo.value));
+    }
+    if (valor.present) {
+      map['valor'] = Variable<double>(valor.value);
     }
     if (dataInicio.present) {
       map['data_inicio'] = Variable<DateTime>(dataInicio.value);
@@ -1478,6 +1514,7 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
     return (StringBuffer('ContratoTableCompanion(')
           ..write('id: $id, ')
           ..write('tipoIntervalo: $tipoIntervalo, ')
+          ..write('valor: $valor, ')
           ..write('dataInicio: $dataInicio, ')
           ..write('dataFim: $dataFim, ')
           ..write('diaPagamento: $diaPagamento, ')
@@ -1527,8 +1564,17 @@ class $PagamentoTableTable extends PagamentoTable
       requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES contrato_table (id)'));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
   @override
-  List<GeneratedColumn> get $columns => [id, tipoPagamento, valor, contratoId];
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, tipoPagamento, valor, contratoId, createdAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1557,6 +1603,10 @@ class $PagamentoTableTable extends PagamentoTable
     } else if (isInserting) {
       context.missing(_contratoIdMeta);
     }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
     return context;
   }
 
@@ -1575,6 +1625,8 @@ class $PagamentoTableTable extends PagamentoTable
           .read(DriftSqlType.double, data['${effectivePrefix}valor'])!,
       contratoId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}contrato_id'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
   }
 
@@ -1594,11 +1646,13 @@ class PagamentoTableData extends DataClass
   final TipoPagamento tipoPagamento;
   final double valor;
   final int contratoId;
+  final DateTime createdAt;
   const PagamentoTableData(
       {required this.id,
       required this.tipoPagamento,
       required this.valor,
-      required this.contratoId});
+      required this.contratoId,
+      required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1609,6 +1663,7 @@ class PagamentoTableData extends DataClass
     }
     map['valor'] = Variable<double>(valor);
     map['contrato_id'] = Variable<int>(contratoId);
+    map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
 
@@ -1618,6 +1673,7 @@ class PagamentoTableData extends DataClass
       tipoPagamento: Value(tipoPagamento),
       valor: Value(valor),
       contratoId: Value(contratoId),
+      createdAt: Value(createdAt),
     );
   }
 
@@ -1630,6 +1686,7 @@ class PagamentoTableData extends DataClass
           .fromJson(serializer.fromJson<String>(json['tipoPagamento'])),
       valor: serializer.fromJson<double>(json['valor']),
       contratoId: serializer.fromJson<int>(json['contratoId']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
   @override
@@ -1641,6 +1698,7 @@ class PagamentoTableData extends DataClass
           $PagamentoTableTable.$convertertipoPagamento.toJson(tipoPagamento)),
       'valor': serializer.toJson<double>(valor),
       'contratoId': serializer.toJson<int>(contratoId),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
 
@@ -1648,12 +1706,14 @@ class PagamentoTableData extends DataClass
           {int? id,
           TipoPagamento? tipoPagamento,
           double? valor,
-          int? contratoId}) =>
+          int? contratoId,
+          DateTime? createdAt}) =>
       PagamentoTableData(
         id: id ?? this.id,
         tipoPagamento: tipoPagamento ?? this.tipoPagamento,
         valor: valor ?? this.valor,
         contratoId: contratoId ?? this.contratoId,
+        createdAt: createdAt ?? this.createdAt,
       );
   PagamentoTableData copyWithCompanion(PagamentoTableCompanion data) {
     return PagamentoTableData(
@@ -1664,6 +1724,7 @@ class PagamentoTableData extends DataClass
       valor: data.valor.present ? data.valor.value : this.valor,
       contratoId:
           data.contratoId.present ? data.contratoId.value : this.contratoId,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
 
@@ -1673,13 +1734,15 @@ class PagamentoTableData extends DataClass
           ..write('id: $id, ')
           ..write('tipoPagamento: $tipoPagamento, ')
           ..write('valor: $valor, ')
-          ..write('contratoId: $contratoId')
+          ..write('contratoId: $contratoId, ')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, tipoPagamento, valor, contratoId);
+  int get hashCode =>
+      Object.hash(id, tipoPagamento, valor, contratoId, createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1687,7 +1750,8 @@ class PagamentoTableData extends DataClass
           other.id == this.id &&
           other.tipoPagamento == this.tipoPagamento &&
           other.valor == this.valor &&
-          other.contratoId == this.contratoId);
+          other.contratoId == this.contratoId &&
+          other.createdAt == this.createdAt);
 }
 
 class PagamentoTableCompanion extends UpdateCompanion<PagamentoTableData> {
@@ -1695,17 +1759,20 @@ class PagamentoTableCompanion extends UpdateCompanion<PagamentoTableData> {
   final Value<TipoPagamento> tipoPagamento;
   final Value<double> valor;
   final Value<int> contratoId;
+  final Value<DateTime> createdAt;
   const PagamentoTableCompanion({
     this.id = const Value.absent(),
     this.tipoPagamento = const Value.absent(),
     this.valor = const Value.absent(),
     this.contratoId = const Value.absent(),
+    this.createdAt = const Value.absent(),
   });
   PagamentoTableCompanion.insert({
     this.id = const Value.absent(),
     required TipoPagamento tipoPagamento,
     required double valor,
     required int contratoId,
+    this.createdAt = const Value.absent(),
   })  : tipoPagamento = Value(tipoPagamento),
         valor = Value(valor),
         contratoId = Value(contratoId);
@@ -1714,12 +1781,14 @@ class PagamentoTableCompanion extends UpdateCompanion<PagamentoTableData> {
     Expression<String>? tipoPagamento,
     Expression<double>? valor,
     Expression<int>? contratoId,
+    Expression<DateTime>? createdAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (tipoPagamento != null) 'tipo_pagamento': tipoPagamento,
       if (valor != null) 'valor': valor,
       if (contratoId != null) 'contrato_id': contratoId,
+      if (createdAt != null) 'created_at': createdAt,
     });
   }
 
@@ -1727,12 +1796,14 @@ class PagamentoTableCompanion extends UpdateCompanion<PagamentoTableData> {
       {Value<int>? id,
       Value<TipoPagamento>? tipoPagamento,
       Value<double>? valor,
-      Value<int>? contratoId}) {
+      Value<int>? contratoId,
+      Value<DateTime>? createdAt}) {
     return PagamentoTableCompanion(
       id: id ?? this.id,
       tipoPagamento: tipoPagamento ?? this.tipoPagamento,
       valor: valor ?? this.valor,
       contratoId: contratoId ?? this.contratoId,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
@@ -1753,6 +1824,9 @@ class PagamentoTableCompanion extends UpdateCompanion<PagamentoTableData> {
     if (contratoId.present) {
       map['contrato_id'] = Variable<int>(contratoId.value);
     }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
     return map;
   }
 
@@ -1762,7 +1836,8 @@ class PagamentoTableCompanion extends UpdateCompanion<PagamentoTableData> {
           ..write('id: $id, ')
           ..write('tipoPagamento: $tipoPagamento, ')
           ..write('valor: $valor, ')
-          ..write('contratoId: $contratoId')
+          ..write('contratoId: $contratoId, ')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
@@ -2958,6 +3033,7 @@ typedef $$ContratoTableTableCreateCompanionBuilder = ContratoTableCompanion
     Function({
   Value<int> id,
   required TipoIntervalo tipoIntervalo,
+  required double valor,
   required DateTime dataInicio,
   required DateTime dataFim,
   required int diaPagamento,
@@ -2969,6 +3045,7 @@ typedef $$ContratoTableTableUpdateCompanionBuilder = ContratoTableCompanion
     Function({
   Value<int> id,
   Value<TipoIntervalo> tipoIntervalo,
+  Value<double> valor,
   Value<DateTime> dataInicio,
   Value<DateTime> dataFim,
   Value<int> diaPagamento,
@@ -3040,6 +3117,9 @@ class $$ContratoTableTableFilterComposer
       get tipoIntervalo => $composableBuilder(
           column: $table.tipoIntervalo,
           builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnFilters<double> get valor => $composableBuilder(
+      column: $table.valor, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<DateTime> get dataInicio => $composableBuilder(
       column: $table.dataInicio, builder: (column) => ColumnFilters(column));
@@ -3131,6 +3211,9 @@ class $$ContratoTableTableOrderingComposer
       column: $table.tipoIntervalo,
       builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<double> get valor => $composableBuilder(
+      column: $table.valor, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<DateTime> get dataInicio => $composableBuilder(
       column: $table.dataInicio, builder: (column) => ColumnOrderings(column));
 
@@ -3201,6 +3284,9 @@ class $$ContratoTableTableAnnotationComposer
   GeneratedColumnWithTypeConverter<TipoIntervalo, String> get tipoIntervalo =>
       $composableBuilder(
           column: $table.tipoIntervalo, builder: (column) => column);
+
+  GeneratedColumn<double> get valor =>
+      $composableBuilder(column: $table.valor, builder: (column) => column);
 
   GeneratedColumn<DateTime> get dataInicio => $composableBuilder(
       column: $table.dataInicio, builder: (column) => column);
@@ -3302,6 +3388,7 @@ class $$ContratoTableTableTableManager extends RootTableManager<
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<TipoIntervalo> tipoIntervalo = const Value.absent(),
+            Value<double> valor = const Value.absent(),
             Value<DateTime> dataInicio = const Value.absent(),
             Value<DateTime> dataFim = const Value.absent(),
             Value<int> diaPagamento = const Value.absent(),
@@ -3312,6 +3399,7 @@ class $$ContratoTableTableTableManager extends RootTableManager<
               ContratoTableCompanion(
             id: id,
             tipoIntervalo: tipoIntervalo,
+            valor: valor,
             dataInicio: dataInicio,
             dataFim: dataFim,
             diaPagamento: diaPagamento,
@@ -3322,6 +3410,7 @@ class $$ContratoTableTableTableManager extends RootTableManager<
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required TipoIntervalo tipoIntervalo,
+            required double valor,
             required DateTime dataInicio,
             required DateTime dataFim,
             required int diaPagamento,
@@ -3332,6 +3421,7 @@ class $$ContratoTableTableTableManager extends RootTableManager<
               ContratoTableCompanion.insert(
             id: id,
             tipoIntervalo: tipoIntervalo,
+            valor: valor,
             dataInicio: dataInicio,
             dataFim: dataFim,
             diaPagamento: diaPagamento,
@@ -3430,6 +3520,7 @@ typedef $$PagamentoTableTableCreateCompanionBuilder = PagamentoTableCompanion
   required TipoPagamento tipoPagamento,
   required double valor,
   required int contratoId,
+  Value<DateTime> createdAt,
 });
 typedef $$PagamentoTableTableUpdateCompanionBuilder = PagamentoTableCompanion
     Function({
@@ -3437,6 +3528,7 @@ typedef $$PagamentoTableTableUpdateCompanionBuilder = PagamentoTableCompanion
   Value<TipoPagamento> tipoPagamento,
   Value<double> valor,
   Value<int> contratoId,
+  Value<DateTime> createdAt,
 });
 
 final class $$PagamentoTableTableReferences extends BaseReferences<_$BancoDados,
@@ -3478,6 +3570,9 @@ class $$PagamentoTableTableFilterComposer
   ColumnFilters<double> get valor => $composableBuilder(
       column: $table.valor, builder: (column) => ColumnFilters(column));
 
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
   $$ContratoTableTableFilterComposer get contratoId {
     final $$ContratoTableTableFilterComposer composer = $composerBuilder(
         composer: this,
@@ -3518,6 +3613,9 @@ class $$PagamentoTableTableOrderingComposer
   ColumnOrderings<double> get valor => $composableBuilder(
       column: $table.valor, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
   $$ContratoTableTableOrderingComposer get contratoId {
     final $$ContratoTableTableOrderingComposer composer = $composerBuilder(
         composer: this,
@@ -3557,6 +3655,9 @@ class $$PagamentoTableTableAnnotationComposer
 
   GeneratedColumn<double> get valor =>
       $composableBuilder(column: $table.valor, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
 
   $$ContratoTableTableAnnotationComposer get contratoId {
     final $$ContratoTableTableAnnotationComposer composer = $composerBuilder(
@@ -3606,24 +3707,28 @@ class $$PagamentoTableTableTableManager extends RootTableManager<
             Value<TipoPagamento> tipoPagamento = const Value.absent(),
             Value<double> valor = const Value.absent(),
             Value<int> contratoId = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
           }) =>
               PagamentoTableCompanion(
             id: id,
             tipoPagamento: tipoPagamento,
             valor: valor,
             contratoId: contratoId,
+            createdAt: createdAt,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required TipoPagamento tipoPagamento,
             required double valor,
             required int contratoId,
+            Value<DateTime> createdAt = const Value.absent(),
           }) =>
               PagamentoTableCompanion.insert(
             id: id,
             tipoPagamento: tipoPagamento,
             valor: valor,
             contratoId: contratoId,
+            createdAt: createdAt,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (

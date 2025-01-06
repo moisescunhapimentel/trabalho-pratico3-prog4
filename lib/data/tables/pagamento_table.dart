@@ -8,4 +8,6 @@ class PagamentoTable extends Table {
   RealColumn get valor => real()();
 
   IntColumn get contratoId => integer().references(ContratoTable, #id)();
+
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 }

@@ -36,4 +36,20 @@ class PagamentoDao extends DatabaseAccessor<BancoDados>
       Insertable<PagamentoTableData> pagamentoTableData) async {
     await update(pagamentoTable).replace(pagamentoTableData);
   }
+
+  Future<List<PagamentoTableData>> getAllPagamentosPorAno(int ano) async {
+    return await (select(pagamentoTable)
+          ..where(
+            (row) => row.createdAt.year.equals(ano),
+          ))
+        .get();
+  }
+
+  getAllPagamentosPorMes(int mes) async {
+    return await (select(pagamentoTable)
+          ..where(
+            (row) => row.createdAt.month.equals(mes),
+          ))
+        .get();
+  }
 }
