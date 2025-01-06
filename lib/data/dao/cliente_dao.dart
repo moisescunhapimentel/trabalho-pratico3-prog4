@@ -17,6 +17,10 @@ class ClienteDao extends DatabaseAccessor<BancoDados> with _$ClienteDaoMixin {
         .getSingleOrNull();
   }
 
+  Future<List<ClienteTableData>> obterTodosClientes() async {
+    return await select(clienteTable).get();
+  }
+
   Future<int> insert(ClienteTableCompanion clienteTableCompanion) async {
     return await into(clienteTable).insert(clienteTableCompanion);
   }
