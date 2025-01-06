@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:trabalho3/data/banco_dados.dart';
 import 'package:trabalho3/data/enums/tipo_intervalo.dart';
+import 'package:trabalho3/data/models/intervalo.dart';
 import 'package:trabalho3/data/tables/pagamento_table.dart';
 
 part 'pagamento_dao.g.dart';
@@ -39,18 +40,20 @@ class PagamentoDao extends DatabaseAccessor<BancoDados>
   }
 
   Future<List<PagamentoTableData>> obterPagamentosPorIntervalo(
-      TipoIntervalo tipoInverlo, int quantidade) {
+      TipoIntervalo tipoInverlo, Intervalo intervalo) {
     if (tipoInverlo == TipoIntervalo.anual) {
-      return getAllPagamentos(
-          quantidade, (row) => row.createdAt.year.equals(quantidade));
+      return getAllPagamentos((row) =>
+          row.createdAt.year.isBiggerOrEqualValue(intervalo.inicio) &
+          row.createdAt.year.isSmallerOrEqualValue(intervalo.fim));
     } else {
-      return getAllPagamentos(
-          quantidade, (row) => row.createdAt.month.equals(quantidade));
+      return getAllPagamentos((row) =>
+          row.createdAt.month.isBiggerOrEqualValue(intervalo.inicio) &
+          row.createdAt.month.isSmallerOrEqualValue(intervalo.fim));
     }
   }
 
   Future<List<PagamentoTableData>> getAllPagamentos(
-      int ano, Expression<bool> Function($PagamentoTableTable) filter) async {
+      Expression<bool> Function($PagamentoTableTable) filter) async {
     return await (select(pagamentoTable)
           ..where(
             filter,

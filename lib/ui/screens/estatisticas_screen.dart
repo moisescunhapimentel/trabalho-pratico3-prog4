@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trabalho3/ui/constants/colors.dart';
 import 'package:trabalho3/ui/widgets/grafico_card.dart';
-import 'package:trabalho3/ui/widgets/seletor_button.dart';
 
 class EstatisticasScreen extends StatefulWidget {
   const EstatisticasScreen({super.key});

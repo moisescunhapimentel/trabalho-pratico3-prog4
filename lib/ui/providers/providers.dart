@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trabalho3/data/banco_dados.dart';
 import 'package:trabalho3/data/dao/theme_dao.dart';
+import 'package:trabalho3/data/enums/tipo_intervalo.dart';
 import 'package:trabalho3/data/models/custom_theme.dart';
 import 'package:trabalho3/data/nosql_banco_dados.dart';
 import 'package:trabalho3/ui/models/formulario_contrato_model.dart';
@@ -9,6 +9,9 @@ import 'package:trabalho3/ui/models/formulario_imovel_model.dart';
 import 'package:trabalho3/ui/models/imovel_model.dart';
 import 'package:trabalho3/ui/providers/theme_notifier.dart';
 import 'package:trabalho3/ui/providers/pagamento_notifier.dart';
+
+final intervaloProvider =
+    StateProvider<TipoIntervalo>((ref) => TipoIntervalo.mensal);
 
 final bancoDadosProvider = Provider<BancoDados>((ref) {
   final sqlBanco = BancoDados();
