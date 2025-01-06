@@ -1,14 +1,15 @@
 import 'dart:convert';
 
 import 'package:trabalho3/data/enums/tipo_pagamento.dart';
+import 'package:trabalho3/data/models/contrato.dart';
 
 class Pagamento {
-  final int? id;
+  final int id;
   final double valor;
   final TipoPagamento tipoPagamento;
 
   Pagamento({
-    this.id,
+    required this.id,
     required this.valor,
     required this.tipoPagamento,
   });
@@ -35,7 +36,7 @@ class Pagamento {
 
   factory Pagamento.fromMap(Map<String, dynamic> map) {
     return Pagamento(
-      id: map['id'],
+      id: map['id'] as int,
       valor: map['valor'] as double,
       tipoPagamento: TipoPagamentoExtension.byName(map['tipoPagamento']),
     );
@@ -47,8 +48,9 @@ class Pagamento {
       Pagamento.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() =>
-      'Pagamento(id: $id, valor: $valor, tipoPagamento: $tipoPagamento)';
+  String toString() {
+    return 'Pagamento(id: $id, valor: $valor, tipoPagamento: $tipoPagamento)';
+  }
 
   @override
   bool operator ==(covariant Pagamento other) {
@@ -60,5 +62,7 @@ class Pagamento {
   }
 
   @override
-  int get hashCode => id.hashCode ^ valor.hashCode ^ tipoPagamento.hashCode;
+  int get hashCode {
+    return id.hashCode ^ valor.hashCode ^ tipoPagamento.hashCode;
+  }
 }
