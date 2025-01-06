@@ -15,7 +15,7 @@ class GraficoCard extends StatelessWidget {
         children: [
           Text('Lucro', style: Theme.of(context).textTheme.displayLarge),
           const SizedBox(height: 10),
-        SeletorButton(opcao1: 'Mensal', opcao2: 'Anual', funcao: (String value) => {} ),
+        SeletorButton(opcao1: 'Mensal', opcao2: 'Anual', selectedOption: 'Mensal', funcao: (String value) => {} ),
           const SizedBox(height: 10),
           Container(
             height: 200,
