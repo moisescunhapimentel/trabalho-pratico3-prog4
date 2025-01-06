@@ -24,6 +24,7 @@ class ClientesScreen extends ConsumerWidget {
             itemBuilder: (context, index) {
               final cliente = clientes[index];
               return ClienteItemCard(
+                nome: cliente.nome, 
                 funcao: () {
                   Navigator.push(
                     context,
