@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trabalho3/ui/widgets/icone_flutuante_button.dart';
 import 'package:trabalho3/ui/widgets/imovel_item_card.dart';
 import 'package:trabalho3/ui/screens/formulario_imovel_screen.dart';
+import 'package:trabalho3/ui/widgets/menu_suspenso_button.dart';
 
 class ImoveisScreen extends StatelessWidget {
   const ImoveisScreen({super.key});
@@ -17,20 +18,17 @@ class ImoveisScreen extends StatelessWidget {
           ImovelItemCard(
             nomeImovel: 'Casa em João Pessoa',
             rua: 'Rua do alegria',
-            numImovel: '123',
-            numComodos: 15,
+            numImovel: '123',        
+          ),
+          ImovelItemCard(
+            nomeImovel: 'Casa em João Pessoa',
+            rua: 'Rua do alegria',
+            numImovel: '123',       
           ),
           ImovelItemCard(
             nomeImovel: 'Casa em João Pessoa',
             rua: 'Rua do alegria',
             numImovel: '123',
-            numComodos: 15,
-          ),
-          ImovelItemCard(
-            nomeImovel: 'Casa em João Pessoa',
-            rua: 'Rua do alegria',
-            numImovel: '123',
-            numComodos: 15,
           ),
         ],
       ),

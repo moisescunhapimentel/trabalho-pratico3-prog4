@@ -5,13 +5,13 @@ class ImovelItemCard extends StatelessWidget {
   final String nomeImovel;
   final String rua;
   final String numImovel;
-  final int numComodos;
+ 
   const ImovelItemCard(
       {super.key,
       required this.nomeImovel,
       required this.rua,
       required this.numImovel,
-      required this.numComodos});
+    });
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +43,7 @@ class ImovelItemCard extends StatelessWidget {
                         Text(numImovel),
                       ],
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '$numComodos Cômodos',
-                    ),
+                   
                   ],
                 ),
               
