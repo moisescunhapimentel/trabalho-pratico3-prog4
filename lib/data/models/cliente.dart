@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:trabalho3/data/models/contato.dart';
+import 'package:trabalho3/data/models/contrato.dart';
 
 class Cliente {
   final int id;
@@ -8,6 +11,7 @@ class Cliente {
   final String cPF;
   final Contato contato;
   final DateTime dataNascimento;
+  final List<Contrato> contratos;
 
   Cliente({
     required this.id,
@@ -15,6 +19,7 @@ class Cliente {
     required this.cPF,
     required this.contato,
     required this.dataNascimento,
+    required this.contratos,
   });
 
   Cliente copyWith({
@@ -23,6 +28,7 @@ class Cliente {
     String? cPF,
     Contato? contato,
     DateTime? dataNascimento,
+    List<Contrato>? contratos,
   }) {
     return Cliente(
       id: id ?? this.id,
@@ -30,6 +36,7 @@ class Cliente {
       cPF: cPF ?? this.cPF,
       contato: contato ?? this.contato,
       dataNascimento: dataNascimento ?? this.dataNascimento,
+      contratos: contratos ?? this.contratos,
     );
   }
 
@@ -39,7 +46,8 @@ class Cliente {
       'nome': nome,
       'cPF': cPF,
       'contato': contato.toMap(),
-      'dataNascimento': dataNascimento,
+      'dataNascimento': dataNascimento.millisecondsSinceEpoch,
+      'contratos': contratos.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -49,7 +57,13 @@ class Cliente {
       nome: map['nome'] as String,
       cPF: map['cPF'] as String,
       contato: Contato.fromMap(map['contato'] as Map<String, dynamic>),
-      dataNascimento: DateTime.parse(map['dataNascimento']),
+      dataNascimento:
+          DateTime.fromMillisecondsSinceEpoch(map['dataNascimento'] as int),
+      contratos: List<Contrato>.from(
+        (map['contratos'] as List<int>).map<Contrato>(
+          (x) => Contrato.fromMap(x as Map<String, dynamic>),
+        ),
+      ),
     );
   }
 
@@ -60,7 +74,7 @@ class Cliente {
 
   @override
   String toString() {
-    return 'Cliente(id: $id, nome: $nome, cPF: $cPF, contato: $contato, dataNascimento: $dataNascimento)';
+    return 'Cliente(id: $id, nome: $nome, cPF: $cPF, contato: $contato, dataNascimento: $dataNascimento, contratos: $contratos)';
   }
 
   @override
@@ -71,7 +85,8 @@ class Cliente {
         other.nome == nome &&
         other.cPF == cPF &&
         other.contato == contato &&
-        other.dataNascimento == dataNascimento;
+        other.dataNascimento == dataNascimento &&
+        listEquals(other.contratos, contratos);
   }
 
   @override
@@ -80,6 +95,7 @@ class Cliente {
         nome.hashCode ^
         cPF.hashCode ^
         contato.hashCode ^
-        dataNascimento.hashCode;
+        dataNascimento.hashCode ^
+        contratos.hashCode;
   }
 }
