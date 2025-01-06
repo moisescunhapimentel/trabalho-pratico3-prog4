@@ -7,9 +7,4 @@ class ImovelTable extends Table {
   TextColumn get descricao => text()();
 
   IntColumn get enderecoId => integer().references(EnderecoTable, #id)();
-
-  // TextColumn get contato => text()
-  // .map(GenericConverter<Contato>((value) => Contato.fromJson(value)))();
-
-  // .references(EnderecoTable, #id)();
 }

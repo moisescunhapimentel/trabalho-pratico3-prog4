@@ -197,7 +197,7 @@ class EnderecoTableCompanion extends UpdateCompanion<Endereco> {
 }
 
 class $ClienteTableTable extends ClienteTable
-    with TableInfo<$ClienteTableTable, Cliente> {
+    with TableInfo<$ClienteTableTable, ClienteTableData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -248,7 +248,7 @@ class $ClienteTableTable extends ClienteTable
   String get actualTableName => $name;
   static const String $name = 'cliente_table';
   @override
-  VerificationContext validateIntegrity(Insertable<Cliente> instance,
+  VerificationContext validateIntegrity(Insertable<ClienteTableData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -288,20 +288,22 @@ class $ClienteTableTable extends ClienteTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Cliente map(Map<String, dynamic> data, {String? tablePrefix}) {
+  ClienteTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Cliente(
+    return ClienteTableData(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       nome: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}nome'])!,
       cPF: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}c_p_f'])!,
+      rua: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}rua'])!,
+      dataNascimento: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}data_nascimento'])!,
       contato: $ClienteTableTable.$convertercontato.fromSql(attachedDatabase
           .typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}contato'])!),
-      dataNascimento: attachedDatabase.typeMapping.read(
-          DriftSqlType.dateTime, data['${effectivePrefix}data_nascimento'])!,
     );
   }
 
@@ -314,7 +316,130 @@ class $ClienteTableTable extends ClienteTable
       GenericConverter<Contato>((value) => Contato.fromJson(value));
 }
 
-class ClienteTableCompanion extends UpdateCompanion<Cliente> {
+class ClienteTableData extends DataClass
+    implements Insertable<ClienteTableData> {
+  final int id;
+  final String nome;
+  final String cPF;
+  final String rua;
+  final DateTime dataNascimento;
+  final Contato contato;
+  const ClienteTableData(
+      {required this.id,
+      required this.nome,
+      required this.cPF,
+      required this.rua,
+      required this.dataNascimento,
+      required this.contato});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['nome'] = Variable<String>(nome);
+    map['c_p_f'] = Variable<String>(cPF);
+    map['rua'] = Variable<String>(rua);
+    map['data_nascimento'] = Variable<DateTime>(dataNascimento);
+    {
+      map['contato'] =
+          Variable<String>($ClienteTableTable.$convertercontato.toSql(contato));
+    }
+    return map;
+  }
+
+  ClienteTableCompanion toCompanion(bool nullToAbsent) {
+    return ClienteTableCompanion(
+      id: Value(id),
+      nome: Value(nome),
+      cPF: Value(cPF),
+      rua: Value(rua),
+      dataNascimento: Value(dataNascimento),
+      contato: Value(contato),
+    );
+  }
+
+  factory ClienteTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ClienteTableData(
+      id: serializer.fromJson<int>(json['id']),
+      nome: serializer.fromJson<String>(json['nome']),
+      cPF: serializer.fromJson<String>(json['cPF']),
+      rua: serializer.fromJson<String>(json['rua']),
+      dataNascimento: serializer.fromJson<DateTime>(json['dataNascimento']),
+      contato: $ClienteTableTable.$convertercontato
+          .fromJson(serializer.fromJson<String>(json['contato'])),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'nome': serializer.toJson<String>(nome),
+      'cPF': serializer.toJson<String>(cPF),
+      'rua': serializer.toJson<String>(rua),
+      'dataNascimento': serializer.toJson<DateTime>(dataNascimento),
+      'contato': serializer
+          .toJson<String>($ClienteTableTable.$convertercontato.toJson(contato)),
+    };
+  }
+
+  ClienteTableData copyWith(
+          {int? id,
+          String? nome,
+          String? cPF,
+          String? rua,
+          DateTime? dataNascimento,
+          Contato? contato}) =>
+      ClienteTableData(
+        id: id ?? this.id,
+        nome: nome ?? this.nome,
+        cPF: cPF ?? this.cPF,
+        rua: rua ?? this.rua,
+        dataNascimento: dataNascimento ?? this.dataNascimento,
+        contato: contato ?? this.contato,
+      );
+  ClienteTableData copyWithCompanion(ClienteTableCompanion data) {
+    return ClienteTableData(
+      id: data.id.present ? data.id.value : this.id,
+      nome: data.nome.present ? data.nome.value : this.nome,
+      cPF: data.cPF.present ? data.cPF.value : this.cPF,
+      rua: data.rua.present ? data.rua.value : this.rua,
+      dataNascimento: data.dataNascimento.present
+          ? data.dataNascimento.value
+          : this.dataNascimento,
+      contato: data.contato.present ? data.contato.value : this.contato,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ClienteTableData(')
+          ..write('id: $id, ')
+          ..write('nome: $nome, ')
+          ..write('cPF: $cPF, ')
+          ..write('rua: $rua, ')
+          ..write('dataNascimento: $dataNascimento, ')
+          ..write('contato: $contato')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, nome, cPF, rua, dataNascimento, contato);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ClienteTableData &&
+          other.id == this.id &&
+          other.nome == this.nome &&
+          other.cPF == this.cPF &&
+          other.rua == this.rua &&
+          other.dataNascimento == this.dataNascimento &&
+          other.contato == this.contato);
+}
+
+class ClienteTableCompanion extends UpdateCompanion<ClienteTableData> {
   final Value<int> id;
   final Value<String> nome;
   final Value<String> cPF;
@@ -341,7 +466,7 @@ class ClienteTableCompanion extends UpdateCompanion<Cliente> {
         rua = Value(rua),
         dataNascimento = Value(dataNascimento),
         contato = Value(contato);
-  static Insertable<Cliente> custom({
+  static Insertable<ClienteTableData> custom({
     Expression<int>? id,
     Expression<String>? nome,
     Expression<String>? cPF,
@@ -410,295 +535,6 @@ class ClienteTableCompanion extends UpdateCompanion<Cliente> {
           ..write('rua: $rua, ')
           ..write('dataNascimento: $dataNascimento, ')
           ..write('contato: $contato')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $ComodoTableTable extends ComodoTable
-    with TableInfo<$ComodoTableTable, Comodo> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $ComodoTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _tipoComodoMeta =
-      const VerificationMeta('tipoComodo');
-  @override
-  late final GeneratedColumnWithTypeConverter<TipoComodo, String> tipoComodo =
-      GeneratedColumn<String>('tipo_comodo', aliasedName, false,
-              type: DriftSqlType.string, requiredDuringInsert: true)
-          .withConverter<TipoComodo>($ComodoTableTable.$convertertipoComodo);
-  static const VerificationMeta _quantidadeMeta =
-      const VerificationMeta('quantidade');
-  @override
-  late final GeneratedColumn<int> quantidade = GeneratedColumn<int>(
-      'quantidade', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns => [id, tipoComodo, quantidade];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'comodo_table';
-  @override
-  VerificationContext validateIntegrity(Insertable<Comodo> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    context.handle(_tipoComodoMeta, const VerificationResult.success());
-    if (data.containsKey('quantidade')) {
-      context.handle(
-          _quantidadeMeta,
-          quantidade.isAcceptableOrUnknown(
-              data['quantidade']!, _quantidadeMeta));
-    } else if (isInserting) {
-      context.missing(_quantidadeMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  Comodo map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Comodo(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      tipoComodo: $ComodoTableTable.$convertertipoComodo.fromSql(
-          attachedDatabase.typeMapping.read(
-              DriftSqlType.string, data['${effectivePrefix}tipo_comodo'])!),
-      quantidade: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}quantidade'])!,
-    );
-  }
-
-  @override
-  $ComodoTableTable createAlias(String alias) {
-    return $ComodoTableTable(attachedDatabase, alias);
-  }
-
-  static JsonTypeConverter2<TipoComodo, String, String> $convertertipoComodo =
-      const EnumNameConverter<TipoComodo>(TipoComodo.values);
-}
-
-class ComodoTableCompanion extends UpdateCompanion<Comodo> {
-  final Value<int> id;
-  final Value<TipoComodo> tipoComodo;
-  final Value<int> quantidade;
-  const ComodoTableCompanion({
-    this.id = const Value.absent(),
-    this.tipoComodo = const Value.absent(),
-    this.quantidade = const Value.absent(),
-  });
-  ComodoTableCompanion.insert({
-    this.id = const Value.absent(),
-    required TipoComodo tipoComodo,
-    required int quantidade,
-  })  : tipoComodo = Value(tipoComodo),
-        quantidade = Value(quantidade);
-  static Insertable<Comodo> custom({
-    Expression<int>? id,
-    Expression<String>? tipoComodo,
-    Expression<int>? quantidade,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (tipoComodo != null) 'tipo_comodo': tipoComodo,
-      if (quantidade != null) 'quantidade': quantidade,
-    });
-  }
-
-  ComodoTableCompanion copyWith(
-      {Value<int>? id, Value<TipoComodo>? tipoComodo, Value<int>? quantidade}) {
-    return ComodoTableCompanion(
-      id: id ?? this.id,
-      tipoComodo: tipoComodo ?? this.tipoComodo,
-      quantidade: quantidade ?? this.quantidade,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (tipoComodo.present) {
-      map['tipo_comodo'] = Variable<String>(
-          $ComodoTableTable.$convertertipoComodo.toSql(tipoComodo.value));
-    }
-    if (quantidade.present) {
-      map['quantidade'] = Variable<int>(quantidade.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('ComodoTableCompanion(')
-          ..write('id: $id, ')
-          ..write('tipoComodo: $tipoComodo, ')
-          ..write('quantidade: $quantidade')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $PagamentoTableTable extends PagamentoTable
-    with TableInfo<$PagamentoTableTable, Pagamento> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $PagamentoTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _tipoPagamentoMeta =
-      const VerificationMeta('tipoPagamento');
-  @override
-  late final GeneratedColumnWithTypeConverter<TipoPagamento, String>
-      tipoPagamento = GeneratedColumn<String>(
-              'tipo_pagamento', aliasedName, false,
-              type: DriftSqlType.string, requiredDuringInsert: true)
-          .withConverter<TipoPagamento>(
-              $PagamentoTableTable.$convertertipoPagamento);
-  static const VerificationMeta _valorMeta = const VerificationMeta('valor');
-  @override
-  late final GeneratedColumn<double> valor = GeneratedColumn<double>(
-      'valor', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns => [id, tipoPagamento, valor];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'pagamento_table';
-  @override
-  VerificationContext validateIntegrity(Insertable<Pagamento> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    context.handle(_tipoPagamentoMeta, const VerificationResult.success());
-    if (data.containsKey('valor')) {
-      context.handle(
-          _valorMeta, valor.isAcceptableOrUnknown(data['valor']!, _valorMeta));
-    } else if (isInserting) {
-      context.missing(_valorMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  Pagamento map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Pagamento(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      valor: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}valor'])!,
-      tipoPagamento: $PagamentoTableTable.$convertertipoPagamento.fromSql(
-          attachedDatabase.typeMapping.read(
-              DriftSqlType.string, data['${effectivePrefix}tipo_pagamento'])!),
-    );
-  }
-
-  @override
-  $PagamentoTableTable createAlias(String alias) {
-    return $PagamentoTableTable(attachedDatabase, alias);
-  }
-
-  static JsonTypeConverter2<TipoPagamento, String, String>
-      $convertertipoPagamento =
-      const EnumNameConverter<TipoPagamento>(TipoPagamento.values);
-}
-
-class PagamentoTableCompanion extends UpdateCompanion<Pagamento> {
-  final Value<int> id;
-  final Value<TipoPagamento> tipoPagamento;
-  final Value<double> valor;
-  const PagamentoTableCompanion({
-    this.id = const Value.absent(),
-    this.tipoPagamento = const Value.absent(),
-    this.valor = const Value.absent(),
-  });
-  PagamentoTableCompanion.insert({
-    this.id = const Value.absent(),
-    required TipoPagamento tipoPagamento,
-    required double valor,
-  })  : tipoPagamento = Value(tipoPagamento),
-        valor = Value(valor);
-  static Insertable<Pagamento> custom({
-    Expression<int>? id,
-    Expression<String>? tipoPagamento,
-    Expression<double>? valor,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (tipoPagamento != null) 'tipo_pagamento': tipoPagamento,
-      if (valor != null) 'valor': valor,
-    });
-  }
-
-  PagamentoTableCompanion copyWith(
-      {Value<int>? id,
-      Value<TipoPagamento>? tipoPagamento,
-      Value<double>? valor}) {
-    return PagamentoTableCompanion(
-      id: id ?? this.id,
-      tipoPagamento: tipoPagamento ?? this.tipoPagamento,
-      valor: valor ?? this.valor,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (tipoPagamento.present) {
-      map['tipo_pagamento'] = Variable<String>($PagamentoTableTable
-          .$convertertipoPagamento
-          .toSql(tipoPagamento.value));
-    }
-    if (valor.present) {
-      map['valor'] = Variable<double>(valor.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('PagamentoTableCompanion(')
-          ..write('id: $id, ')
-          ..write('tipoPagamento: $tipoPagamento, ')
-          ..write('valor: $valor')
           ..write(')'))
         .toString();
   }
@@ -967,6 +803,277 @@ class ImovelTableCompanion extends UpdateCompanion<ImovelTableData> {
   }
 }
 
+class $ComodoTableTable extends ComodoTable
+    with TableInfo<$ComodoTableTable, ComodoTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ComodoTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _tipoComodoMeta =
+      const VerificationMeta('tipoComodo');
+  @override
+  late final GeneratedColumnWithTypeConverter<TipoComodo, String> tipoComodo =
+      GeneratedColumn<String>('tipo_comodo', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<TipoComodo>($ComodoTableTable.$convertertipoComodo);
+  static const VerificationMeta _quantidadeMeta =
+      const VerificationMeta('quantidade');
+  @override
+  late final GeneratedColumn<int> quantidade = GeneratedColumn<int>(
+      'quantidade', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _imovelIdMeta =
+      const VerificationMeta('imovelId');
+  @override
+  late final GeneratedColumn<int> imovelId = GeneratedColumn<int>(
+      'imovel_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES imovel_table (id)'));
+  @override
+  List<GeneratedColumn> get $columns => [id, tipoComodo, quantidade, imovelId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'comodo_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<ComodoTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    context.handle(_tipoComodoMeta, const VerificationResult.success());
+    if (data.containsKey('quantidade')) {
+      context.handle(
+          _quantidadeMeta,
+          quantidade.isAcceptableOrUnknown(
+              data['quantidade']!, _quantidadeMeta));
+    } else if (isInserting) {
+      context.missing(_quantidadeMeta);
+    }
+    if (data.containsKey('imovel_id')) {
+      context.handle(_imovelIdMeta,
+          imovelId.isAcceptableOrUnknown(data['imovel_id']!, _imovelIdMeta));
+    } else if (isInserting) {
+      context.missing(_imovelIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ComodoTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ComodoTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      tipoComodo: $ComodoTableTable.$convertertipoComodo.fromSql(
+          attachedDatabase.typeMapping.read(
+              DriftSqlType.string, data['${effectivePrefix}tipo_comodo'])!),
+      quantidade: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}quantidade'])!,
+      imovelId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}imovel_id'])!,
+    );
+  }
+
+  @override
+  $ComodoTableTable createAlias(String alias) {
+    return $ComodoTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<TipoComodo, String, String> $convertertipoComodo =
+      const EnumNameConverter<TipoComodo>(TipoComodo.values);
+}
+
+class ComodoTableData extends DataClass implements Insertable<ComodoTableData> {
+  final int id;
+  final TipoComodo tipoComodo;
+  final int quantidade;
+  final int imovelId;
+  const ComodoTableData(
+      {required this.id,
+      required this.tipoComodo,
+      required this.quantidade,
+      required this.imovelId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    {
+      map['tipo_comodo'] = Variable<String>(
+          $ComodoTableTable.$convertertipoComodo.toSql(tipoComodo));
+    }
+    map['quantidade'] = Variable<int>(quantidade);
+    map['imovel_id'] = Variable<int>(imovelId);
+    return map;
+  }
+
+  ComodoTableCompanion toCompanion(bool nullToAbsent) {
+    return ComodoTableCompanion(
+      id: Value(id),
+      tipoComodo: Value(tipoComodo),
+      quantidade: Value(quantidade),
+      imovelId: Value(imovelId),
+    );
+  }
+
+  factory ComodoTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ComodoTableData(
+      id: serializer.fromJson<int>(json['id']),
+      tipoComodo: $ComodoTableTable.$convertertipoComodo
+          .fromJson(serializer.fromJson<String>(json['tipoComodo'])),
+      quantidade: serializer.fromJson<int>(json['quantidade']),
+      imovelId: serializer.fromJson<int>(json['imovelId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'tipoComodo': serializer.toJson<String>(
+          $ComodoTableTable.$convertertipoComodo.toJson(tipoComodo)),
+      'quantidade': serializer.toJson<int>(quantidade),
+      'imovelId': serializer.toJson<int>(imovelId),
+    };
+  }
+
+  ComodoTableData copyWith(
+          {int? id, TipoComodo? tipoComodo, int? quantidade, int? imovelId}) =>
+      ComodoTableData(
+        id: id ?? this.id,
+        tipoComodo: tipoComodo ?? this.tipoComodo,
+        quantidade: quantidade ?? this.quantidade,
+        imovelId: imovelId ?? this.imovelId,
+      );
+  ComodoTableData copyWithCompanion(ComodoTableCompanion data) {
+    return ComodoTableData(
+      id: data.id.present ? data.id.value : this.id,
+      tipoComodo:
+          data.tipoComodo.present ? data.tipoComodo.value : this.tipoComodo,
+      quantidade:
+          data.quantidade.present ? data.quantidade.value : this.quantidade,
+      imovelId: data.imovelId.present ? data.imovelId.value : this.imovelId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ComodoTableData(')
+          ..write('id: $id, ')
+          ..write('tipoComodo: $tipoComodo, ')
+          ..write('quantidade: $quantidade, ')
+          ..write('imovelId: $imovelId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, tipoComodo, quantidade, imovelId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ComodoTableData &&
+          other.id == this.id &&
+          other.tipoComodo == this.tipoComodo &&
+          other.quantidade == this.quantidade &&
+          other.imovelId == this.imovelId);
+}
+
+class ComodoTableCompanion extends UpdateCompanion<ComodoTableData> {
+  final Value<int> id;
+  final Value<TipoComodo> tipoComodo;
+  final Value<int> quantidade;
+  final Value<int> imovelId;
+  const ComodoTableCompanion({
+    this.id = const Value.absent(),
+    this.tipoComodo = const Value.absent(),
+    this.quantidade = const Value.absent(),
+    this.imovelId = const Value.absent(),
+  });
+  ComodoTableCompanion.insert({
+    this.id = const Value.absent(),
+    required TipoComodo tipoComodo,
+    required int quantidade,
+    required int imovelId,
+  })  : tipoComodo = Value(tipoComodo),
+        quantidade = Value(quantidade),
+        imovelId = Value(imovelId);
+  static Insertable<ComodoTableData> custom({
+    Expression<int>? id,
+    Expression<String>? tipoComodo,
+    Expression<int>? quantidade,
+    Expression<int>? imovelId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (tipoComodo != null) 'tipo_comodo': tipoComodo,
+      if (quantidade != null) 'quantidade': quantidade,
+      if (imovelId != null) 'imovel_id': imovelId,
+    });
+  }
+
+  ComodoTableCompanion copyWith(
+      {Value<int>? id,
+      Value<TipoComodo>? tipoComodo,
+      Value<int>? quantidade,
+      Value<int>? imovelId}) {
+    return ComodoTableCompanion(
+      id: id ?? this.id,
+      tipoComodo: tipoComodo ?? this.tipoComodo,
+      quantidade: quantidade ?? this.quantidade,
+      imovelId: imovelId ?? this.imovelId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (tipoComodo.present) {
+      map['tipo_comodo'] = Variable<String>(
+          $ComodoTableTable.$convertertipoComodo.toSql(tipoComodo.value));
+    }
+    if (quantidade.present) {
+      map['quantidade'] = Variable<int>(quantidade.value);
+    }
+    if (imovelId.present) {
+      map['imovel_id'] = Variable<int>(imovelId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ComodoTableCompanion(')
+          ..write('id: $id, ')
+          ..write('tipoComodo: $tipoComodo, ')
+          ..write('quantidade: $quantidade, ')
+          ..write('imovelId: $imovelId')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $ContratoTableTable extends ContratoTable
     with TableInfo<$ContratoTableTable, ContratoTableData> {
   @override
@@ -1015,9 +1122,35 @@ class $ContratoTableTable extends ContratoTable
   late final GeneratedColumn<int> mesPagamento = GeneratedColumn<int>(
       'mes_pagamento', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _clienteIdMeta =
+      const VerificationMeta('clienteId');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, tipoIntervalo, dataInicio, dataFim, diaPagamento, mesPagamento];
+  late final GeneratedColumn<int> clienteId = GeneratedColumn<int>(
+      'cliente_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES cliente_table (id)'));
+  static const VerificationMeta _imovelIdMeta =
+      const VerificationMeta('imovelId');
+  @override
+  late final GeneratedColumn<int> imovelId = GeneratedColumn<int>(
+      'imovel_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES imovel_table (id)'));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        tipoIntervalo,
+        dataInicio,
+        dataFim,
+        diaPagamento,
+        mesPagamento,
+        clienteId,
+        imovelId
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1060,6 +1193,18 @@ class $ContratoTableTable extends ContratoTable
           mesPagamento.isAcceptableOrUnknown(
               data['mes_pagamento']!, _mesPagamentoMeta));
     }
+    if (data.containsKey('cliente_id')) {
+      context.handle(_clienteIdMeta,
+          clienteId.isAcceptableOrUnknown(data['cliente_id']!, _clienteIdMeta));
+    } else if (isInserting) {
+      context.missing(_clienteIdMeta);
+    }
+    if (data.containsKey('imovel_id')) {
+      context.handle(_imovelIdMeta,
+          imovelId.isAcceptableOrUnknown(data['imovel_id']!, _imovelIdMeta));
+    } else if (isInserting) {
+      context.missing(_imovelIdMeta);
+    }
     return context;
   }
 
@@ -1082,6 +1227,10 @@ class $ContratoTableTable extends ContratoTable
           .read(DriftSqlType.int, data['${effectivePrefix}dia_pagamento'])!,
       mesPagamento: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}mes_pagamento']),
+      clienteId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}cliente_id'])!,
+      imovelId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}imovel_id'])!,
     );
   }
 
@@ -1103,13 +1252,17 @@ class ContratoTableData extends DataClass
   final DateTime dataFim;
   final int diaPagamento;
   final int? mesPagamento;
+  final int clienteId;
+  final int imovelId;
   const ContratoTableData(
       {required this.id,
       required this.tipoIntervalo,
       required this.dataInicio,
       required this.dataFim,
       required this.diaPagamento,
-      this.mesPagamento});
+      this.mesPagamento,
+      required this.clienteId,
+      required this.imovelId});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1124,6 +1277,8 @@ class ContratoTableData extends DataClass
     if (!nullToAbsent || mesPagamento != null) {
       map['mes_pagamento'] = Variable<int>(mesPagamento);
     }
+    map['cliente_id'] = Variable<int>(clienteId);
+    map['imovel_id'] = Variable<int>(imovelId);
     return map;
   }
 
@@ -1137,6 +1292,8 @@ class ContratoTableData extends DataClass
       mesPagamento: mesPagamento == null && nullToAbsent
           ? const Value.absent()
           : Value(mesPagamento),
+      clienteId: Value(clienteId),
+      imovelId: Value(imovelId),
     );
   }
 
@@ -1151,6 +1308,8 @@ class ContratoTableData extends DataClass
       dataFim: serializer.fromJson<DateTime>(json['dataFim']),
       diaPagamento: serializer.fromJson<int>(json['diaPagamento']),
       mesPagamento: serializer.fromJson<int?>(json['mesPagamento']),
+      clienteId: serializer.fromJson<int>(json['clienteId']),
+      imovelId: serializer.fromJson<int>(json['imovelId']),
     );
   }
   @override
@@ -1164,6 +1323,8 @@ class ContratoTableData extends DataClass
       'dataFim': serializer.toJson<DateTime>(dataFim),
       'diaPagamento': serializer.toJson<int>(diaPagamento),
       'mesPagamento': serializer.toJson<int?>(mesPagamento),
+      'clienteId': serializer.toJson<int>(clienteId),
+      'imovelId': serializer.toJson<int>(imovelId),
     };
   }
 
@@ -1173,7 +1334,9 @@ class ContratoTableData extends DataClass
           DateTime? dataInicio,
           DateTime? dataFim,
           int? diaPagamento,
-          Value<int?> mesPagamento = const Value.absent()}) =>
+          Value<int?> mesPagamento = const Value.absent(),
+          int? clienteId,
+          int? imovelId}) =>
       ContratoTableData(
         id: id ?? this.id,
         tipoIntervalo: tipoIntervalo ?? this.tipoIntervalo,
@@ -1182,6 +1345,8 @@ class ContratoTableData extends DataClass
         diaPagamento: diaPagamento ?? this.diaPagamento,
         mesPagamento:
             mesPagamento.present ? mesPagamento.value : this.mesPagamento,
+        clienteId: clienteId ?? this.clienteId,
+        imovelId: imovelId ?? this.imovelId,
       );
   ContratoTableData copyWithCompanion(ContratoTableCompanion data) {
     return ContratoTableData(
@@ -1198,6 +1363,8 @@ class ContratoTableData extends DataClass
       mesPagamento: data.mesPagamento.present
           ? data.mesPagamento.value
           : this.mesPagamento,
+      clienteId: data.clienteId.present ? data.clienteId.value : this.clienteId,
+      imovelId: data.imovelId.present ? data.imovelId.value : this.imovelId,
     );
   }
 
@@ -1209,14 +1376,16 @@ class ContratoTableData extends DataClass
           ..write('dataInicio: $dataInicio, ')
           ..write('dataFim: $dataFim, ')
           ..write('diaPagamento: $diaPagamento, ')
-          ..write('mesPagamento: $mesPagamento')
+          ..write('mesPagamento: $mesPagamento, ')
+          ..write('clienteId: $clienteId, ')
+          ..write('imovelId: $imovelId')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, tipoIntervalo, dataInicio, dataFim, diaPagamento, mesPagamento);
+  int get hashCode => Object.hash(id, tipoIntervalo, dataInicio, dataFim,
+      diaPagamento, mesPagamento, clienteId, imovelId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1226,7 +1395,9 @@ class ContratoTableData extends DataClass
           other.dataInicio == this.dataInicio &&
           other.dataFim == this.dataFim &&
           other.diaPagamento == this.diaPagamento &&
-          other.mesPagamento == this.mesPagamento);
+          other.mesPagamento == this.mesPagamento &&
+          other.clienteId == this.clienteId &&
+          other.imovelId == this.imovelId);
 }
 
 class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
@@ -1236,6 +1407,8 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
   final Value<DateTime> dataFim;
   final Value<int> diaPagamento;
   final Value<int?> mesPagamento;
+  final Value<int> clienteId;
+  final Value<int> imovelId;
   const ContratoTableCompanion({
     this.id = const Value.absent(),
     this.tipoIntervalo = const Value.absent(),
@@ -1243,6 +1416,8 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
     this.dataFim = const Value.absent(),
     this.diaPagamento = const Value.absent(),
     this.mesPagamento = const Value.absent(),
+    this.clienteId = const Value.absent(),
+    this.imovelId = const Value.absent(),
   });
   ContratoTableCompanion.insert({
     this.id = const Value.absent(),
@@ -1251,10 +1426,14 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
     required DateTime dataFim,
     required int diaPagamento,
     this.mesPagamento = const Value.absent(),
+    required int clienteId,
+    required int imovelId,
   })  : tipoIntervalo = Value(tipoIntervalo),
         dataInicio = Value(dataInicio),
         dataFim = Value(dataFim),
-        diaPagamento = Value(diaPagamento);
+        diaPagamento = Value(diaPagamento),
+        clienteId = Value(clienteId),
+        imovelId = Value(imovelId);
   static Insertable<ContratoTableData> custom({
     Expression<int>? id,
     Expression<String>? tipoIntervalo,
@@ -1262,6 +1441,8 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
     Expression<DateTime>? dataFim,
     Expression<int>? diaPagamento,
     Expression<int>? mesPagamento,
+    Expression<int>? clienteId,
+    Expression<int>? imovelId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1270,6 +1451,8 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
       if (dataFim != null) 'data_fim': dataFim,
       if (diaPagamento != null) 'dia_pagamento': diaPagamento,
       if (mesPagamento != null) 'mes_pagamento': mesPagamento,
+      if (clienteId != null) 'cliente_id': clienteId,
+      if (imovelId != null) 'imovel_id': imovelId,
     });
   }
 
@@ -1279,7 +1462,9 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
       Value<DateTime>? dataInicio,
       Value<DateTime>? dataFim,
       Value<int>? diaPagamento,
-      Value<int?>? mesPagamento}) {
+      Value<int?>? mesPagamento,
+      Value<int>? clienteId,
+      Value<int>? imovelId}) {
     return ContratoTableCompanion(
       id: id ?? this.id,
       tipoIntervalo: tipoIntervalo ?? this.tipoIntervalo,
@@ -1287,6 +1472,8 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
       dataFim: dataFim ?? this.dataFim,
       diaPagamento: diaPagamento ?? this.diaPagamento,
       mesPagamento: mesPagamento ?? this.mesPagamento,
+      clienteId: clienteId ?? this.clienteId,
+      imovelId: imovelId ?? this.imovelId,
     );
   }
 
@@ -1313,6 +1500,12 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
     if (mesPagamento.present) {
       map['mes_pagamento'] = Variable<int>(mesPagamento.value);
     }
+    if (clienteId.present) {
+      map['cliente_id'] = Variable<int>(clienteId.value);
+    }
+    if (imovelId.present) {
+      map['imovel_id'] = Variable<int>(imovelId.value);
+    }
     return map;
   }
 
@@ -1324,7 +1517,288 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
           ..write('dataInicio: $dataInicio, ')
           ..write('dataFim: $dataFim, ')
           ..write('diaPagamento: $diaPagamento, ')
-          ..write('mesPagamento: $mesPagamento')
+          ..write('mesPagamento: $mesPagamento, ')
+          ..write('clienteId: $clienteId, ')
+          ..write('imovelId: $imovelId')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $PagamentoTableTable extends PagamentoTable
+    with TableInfo<$PagamentoTableTable, PagamentoTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PagamentoTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _tipoPagamentoMeta =
+      const VerificationMeta('tipoPagamento');
+  @override
+  late final GeneratedColumnWithTypeConverter<TipoPagamento, String>
+      tipoPagamento = GeneratedColumn<String>(
+              'tipo_pagamento', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<TipoPagamento>(
+              $PagamentoTableTable.$convertertipoPagamento);
+  static const VerificationMeta _valorMeta = const VerificationMeta('valor');
+  @override
+  late final GeneratedColumn<double> valor = GeneratedColumn<double>(
+      'valor', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _contratoIdMeta =
+      const VerificationMeta('contratoId');
+  @override
+  late final GeneratedColumn<int> contratoId = GeneratedColumn<int>(
+      'contrato_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES contrato_table (id)'));
+  @override
+  List<GeneratedColumn> get $columns => [id, tipoPagamento, valor, contratoId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'pagamento_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<PagamentoTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    context.handle(_tipoPagamentoMeta, const VerificationResult.success());
+    if (data.containsKey('valor')) {
+      context.handle(
+          _valorMeta, valor.isAcceptableOrUnknown(data['valor']!, _valorMeta));
+    } else if (isInserting) {
+      context.missing(_valorMeta);
+    }
+    if (data.containsKey('contrato_id')) {
+      context.handle(
+          _contratoIdMeta,
+          contratoId.isAcceptableOrUnknown(
+              data['contrato_id']!, _contratoIdMeta));
+    } else if (isInserting) {
+      context.missing(_contratoIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  PagamentoTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PagamentoTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      tipoPagamento: $PagamentoTableTable.$convertertipoPagamento.fromSql(
+          attachedDatabase.typeMapping.read(
+              DriftSqlType.string, data['${effectivePrefix}tipo_pagamento'])!),
+      valor: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}valor'])!,
+      contratoId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}contrato_id'])!,
+    );
+  }
+
+  @override
+  $PagamentoTableTable createAlias(String alias) {
+    return $PagamentoTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<TipoPagamento, String, String>
+      $convertertipoPagamento =
+      const EnumNameConverter<TipoPagamento>(TipoPagamento.values);
+}
+
+class PagamentoTableData extends DataClass
+    implements Insertable<PagamentoTableData> {
+  final int id;
+  final TipoPagamento tipoPagamento;
+  final double valor;
+  final int contratoId;
+  const PagamentoTableData(
+      {required this.id,
+      required this.tipoPagamento,
+      required this.valor,
+      required this.contratoId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    {
+      map['tipo_pagamento'] = Variable<String>(
+          $PagamentoTableTable.$convertertipoPagamento.toSql(tipoPagamento));
+    }
+    map['valor'] = Variable<double>(valor);
+    map['contrato_id'] = Variable<int>(contratoId);
+    return map;
+  }
+
+  PagamentoTableCompanion toCompanion(bool nullToAbsent) {
+    return PagamentoTableCompanion(
+      id: Value(id),
+      tipoPagamento: Value(tipoPagamento),
+      valor: Value(valor),
+      contratoId: Value(contratoId),
+    );
+  }
+
+  factory PagamentoTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PagamentoTableData(
+      id: serializer.fromJson<int>(json['id']),
+      tipoPagamento: $PagamentoTableTable.$convertertipoPagamento
+          .fromJson(serializer.fromJson<String>(json['tipoPagamento'])),
+      valor: serializer.fromJson<double>(json['valor']),
+      contratoId: serializer.fromJson<int>(json['contratoId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'tipoPagamento': serializer.toJson<String>(
+          $PagamentoTableTable.$convertertipoPagamento.toJson(tipoPagamento)),
+      'valor': serializer.toJson<double>(valor),
+      'contratoId': serializer.toJson<int>(contratoId),
+    };
+  }
+
+  PagamentoTableData copyWith(
+          {int? id,
+          TipoPagamento? tipoPagamento,
+          double? valor,
+          int? contratoId}) =>
+      PagamentoTableData(
+        id: id ?? this.id,
+        tipoPagamento: tipoPagamento ?? this.tipoPagamento,
+        valor: valor ?? this.valor,
+        contratoId: contratoId ?? this.contratoId,
+      );
+  PagamentoTableData copyWithCompanion(PagamentoTableCompanion data) {
+    return PagamentoTableData(
+      id: data.id.present ? data.id.value : this.id,
+      tipoPagamento: data.tipoPagamento.present
+          ? data.tipoPagamento.value
+          : this.tipoPagamento,
+      valor: data.valor.present ? data.valor.value : this.valor,
+      contratoId:
+          data.contratoId.present ? data.contratoId.value : this.contratoId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PagamentoTableData(')
+          ..write('id: $id, ')
+          ..write('tipoPagamento: $tipoPagamento, ')
+          ..write('valor: $valor, ')
+          ..write('contratoId: $contratoId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, tipoPagamento, valor, contratoId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PagamentoTableData &&
+          other.id == this.id &&
+          other.tipoPagamento == this.tipoPagamento &&
+          other.valor == this.valor &&
+          other.contratoId == this.contratoId);
+}
+
+class PagamentoTableCompanion extends UpdateCompanion<PagamentoTableData> {
+  final Value<int> id;
+  final Value<TipoPagamento> tipoPagamento;
+  final Value<double> valor;
+  final Value<int> contratoId;
+  const PagamentoTableCompanion({
+    this.id = const Value.absent(),
+    this.tipoPagamento = const Value.absent(),
+    this.valor = const Value.absent(),
+    this.contratoId = const Value.absent(),
+  });
+  PagamentoTableCompanion.insert({
+    this.id = const Value.absent(),
+    required TipoPagamento tipoPagamento,
+    required double valor,
+    required int contratoId,
+  })  : tipoPagamento = Value(tipoPagamento),
+        valor = Value(valor),
+        contratoId = Value(contratoId);
+  static Insertable<PagamentoTableData> custom({
+    Expression<int>? id,
+    Expression<String>? tipoPagamento,
+    Expression<double>? valor,
+    Expression<int>? contratoId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (tipoPagamento != null) 'tipo_pagamento': tipoPagamento,
+      if (valor != null) 'valor': valor,
+      if (contratoId != null) 'contrato_id': contratoId,
+    });
+  }
+
+  PagamentoTableCompanion copyWith(
+      {Value<int>? id,
+      Value<TipoPagamento>? tipoPagamento,
+      Value<double>? valor,
+      Value<int>? contratoId}) {
+    return PagamentoTableCompanion(
+      id: id ?? this.id,
+      tipoPagamento: tipoPagamento ?? this.tipoPagamento,
+      valor: valor ?? this.valor,
+      contratoId: contratoId ?? this.contratoId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (tipoPagamento.present) {
+      map['tipo_pagamento'] = Variable<String>($PagamentoTableTable
+          .$convertertipoPagamento
+          .toSql(tipoPagamento.value));
+    }
+    if (valor.present) {
+      map['valor'] = Variable<double>(valor.value);
+    }
+    if (contratoId.present) {
+      map['contrato_id'] = Variable<int>(contratoId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PagamentoTableCompanion(')
+          ..write('id: $id, ')
+          ..write('tipoPagamento: $tipoPagamento, ')
+          ..write('valor: $valor, ')
+          ..write('contratoId: $contratoId')
           ..write(')'))
         .toString();
   }
@@ -1335,10 +1809,10 @@ abstract class _$BancoDados extends GeneratedDatabase {
   $BancoDadosManager get managers => $BancoDadosManager(this);
   late final $EnderecoTableTable enderecoTable = $EnderecoTableTable(this);
   late final $ClienteTableTable clienteTable = $ClienteTableTable(this);
-  late final $ComodoTableTable comodoTable = $ComodoTableTable(this);
-  late final $PagamentoTableTable pagamentoTable = $PagamentoTableTable(this);
   late final $ImovelTableTable imovelTable = $ImovelTableTable(this);
+  late final $ComodoTableTable comodoTable = $ComodoTableTable(this);
   late final $ContratoTableTable contratoTable = $ContratoTableTable(this);
+  late final $PagamentoTableTable pagamentoTable = $PagamentoTableTable(this);
   late final EnderecoDao enderecoDao = EnderecoDao(this as BancoDados);
   late final ClienteDao clienteDao = ClienteDao(this as BancoDados);
   late final ComodoDao comodoDao = ComodoDao(this as BancoDados);
@@ -1352,10 +1826,10 @@ abstract class _$BancoDados extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
         enderecoTable,
         clienteTable,
-        comodoTable,
-        pagamentoTable,
         imovelTable,
-        contratoTable
+        comodoTable,
+        contratoTable,
+        pagamentoTable
       ];
 }
 
@@ -1627,6 +2101,26 @@ typedef $$ClienteTableTableUpdateCompanionBuilder = ClienteTableCompanion
   Value<Contato> contato,
 });
 
+final class $$ClienteTableTableReferences
+    extends BaseReferences<_$BancoDados, $ClienteTableTable, ClienteTableData> {
+  $$ClienteTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$ContratoTableTable, List<ContratoTableData>>
+      _contratoTableRefsTable(_$BancoDados db) =>
+          MultiTypedResultKey.fromTable(db.contratoTable,
+              aliasName: $_aliasNameGenerator(
+                  db.clienteTable.id, db.contratoTable.clienteId));
+
+  $$ContratoTableTableProcessedTableManager get contratoTableRefs {
+    final manager = $$ContratoTableTableTableManager($_db, $_db.contratoTable)
+        .filter((f) => f.clienteId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_contratoTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
 class $$ClienteTableTableFilterComposer
     extends Composer<_$BancoDados, $ClienteTableTable> {
   $$ClienteTableTableFilterComposer({
@@ -1656,6 +2150,27 @@ class $$ClienteTableTableFilterComposer
       $composableBuilder(
           column: $table.contato,
           builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  Expression<bool> contratoTableRefs(
+      Expression<bool> Function($$ContratoTableTableFilterComposer f) f) {
+    final $$ContratoTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.contratoTable,
+        getReferencedColumn: (t) => t.clienteId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ContratoTableTableFilterComposer(
+              $db: $db,
+              $table: $db.contratoTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$ClienteTableTableOrderingComposer
@@ -1713,20 +2228,41 @@ class $$ClienteTableTableAnnotationComposer
 
   GeneratedColumnWithTypeConverter<Contato, String> get contato =>
       $composableBuilder(column: $table.contato, builder: (column) => column);
+
+  Expression<T> contratoTableRefs<T extends Object>(
+      Expression<T> Function($$ContratoTableTableAnnotationComposer a) f) {
+    final $$ContratoTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.contratoTable,
+        getReferencedColumn: (t) => t.clienteId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ContratoTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.contratoTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$ClienteTableTableTableManager extends RootTableManager<
     _$BancoDados,
     $ClienteTableTable,
-    Cliente,
+    ClienteTableData,
     $$ClienteTableTableFilterComposer,
     $$ClienteTableTableOrderingComposer,
     $$ClienteTableTableAnnotationComposer,
     $$ClienteTableTableCreateCompanionBuilder,
     $$ClienteTableTableUpdateCompanionBuilder,
-    (Cliente, BaseReferences<_$BancoDados, $ClienteTableTable, Cliente>),
-    Cliente,
-    PrefetchHooks Function()> {
+    (ClienteTableData, $$ClienteTableTableReferences),
+    ClienteTableData,
+    PrefetchHooks Function({bool contratoTableRefs})> {
   $$ClienteTableTableTableManager(_$BancoDados db, $ClienteTableTable table)
       : super(TableManagerState(
           db: db,
@@ -1770,293 +2306,51 @@ class $$ClienteTableTableTableManager extends RootTableManager<
             contato: contato,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map((e) => (
+                    e.readTable(table),
+                    $$ClienteTableTableReferences(db, table, e)
+                  ))
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({contratoTableRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (contratoTableRefs) db.contratoTable
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (contratoTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ClienteTableTableReferences
+                            ._contratoTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ClienteTableTableReferences(db, table, p0)
+                                .contratoTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.clienteId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
         ));
 }
 
 typedef $$ClienteTableTableProcessedTableManager = ProcessedTableManager<
     _$BancoDados,
     $ClienteTableTable,
-    Cliente,
+    ClienteTableData,
     $$ClienteTableTableFilterComposer,
     $$ClienteTableTableOrderingComposer,
     $$ClienteTableTableAnnotationComposer,
     $$ClienteTableTableCreateCompanionBuilder,
     $$ClienteTableTableUpdateCompanionBuilder,
-    (Cliente, BaseReferences<_$BancoDados, $ClienteTableTable, Cliente>),
-    Cliente,
-    PrefetchHooks Function()>;
-typedef $$ComodoTableTableCreateCompanionBuilder = ComodoTableCompanion
-    Function({
-  Value<int> id,
-  required TipoComodo tipoComodo,
-  required int quantidade,
-});
-typedef $$ComodoTableTableUpdateCompanionBuilder = ComodoTableCompanion
-    Function({
-  Value<int> id,
-  Value<TipoComodo> tipoComodo,
-  Value<int> quantidade,
-});
-
-class $$ComodoTableTableFilterComposer
-    extends Composer<_$BancoDados, $ComodoTableTable> {
-  $$ComodoTableTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
-
-  ColumnWithTypeConverterFilters<TipoComodo, TipoComodo, String>
-      get tipoComodo => $composableBuilder(
-          column: $table.tipoComodo,
-          builder: (column) => ColumnWithTypeConverterFilters(column));
-
-  ColumnFilters<int> get quantidade => $composableBuilder(
-      column: $table.quantidade, builder: (column) => ColumnFilters(column));
-}
-
-class $$ComodoTableTableOrderingComposer
-    extends Composer<_$BancoDados, $ComodoTableTable> {
-  $$ComodoTableTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<String> get tipoComodo => $composableBuilder(
-      column: $table.tipoComodo, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<int> get quantidade => $composableBuilder(
-      column: $table.quantidade, builder: (column) => ColumnOrderings(column));
-}
-
-class $$ComodoTableTableAnnotationComposer
-    extends Composer<_$BancoDados, $ComodoTableTable> {
-  $$ComodoTableTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumnWithTypeConverter<TipoComodo, String> get tipoComodo =>
-      $composableBuilder(
-          column: $table.tipoComodo, builder: (column) => column);
-
-  GeneratedColumn<int> get quantidade => $composableBuilder(
-      column: $table.quantidade, builder: (column) => column);
-}
-
-class $$ComodoTableTableTableManager extends RootTableManager<
-    _$BancoDados,
-    $ComodoTableTable,
-    Comodo,
-    $$ComodoTableTableFilterComposer,
-    $$ComodoTableTableOrderingComposer,
-    $$ComodoTableTableAnnotationComposer,
-    $$ComodoTableTableCreateCompanionBuilder,
-    $$ComodoTableTableUpdateCompanionBuilder,
-    (Comodo, BaseReferences<_$BancoDados, $ComodoTableTable, Comodo>),
-    Comodo,
-    PrefetchHooks Function()> {
-  $$ComodoTableTableTableManager(_$BancoDados db, $ComodoTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$ComodoTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$ComodoTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$ComodoTableTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<TipoComodo> tipoComodo = const Value.absent(),
-            Value<int> quantidade = const Value.absent(),
-          }) =>
-              ComodoTableCompanion(
-            id: id,
-            tipoComodo: tipoComodo,
-            quantidade: quantidade,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required TipoComodo tipoComodo,
-            required int quantidade,
-          }) =>
-              ComodoTableCompanion.insert(
-            id: id,
-            tipoComodo: tipoComodo,
-            quantidade: quantidade,
-          ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
-              .toList(),
-          prefetchHooksCallback: null,
-        ));
-}
-
-typedef $$ComodoTableTableProcessedTableManager = ProcessedTableManager<
-    _$BancoDados,
-    $ComodoTableTable,
-    Comodo,
-    $$ComodoTableTableFilterComposer,
-    $$ComodoTableTableOrderingComposer,
-    $$ComodoTableTableAnnotationComposer,
-    $$ComodoTableTableCreateCompanionBuilder,
-    $$ComodoTableTableUpdateCompanionBuilder,
-    (Comodo, BaseReferences<_$BancoDados, $ComodoTableTable, Comodo>),
-    Comodo,
-    PrefetchHooks Function()>;
-typedef $$PagamentoTableTableCreateCompanionBuilder = PagamentoTableCompanion
-    Function({
-  Value<int> id,
-  required TipoPagamento tipoPagamento,
-  required double valor,
-});
-typedef $$PagamentoTableTableUpdateCompanionBuilder = PagamentoTableCompanion
-    Function({
-  Value<int> id,
-  Value<TipoPagamento> tipoPagamento,
-  Value<double> valor,
-});
-
-class $$PagamentoTableTableFilterComposer
-    extends Composer<_$BancoDados, $PagamentoTableTable> {
-  $$PagamentoTableTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
-
-  ColumnWithTypeConverterFilters<TipoPagamento, TipoPagamento, String>
-      get tipoPagamento => $composableBuilder(
-          column: $table.tipoPagamento,
-          builder: (column) => ColumnWithTypeConverterFilters(column));
-
-  ColumnFilters<double> get valor => $composableBuilder(
-      column: $table.valor, builder: (column) => ColumnFilters(column));
-}
-
-class $$PagamentoTableTableOrderingComposer
-    extends Composer<_$BancoDados, $PagamentoTableTable> {
-  $$PagamentoTableTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<String> get tipoPagamento => $composableBuilder(
-      column: $table.tipoPagamento,
-      builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<double> get valor => $composableBuilder(
-      column: $table.valor, builder: (column) => ColumnOrderings(column));
-}
-
-class $$PagamentoTableTableAnnotationComposer
-    extends Composer<_$BancoDados, $PagamentoTableTable> {
-  $$PagamentoTableTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumnWithTypeConverter<TipoPagamento, String> get tipoPagamento =>
-      $composableBuilder(
-          column: $table.tipoPagamento, builder: (column) => column);
-
-  GeneratedColumn<double> get valor =>
-      $composableBuilder(column: $table.valor, builder: (column) => column);
-}
-
-class $$PagamentoTableTableTableManager extends RootTableManager<
-    _$BancoDados,
-    $PagamentoTableTable,
-    Pagamento,
-    $$PagamentoTableTableFilterComposer,
-    $$PagamentoTableTableOrderingComposer,
-    $$PagamentoTableTableAnnotationComposer,
-    $$PagamentoTableTableCreateCompanionBuilder,
-    $$PagamentoTableTableUpdateCompanionBuilder,
-    (Pagamento, BaseReferences<_$BancoDados, $PagamentoTableTable, Pagamento>),
-    Pagamento,
-    PrefetchHooks Function()> {
-  $$PagamentoTableTableTableManager(_$BancoDados db, $PagamentoTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$PagamentoTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$PagamentoTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$PagamentoTableTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<TipoPagamento> tipoPagamento = const Value.absent(),
-            Value<double> valor = const Value.absent(),
-          }) =>
-              PagamentoTableCompanion(
-            id: id,
-            tipoPagamento: tipoPagamento,
-            valor: valor,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required TipoPagamento tipoPagamento,
-            required double valor,
-          }) =>
-              PagamentoTableCompanion.insert(
-            id: id,
-            tipoPagamento: tipoPagamento,
-            valor: valor,
-          ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
-              .toList(),
-          prefetchHooksCallback: null,
-        ));
-}
-
-typedef $$PagamentoTableTableProcessedTableManager = ProcessedTableManager<
-    _$BancoDados,
-    $PagamentoTableTable,
-    Pagamento,
-    $$PagamentoTableTableFilterComposer,
-    $$PagamentoTableTableOrderingComposer,
-    $$PagamentoTableTableAnnotationComposer,
-    $$PagamentoTableTableCreateCompanionBuilder,
-    $$PagamentoTableTableUpdateCompanionBuilder,
-    (Pagamento, BaseReferences<_$BancoDados, $PagamentoTableTable, Pagamento>),
-    Pagamento,
-    PrefetchHooks Function()>;
+    (ClienteTableData, $$ClienteTableTableReferences),
+    ClienteTableData,
+    PrefetchHooks Function({bool contratoTableRefs})>;
 typedef $$ImovelTableTableCreateCompanionBuilder = ImovelTableCompanion
     Function({
   Value<int> id,
@@ -2087,6 +2381,36 @@ final class $$ImovelTableTableReferences
     if (item == null) return manager;
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static MultiTypedResultKey<$ComodoTableTable, List<ComodoTableData>>
+      _comodoTableRefsTable(_$BancoDados db) => MultiTypedResultKey.fromTable(
+          db.comodoTable,
+          aliasName:
+              $_aliasNameGenerator(db.imovelTable.id, db.comodoTable.imovelId));
+
+  $$ComodoTableTableProcessedTableManager get comodoTableRefs {
+    final manager = $$ComodoTableTableTableManager($_db, $_db.comodoTable)
+        .filter((f) => f.imovelId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_comodoTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$ContratoTableTable, List<ContratoTableData>>
+      _contratoTableRefsTable(_$BancoDados db) =>
+          MultiTypedResultKey.fromTable(db.contratoTable,
+              aliasName: $_aliasNameGenerator(
+                  db.imovelTable.id, db.contratoTable.imovelId));
+
+  $$ContratoTableTableProcessedTableManager get contratoTableRefs {
+    final manager = $$ContratoTableTableTableManager($_db, $_db.contratoTable)
+        .filter((f) => f.imovelId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_contratoTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
   }
 }
 
@@ -2126,6 +2450,48 @@ class $$ImovelTableTableFilterComposer
                   $removeJoinBuilderFromRootComposer,
             ));
     return composer;
+  }
+
+  Expression<bool> comodoTableRefs(
+      Expression<bool> Function($$ComodoTableTableFilterComposer f) f) {
+    final $$ComodoTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.comodoTable,
+        getReferencedColumn: (t) => t.imovelId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ComodoTableTableFilterComposer(
+              $db: $db,
+              $table: $db.comodoTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> contratoTableRefs(
+      Expression<bool> Function($$ContratoTableTableFilterComposer f) f) {
+    final $$ContratoTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.contratoTable,
+        getReferencedColumn: (t) => t.imovelId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ContratoTableTableFilterComposer(
+              $db: $db,
+              $table: $db.contratoTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
   }
 }
 
@@ -2205,6 +2571,48 @@ class $$ImovelTableTableAnnotationComposer
             ));
     return composer;
   }
+
+  Expression<T> comodoTableRefs<T extends Object>(
+      Expression<T> Function($$ComodoTableTableAnnotationComposer a) f) {
+    final $$ComodoTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.comodoTable,
+        getReferencedColumn: (t) => t.imovelId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ComodoTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.comodoTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> contratoTableRefs<T extends Object>(
+      Expression<T> Function($$ContratoTableTableAnnotationComposer a) f) {
+    final $$ContratoTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.contratoTable,
+        getReferencedColumn: (t) => t.imovelId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ContratoTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.contratoTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$ImovelTableTableTableManager extends RootTableManager<
@@ -2218,7 +2626,8 @@ class $$ImovelTableTableTableManager extends RootTableManager<
     $$ImovelTableTableUpdateCompanionBuilder,
     (ImovelTableData, $$ImovelTableTableReferences),
     ImovelTableData,
-    PrefetchHooks Function({bool enderecoId})> {
+    PrefetchHooks Function(
+        {bool enderecoId, bool comodoTableRefs, bool contratoTableRefs})> {
   $$ImovelTableTableTableManager(_$BancoDados db, $ImovelTableTable table)
       : super(TableManagerState(
           db: db,
@@ -2259,10 +2668,16 @@ class $$ImovelTableTableTableManager extends RootTableManager<
                     $$ImovelTableTableReferences(db, table, e)
                   ))
               .toList(),
-          prefetchHooksCallback: ({enderecoId = false}) {
+          prefetchHooksCallback: (
+              {enderecoId = false,
+              comodoTableRefs = false,
+              contratoTableRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [],
+              explicitlyWatchedTables: [
+                if (comodoTableRefs) db.comodoTable,
+                if (contratoTableRefs) db.contratoTable
+              ],
               addJoins: <
                   T extends TableManagerState<
                       dynamic,
@@ -2290,7 +2705,32 @@ class $$ImovelTableTableTableManager extends RootTableManager<
                 return state;
               },
               getPrefetchedDataCallback: (items) async {
-                return [];
+                return [
+                  if (comodoTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ImovelTableTableReferences
+                            ._comodoTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ImovelTableTableReferences(db, table, p0)
+                                .comodoTableRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.imovelId == item.id),
+                        typedResults: items),
+                  if (contratoTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ImovelTableTableReferences
+                            ._contratoTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ImovelTableTableReferences(db, table, p0)
+                                .contratoTableRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.imovelId == item.id),
+                        typedResults: items)
+                ];
               },
             );
           },
@@ -2308,7 +2748,263 @@ typedef $$ImovelTableTableProcessedTableManager = ProcessedTableManager<
     $$ImovelTableTableUpdateCompanionBuilder,
     (ImovelTableData, $$ImovelTableTableReferences),
     ImovelTableData,
-    PrefetchHooks Function({bool enderecoId})>;
+    PrefetchHooks Function(
+        {bool enderecoId, bool comodoTableRefs, bool contratoTableRefs})>;
+typedef $$ComodoTableTableCreateCompanionBuilder = ComodoTableCompanion
+    Function({
+  Value<int> id,
+  required TipoComodo tipoComodo,
+  required int quantidade,
+  required int imovelId,
+});
+typedef $$ComodoTableTableUpdateCompanionBuilder = ComodoTableCompanion
+    Function({
+  Value<int> id,
+  Value<TipoComodo> tipoComodo,
+  Value<int> quantidade,
+  Value<int> imovelId,
+});
+
+final class $$ComodoTableTableReferences
+    extends BaseReferences<_$BancoDados, $ComodoTableTable, ComodoTableData> {
+  $$ComodoTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $ImovelTableTable _imovelIdTable(_$BancoDados db) =>
+      db.imovelTable.createAlias(
+          $_aliasNameGenerator(db.comodoTable.imovelId, db.imovelTable.id));
+
+  $$ImovelTableTableProcessedTableManager get imovelId {
+    final manager = $$ImovelTableTableTableManager($_db, $_db.imovelTable)
+        .filter((f) => f.id($_item.imovelId!));
+    final item = $_typedResult.readTableOrNull(_imovelIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$ComodoTableTableFilterComposer
+    extends Composer<_$BancoDados, $ComodoTableTable> {
+  $$ComodoTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<TipoComodo, TipoComodo, String>
+      get tipoComodo => $composableBuilder(
+          column: $table.tipoComodo,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnFilters<int> get quantidade => $composableBuilder(
+      column: $table.quantidade, builder: (column) => ColumnFilters(column));
+
+  $$ImovelTableTableFilterComposer get imovelId {
+    final $$ImovelTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.imovelId,
+        referencedTable: $db.imovelTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ImovelTableTableFilterComposer(
+              $db: $db,
+              $table: $db.imovelTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ComodoTableTableOrderingComposer
+    extends Composer<_$BancoDados, $ComodoTableTable> {
+  $$ComodoTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get tipoComodo => $composableBuilder(
+      column: $table.tipoComodo, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get quantidade => $composableBuilder(
+      column: $table.quantidade, builder: (column) => ColumnOrderings(column));
+
+  $$ImovelTableTableOrderingComposer get imovelId {
+    final $$ImovelTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.imovelId,
+        referencedTable: $db.imovelTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ImovelTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.imovelTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ComodoTableTableAnnotationComposer
+    extends Composer<_$BancoDados, $ComodoTableTable> {
+  $$ComodoTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<TipoComodo, String> get tipoComodo =>
+      $composableBuilder(
+          column: $table.tipoComodo, builder: (column) => column);
+
+  GeneratedColumn<int> get quantidade => $composableBuilder(
+      column: $table.quantidade, builder: (column) => column);
+
+  $$ImovelTableTableAnnotationComposer get imovelId {
+    final $$ImovelTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.imovelId,
+        referencedTable: $db.imovelTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ImovelTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.imovelTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ComodoTableTableTableManager extends RootTableManager<
+    _$BancoDados,
+    $ComodoTableTable,
+    ComodoTableData,
+    $$ComodoTableTableFilterComposer,
+    $$ComodoTableTableOrderingComposer,
+    $$ComodoTableTableAnnotationComposer,
+    $$ComodoTableTableCreateCompanionBuilder,
+    $$ComodoTableTableUpdateCompanionBuilder,
+    (ComodoTableData, $$ComodoTableTableReferences),
+    ComodoTableData,
+    PrefetchHooks Function({bool imovelId})> {
+  $$ComodoTableTableTableManager(_$BancoDados db, $ComodoTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ComodoTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ComodoTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ComodoTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<TipoComodo> tipoComodo = const Value.absent(),
+            Value<int> quantidade = const Value.absent(),
+            Value<int> imovelId = const Value.absent(),
+          }) =>
+              ComodoTableCompanion(
+            id: id,
+            tipoComodo: tipoComodo,
+            quantidade: quantidade,
+            imovelId: imovelId,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required TipoComodo tipoComodo,
+            required int quantidade,
+            required int imovelId,
+          }) =>
+              ComodoTableCompanion.insert(
+            id: id,
+            tipoComodo: tipoComodo,
+            quantidade: quantidade,
+            imovelId: imovelId,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ComodoTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({imovelId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (imovelId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.imovelId,
+                    referencedTable:
+                        $$ComodoTableTableReferences._imovelIdTable(db),
+                    referencedColumn:
+                        $$ComodoTableTableReferences._imovelIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$ComodoTableTableProcessedTableManager = ProcessedTableManager<
+    _$BancoDados,
+    $ComodoTableTable,
+    ComodoTableData,
+    $$ComodoTableTableFilterComposer,
+    $$ComodoTableTableOrderingComposer,
+    $$ComodoTableTableAnnotationComposer,
+    $$ComodoTableTableCreateCompanionBuilder,
+    $$ComodoTableTableUpdateCompanionBuilder,
+    (ComodoTableData, $$ComodoTableTableReferences),
+    ComodoTableData,
+    PrefetchHooks Function({bool imovelId})>;
 typedef $$ContratoTableTableCreateCompanionBuilder = ContratoTableCompanion
     Function({
   Value<int> id,
@@ -2317,6 +3013,8 @@ typedef $$ContratoTableTableCreateCompanionBuilder = ContratoTableCompanion
   required DateTime dataFim,
   required int diaPagamento,
   Value<int?> mesPagamento,
+  required int clienteId,
+  required int imovelId,
 });
 typedef $$ContratoTableTableUpdateCompanionBuilder = ContratoTableCompanion
     Function({
@@ -2326,7 +3024,56 @@ typedef $$ContratoTableTableUpdateCompanionBuilder = ContratoTableCompanion
   Value<DateTime> dataFim,
   Value<int> diaPagamento,
   Value<int?> mesPagamento,
+  Value<int> clienteId,
+  Value<int> imovelId,
 });
+
+final class $$ContratoTableTableReferences extends BaseReferences<_$BancoDados,
+    $ContratoTableTable, ContratoTableData> {
+  $$ContratoTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ClienteTableTable _clienteIdTable(_$BancoDados db) =>
+      db.clienteTable.createAlias(
+          $_aliasNameGenerator(db.contratoTable.clienteId, db.clienteTable.id));
+
+  $$ClienteTableTableProcessedTableManager get clienteId {
+    final manager = $$ClienteTableTableTableManager($_db, $_db.clienteTable)
+        .filter((f) => f.id($_item.clienteId!));
+    final item = $_typedResult.readTableOrNull(_clienteIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $ImovelTableTable _imovelIdTable(_$BancoDados db) =>
+      db.imovelTable.createAlias(
+          $_aliasNameGenerator(db.contratoTable.imovelId, db.imovelTable.id));
+
+  $$ImovelTableTableProcessedTableManager get imovelId {
+    final manager = $$ImovelTableTableTableManager($_db, $_db.imovelTable)
+        .filter((f) => f.id($_item.imovelId!));
+    final item = $_typedResult.readTableOrNull(_imovelIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static MultiTypedResultKey<$PagamentoTableTable, List<PagamentoTableData>>
+      _pagamentoTableRefsTable(_$BancoDados db) =>
+          MultiTypedResultKey.fromTable(db.pagamentoTable,
+              aliasName: $_aliasNameGenerator(
+                  db.contratoTable.id, db.pagamentoTable.contratoId));
+
+  $$PagamentoTableTableProcessedTableManager get pagamentoTableRefs {
+    final manager = $$PagamentoTableTableTableManager($_db, $_db.pagamentoTable)
+        .filter((f) => f.contratoId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_pagamentoTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
 
 class $$ContratoTableTableFilterComposer
     extends Composer<_$BancoDados, $ContratoTableTable> {
@@ -2356,6 +3103,67 @@ class $$ContratoTableTableFilterComposer
 
   ColumnFilters<int> get mesPagamento => $composableBuilder(
       column: $table.mesPagamento, builder: (column) => ColumnFilters(column));
+
+  $$ClienteTableTableFilterComposer get clienteId {
+    final $$ClienteTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.clienteId,
+        referencedTable: $db.clienteTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ClienteTableTableFilterComposer(
+              $db: $db,
+              $table: $db.clienteTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$ImovelTableTableFilterComposer get imovelId {
+    final $$ImovelTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.imovelId,
+        referencedTable: $db.imovelTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ImovelTableTableFilterComposer(
+              $db: $db,
+              $table: $db.imovelTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<bool> pagamentoTableRefs(
+      Expression<bool> Function($$PagamentoTableTableFilterComposer f) f) {
+    final $$PagamentoTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.pagamentoTable,
+        getReferencedColumn: (t) => t.contratoId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PagamentoTableTableFilterComposer(
+              $db: $db,
+              $table: $db.pagamentoTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$ContratoTableTableOrderingComposer
@@ -2387,6 +3195,46 @@ class $$ContratoTableTableOrderingComposer
   ColumnOrderings<int> get mesPagamento => $composableBuilder(
       column: $table.mesPagamento,
       builder: (column) => ColumnOrderings(column));
+
+  $$ClienteTableTableOrderingComposer get clienteId {
+    final $$ClienteTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.clienteId,
+        referencedTable: $db.clienteTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ClienteTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.clienteTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$ImovelTableTableOrderingComposer get imovelId {
+    final $$ImovelTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.imovelId,
+        referencedTable: $db.imovelTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ImovelTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.imovelTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
 }
 
 class $$ContratoTableTableAnnotationComposer
@@ -2416,6 +3264,67 @@ class $$ContratoTableTableAnnotationComposer
 
   GeneratedColumn<int> get mesPagamento => $composableBuilder(
       column: $table.mesPagamento, builder: (column) => column);
+
+  $$ClienteTableTableAnnotationComposer get clienteId {
+    final $$ClienteTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.clienteId,
+        referencedTable: $db.clienteTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ClienteTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.clienteTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$ImovelTableTableAnnotationComposer get imovelId {
+    final $$ImovelTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.imovelId,
+        referencedTable: $db.imovelTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ImovelTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.imovelTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<T> pagamentoTableRefs<T extends Object>(
+      Expression<T> Function($$PagamentoTableTableAnnotationComposer a) f) {
+    final $$PagamentoTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.pagamentoTable,
+        getReferencedColumn: (t) => t.contratoId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PagamentoTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.pagamentoTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$ContratoTableTableTableManager extends RootTableManager<
@@ -2427,12 +3336,10 @@ class $$ContratoTableTableTableManager extends RootTableManager<
     $$ContratoTableTableAnnotationComposer,
     $$ContratoTableTableCreateCompanionBuilder,
     $$ContratoTableTableUpdateCompanionBuilder,
-    (
-      ContratoTableData,
-      BaseReferences<_$BancoDados, $ContratoTableTable, ContratoTableData>
-    ),
+    (ContratoTableData, $$ContratoTableTableReferences),
     ContratoTableData,
-    PrefetchHooks Function()> {
+    PrefetchHooks Function(
+        {bool clienteId, bool imovelId, bool pagamentoTableRefs})> {
   $$ContratoTableTableTableManager(_$BancoDados db, $ContratoTableTable table)
       : super(TableManagerState(
           db: db,
@@ -2450,6 +3357,8 @@ class $$ContratoTableTableTableManager extends RootTableManager<
             Value<DateTime> dataFim = const Value.absent(),
             Value<int> diaPagamento = const Value.absent(),
             Value<int?> mesPagamento = const Value.absent(),
+            Value<int> clienteId = const Value.absent(),
+            Value<int> imovelId = const Value.absent(),
           }) =>
               ContratoTableCompanion(
             id: id,
@@ -2458,6 +3367,8 @@ class $$ContratoTableTableTableManager extends RootTableManager<
             dataFim: dataFim,
             diaPagamento: diaPagamento,
             mesPagamento: mesPagamento,
+            clienteId: clienteId,
+            imovelId: imovelId,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
@@ -2466,6 +3377,8 @@ class $$ContratoTableTableTableManager extends RootTableManager<
             required DateTime dataFim,
             required int diaPagamento,
             Value<int?> mesPagamento = const Value.absent(),
+            required int clienteId,
+            required int imovelId,
           }) =>
               ContratoTableCompanion.insert(
             id: id,
@@ -2474,11 +3387,78 @@ class $$ContratoTableTableTableManager extends RootTableManager<
             dataFim: dataFim,
             diaPagamento: diaPagamento,
             mesPagamento: mesPagamento,
+            clienteId: clienteId,
+            imovelId: imovelId,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map((e) => (
+                    e.readTable(table),
+                    $$ContratoTableTableReferences(db, table, e)
+                  ))
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: (
+              {clienteId = false,
+              imovelId = false,
+              pagamentoTableRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (pagamentoTableRefs) db.pagamentoTable
+              ],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (clienteId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.clienteId,
+                    referencedTable:
+                        $$ContratoTableTableReferences._clienteIdTable(db),
+                    referencedColumn:
+                        $$ContratoTableTableReferences._clienteIdTable(db).id,
+                  ) as T;
+                }
+                if (imovelId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.imovelId,
+                    referencedTable:
+                        $$ContratoTableTableReferences._imovelIdTable(db),
+                    referencedColumn:
+                        $$ContratoTableTableReferences._imovelIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (pagamentoTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ContratoTableTableReferences
+                            ._pagamentoTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ContratoTableTableReferences(db, table, p0)
+                                .pagamentoTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.contratoId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
         ));
 }
 
@@ -2491,12 +3471,267 @@ typedef $$ContratoTableTableProcessedTableManager = ProcessedTableManager<
     $$ContratoTableTableAnnotationComposer,
     $$ContratoTableTableCreateCompanionBuilder,
     $$ContratoTableTableUpdateCompanionBuilder,
-    (
-      ContratoTableData,
-      BaseReferences<_$BancoDados, $ContratoTableTable, ContratoTableData>
-    ),
+    (ContratoTableData, $$ContratoTableTableReferences),
     ContratoTableData,
-    PrefetchHooks Function()>;
+    PrefetchHooks Function(
+        {bool clienteId, bool imovelId, bool pagamentoTableRefs})>;
+typedef $$PagamentoTableTableCreateCompanionBuilder = PagamentoTableCompanion
+    Function({
+  Value<int> id,
+  required TipoPagamento tipoPagamento,
+  required double valor,
+  required int contratoId,
+});
+typedef $$PagamentoTableTableUpdateCompanionBuilder = PagamentoTableCompanion
+    Function({
+  Value<int> id,
+  Value<TipoPagamento> tipoPagamento,
+  Value<double> valor,
+  Value<int> contratoId,
+});
+
+final class $$PagamentoTableTableReferences extends BaseReferences<_$BancoDados,
+    $PagamentoTableTable, PagamentoTableData> {
+  $$PagamentoTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ContratoTableTable _contratoIdTable(_$BancoDados db) =>
+      db.contratoTable.createAlias($_aliasNameGenerator(
+          db.pagamentoTable.contratoId, db.contratoTable.id));
+
+  $$ContratoTableTableProcessedTableManager get contratoId {
+    final manager = $$ContratoTableTableTableManager($_db, $_db.contratoTable)
+        .filter((f) => f.id($_item.contratoId!));
+    final item = $_typedResult.readTableOrNull(_contratoIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$PagamentoTableTableFilterComposer
+    extends Composer<_$BancoDados, $PagamentoTableTable> {
+  $$PagamentoTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<TipoPagamento, TipoPagamento, String>
+      get tipoPagamento => $composableBuilder(
+          column: $table.tipoPagamento,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnFilters<double> get valor => $composableBuilder(
+      column: $table.valor, builder: (column) => ColumnFilters(column));
+
+  $$ContratoTableTableFilterComposer get contratoId {
+    final $$ContratoTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.contratoId,
+        referencedTable: $db.contratoTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ContratoTableTableFilterComposer(
+              $db: $db,
+              $table: $db.contratoTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$PagamentoTableTableOrderingComposer
+    extends Composer<_$BancoDados, $PagamentoTableTable> {
+  $$PagamentoTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get tipoPagamento => $composableBuilder(
+      column: $table.tipoPagamento,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get valor => $composableBuilder(
+      column: $table.valor, builder: (column) => ColumnOrderings(column));
+
+  $$ContratoTableTableOrderingComposer get contratoId {
+    final $$ContratoTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.contratoId,
+        referencedTable: $db.contratoTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ContratoTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.contratoTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$PagamentoTableTableAnnotationComposer
+    extends Composer<_$BancoDados, $PagamentoTableTable> {
+  $$PagamentoTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<TipoPagamento, String> get tipoPagamento =>
+      $composableBuilder(
+          column: $table.tipoPagamento, builder: (column) => column);
+
+  GeneratedColumn<double> get valor =>
+      $composableBuilder(column: $table.valor, builder: (column) => column);
+
+  $$ContratoTableTableAnnotationComposer get contratoId {
+    final $$ContratoTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.contratoId,
+        referencedTable: $db.contratoTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ContratoTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.contratoTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$PagamentoTableTableTableManager extends RootTableManager<
+    _$BancoDados,
+    $PagamentoTableTable,
+    PagamentoTableData,
+    $$PagamentoTableTableFilterComposer,
+    $$PagamentoTableTableOrderingComposer,
+    $$PagamentoTableTableAnnotationComposer,
+    $$PagamentoTableTableCreateCompanionBuilder,
+    $$PagamentoTableTableUpdateCompanionBuilder,
+    (PagamentoTableData, $$PagamentoTableTableReferences),
+    PagamentoTableData,
+    PrefetchHooks Function({bool contratoId})> {
+  $$PagamentoTableTableTableManager(_$BancoDados db, $PagamentoTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PagamentoTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PagamentoTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PagamentoTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<TipoPagamento> tipoPagamento = const Value.absent(),
+            Value<double> valor = const Value.absent(),
+            Value<int> contratoId = const Value.absent(),
+          }) =>
+              PagamentoTableCompanion(
+            id: id,
+            tipoPagamento: tipoPagamento,
+            valor: valor,
+            contratoId: contratoId,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required TipoPagamento tipoPagamento,
+            required double valor,
+            required int contratoId,
+          }) =>
+              PagamentoTableCompanion.insert(
+            id: id,
+            tipoPagamento: tipoPagamento,
+            valor: valor,
+            contratoId: contratoId,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$PagamentoTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({contratoId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (contratoId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.contratoId,
+                    referencedTable:
+                        $$PagamentoTableTableReferences._contratoIdTable(db),
+                    referencedColumn:
+                        $$PagamentoTableTableReferences._contratoIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$PagamentoTableTableProcessedTableManager = ProcessedTableManager<
+    _$BancoDados,
+    $PagamentoTableTable,
+    PagamentoTableData,
+    $$PagamentoTableTableFilterComposer,
+    $$PagamentoTableTableOrderingComposer,
+    $$PagamentoTableTableAnnotationComposer,
+    $$PagamentoTableTableCreateCompanionBuilder,
+    $$PagamentoTableTableUpdateCompanionBuilder,
+    (PagamentoTableData, $$PagamentoTableTableReferences),
+    PagamentoTableData,
+    PrefetchHooks Function({bool contratoId})>;
 
 class $BancoDadosManager {
   final _$BancoDados _db;
@@ -2505,12 +3740,12 @@ class $BancoDadosManager {
       $$EnderecoTableTableTableManager(_db, _db.enderecoTable);
   $$ClienteTableTableTableManager get clienteTable =>
       $$ClienteTableTableTableManager(_db, _db.clienteTable);
-  $$ComodoTableTableTableManager get comodoTable =>
-      $$ComodoTableTableTableManager(_db, _db.comodoTable);
-  $$PagamentoTableTableTableManager get pagamentoTable =>
-      $$PagamentoTableTableTableManager(_db, _db.pagamentoTable);
   $$ImovelTableTableTableManager get imovelTable =>
       $$ImovelTableTableTableManager(_db, _db.imovelTable);
+  $$ComodoTableTableTableManager get comodoTable =>
+      $$ComodoTableTableTableManager(_db, _db.comodoTable);
   $$ContratoTableTableTableManager get contratoTable =>
       $$ContratoTableTableTableManager(_db, _db.contratoTable);
+  $$PagamentoTableTableTableManager get pagamentoTable =>
+      $$PagamentoTableTableTableManager(_db, _db.pagamentoTable);
 }

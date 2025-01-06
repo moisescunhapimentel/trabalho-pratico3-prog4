@@ -6,6 +6,7 @@ class Comodo {
   final int id;
   final TipoComodo tipoComodo;
   final int quantidade;
+
   Comodo({
     required this.id,
     required this.tipoComodo,

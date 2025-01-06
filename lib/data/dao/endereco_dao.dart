@@ -10,17 +10,11 @@ class EnderecoDao extends DatabaseAccessor<BancoDados> with _$EnderecoDaoMixin {
   EnderecoDao(super.db);
 
   Future<Endereco?> obterEnderecoPeloId(int id) async {
-    try {
-      return await (select(enderecoTable)
-            ..where(
-              (row) => row.id.equals(id),
-            ))
-          .getSingle();
-    } catch (e) {
-      return Future(
-        () => null,
-      );
-    }
+    return await (select(enderecoTable)
+          ..where(
+            (row) => row.id.equals(id),
+          ))
+        .getSingleOrNull();
   }
 
   Future<int> insert(EnderecoTableCompanion enderecoTableCompanion) async {

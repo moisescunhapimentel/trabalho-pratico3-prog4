@@ -1,14 +1,18 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:trabalho3/data/enums/tipo_intervalo.dart';
+import 'package:trabalho3/data/models/pagamento.dart';
 
 class Contrato {
-  final String id;
+  final int id;
   final DateTime dataInicio;
   final DateTime dataFim;
   final int diaPagamento;
   final TipoIntervalo intervaloPagamento;
   final int? mesPagamento;
+  final List<Pagamento> pagamentos;
 
   Contrato({
     required this.id,
@@ -17,16 +21,17 @@ class Contrato {
     required this.diaPagamento,
     required this.intervaloPagamento,
     this.mesPagamento,
-  }) : assert(intervaloPagamento != TipoIntervalo.anual || mesPagamento != null,
-            'O mês de pagamento deve ser fornecido para o intervalo anual.');
+    required this.pagamentos,
+  });
 
   Contrato copyWith({
-    String? id,
+    int? id,
     DateTime? dataInicio,
     DateTime? dataFim,
     int? diaPagamento,
     TipoIntervalo? intervaloPagamento,
     int? mesPagamento,
+    List<Pagamento>? pagamentos,
   }) {
     return Contrato(
       id: id ?? this.id,
@@ -35,6 +40,7 @@ class Contrato {
       diaPagamento: diaPagamento ?? this.diaPagamento,
       intervaloPagamento: intervaloPagamento ?? this.intervaloPagamento,
       mesPagamento: mesPagamento ?? this.mesPagamento,
+      pagamentos: pagamentos ?? this.pagamentos,
     );
   }
 
@@ -46,12 +52,13 @@ class Contrato {
       'diaPagamento': diaPagamento,
       'intervaloPagamento': intervaloPagamento.name,
       'mesPagamento': mesPagamento,
+      'pagamentos': pagamentos.map((x) => x.toMap()).toList(),
     };
   }
 
   factory Contrato.fromMap(Map<String, dynamic> map) {
     return Contrato(
-      id: map['id'] as String,
+      id: map['id'] as int,
       dataInicio: DateTime.fromMillisecondsSinceEpoch(map['dataInicio'] as int),
       dataFim: DateTime.fromMillisecondsSinceEpoch(map['dataFim'] as int),
       diaPagamento: map['diaPagamento'] as int,
@@ -59,6 +66,11 @@ class Contrato {
           TipoIntervaloExtension.byName(map['intervaloPagamento']),
       mesPagamento:
           map['mesPagamento'] != null ? map['mesPagamento'] as int : null,
+      pagamentos: List<Pagamento>.from(
+        (map['pagamentos'] as List<int>).map<Pagamento>(
+          (x) => Pagamento.fromMap(x as Map<String, dynamic>),
+        ),
+      ),
     );
   }
 
@@ -69,7 +81,7 @@ class Contrato {
 
   @override
   String toString() {
-    return 'Contrato(id: $id, dataInicio: $dataInicio, dataFim: $dataFim, diaPagamento: $diaPagamento, intervaloPagamento: $intervaloPagamento, mesPagamento: $mesPagamento)';
+    return 'Contrato(id: $id, dataInicio: $dataInicio, dataFim: $dataFim, diaPagamento: $diaPagamento, intervaloPagamento: $intervaloPagamento, mesPagamento: $mesPagamento, pagamentos: $pagamentos)';
   }
 
   @override
@@ -81,7 +93,8 @@ class Contrato {
         other.dataFim == dataFim &&
         other.diaPagamento == diaPagamento &&
         other.intervaloPagamento == intervaloPagamento &&
-        other.mesPagamento == mesPagamento;
+        other.mesPagamento == mesPagamento &&
+        listEquals(other.pagamentos, pagamentos);
   }
 
   @override
@@ -91,6 +104,7 @@ class Contrato {
         dataFim.hashCode ^
         diaPagamento.hashCode ^
         intervaloPagamento.hashCode ^
-        mesPagamento.hashCode;
+        mesPagamento.hashCode ^
+        pagamentos.hashCode;
   }
 }

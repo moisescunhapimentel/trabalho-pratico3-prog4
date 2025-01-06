@@ -1,5 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:trabalho3/data/enums/tipo_intervalo.dart';
+import 'package:trabalho3/data/tables/cliente_table.dart';
+import 'package:trabalho3/data/tables/imovel_table.dart';
 
 class ContratoTable extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -11,5 +13,6 @@ class ContratoTable extends Table {
   IntColumn get diaPagamento => integer()();
   IntColumn get mesPagamento => integer().nullable()();
 
-  // IntColumn get enderecoId => integer().references(EnderecoTable, #id)();
+  IntColumn get clienteId => integer().references(ClienteTable, #id)();
+  IntColumn get imovelId => integer().references(ImovelTable, #id)();
 }
