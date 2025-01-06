@@ -13,26 +13,26 @@ class TextoIconeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var larguraScreen = MediaQuery.of(context).size.width;
-
+    var alturaScreen = MediaQuery.of(context).size.height;
     return ElevatedButton(
       onPressed: () {
         funcao();
       },
       style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.symmetric(vertical: (larguraScreen * 0.05), horizontal: (larguraScreen * 0.01)),
+        padding: EdgeInsets.symmetric(vertical: (larguraScreen * 0.03), horizontal: (larguraScreen * 0.02)),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        fixedSize: Size((larguraScreen * 0.45), 150),
+        fixedSize: Size((larguraScreen * 0.42), alturaScreen * 0.20),
         elevation: 8,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icone, size: 50),
-          const SizedBox(height: 1),
+          Icon(icone, size: 24),
+          const SizedBox(height: 4),
           Text(texto,
-              style: const TextStyle( fontSize: 20)),
+              style: const TextStyle(fontSize: 14)),
         ],
       ),
     );
