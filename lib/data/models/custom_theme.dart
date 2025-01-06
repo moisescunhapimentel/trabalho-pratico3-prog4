@@ -20,4 +20,14 @@ class CustomTheme {
         newBrightness == Brightness.dark ? Brightness.light : Brightness.dark;
     brightness = newBrightness.name;
   }
+
+  copyWith({
+    int? id,
+    String? brightness,
+  }) {
+    return CustomTheme(
+      id: id ?? this.id,
+      brightness: brightness ?? this.brightness,
+    );
+  }
 }

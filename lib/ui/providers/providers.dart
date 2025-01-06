@@ -7,8 +7,8 @@ import 'package:trabalho3/data/nosql_banco_dados.dart';
 import 'package:trabalho3/ui/models/formulario_contrato_model.dart';
 import 'package:trabalho3/ui/models/formulario_imovel_model.dart';
 import 'package:trabalho3/ui/models/imovel_model.dart';
-import 'package:trabalho3/ui/providers/custom_theme_provider.dart';
-import 'package:trabalho3/ui/providers/pagamento_provider.dart';
+import 'package:trabalho3/ui/providers/theme_notifier.dart';
+import 'package:trabalho3/ui/providers/pagamento_notifier.dart';
 
 final bancoDadosProvider = Provider<BancoDados>((ref) {
   final sqlBanco = BancoDados();
