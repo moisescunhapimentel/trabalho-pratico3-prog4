@@ -221,11 +221,6 @@ class $ClienteTableTable extends ClienteTable
   late final GeneratedColumn<String> cPF = GeneratedColumn<String>(
       'c_p_f', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _ruaMeta = const VerificationMeta('rua');
-  @override
-  late final GeneratedColumn<String> rua = GeneratedColumn<String>(
-      'rua', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _dataNascimentoMeta =
       const VerificationMeta('dataNascimento');
   @override
@@ -241,7 +236,7 @@ class $ClienteTableTable extends ClienteTable
           .withConverter<Contato>($ClienteTableTable.$convertercontato);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, nome, cPF, rua, dataNascimento, contato];
+      [id, nome, cPF, dataNascimento, contato];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -267,12 +262,6 @@ class $ClienteTableTable extends ClienteTable
     } else if (isInserting) {
       context.missing(_cPFMeta);
     }
-    if (data.containsKey('rua')) {
-      context.handle(
-          _ruaMeta, rua.isAcceptableOrUnknown(data['rua']!, _ruaMeta));
-    } else if (isInserting) {
-      context.missing(_ruaMeta);
-    }
     if (data.containsKey('data_nascimento')) {
       context.handle(
           _dataNascimentoMeta,
@@ -297,8 +286,6 @@ class $ClienteTableTable extends ClienteTable
           .read(DriftSqlType.string, data['${effectivePrefix}nome'])!,
       cPF: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}c_p_f'])!,
-      rua: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}rua'])!,
       dataNascimento: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime, data['${effectivePrefix}data_nascimento'])!,
       contato: $ClienteTableTable.$convertercontato.fromSql(attachedDatabase
@@ -321,14 +308,12 @@ class ClienteTableData extends DataClass
   final int id;
   final String nome;
   final String cPF;
-  final String rua;
   final DateTime dataNascimento;
   final Contato contato;
   const ClienteTableData(
       {required this.id,
       required this.nome,
       required this.cPF,
-      required this.rua,
       required this.dataNascimento,
       required this.contato});
   @override
@@ -337,7 +322,6 @@ class ClienteTableData extends DataClass
     map['id'] = Variable<int>(id);
     map['nome'] = Variable<String>(nome);
     map['c_p_f'] = Variable<String>(cPF);
-    map['rua'] = Variable<String>(rua);
     map['data_nascimento'] = Variable<DateTime>(dataNascimento);
     {
       map['contato'] =
@@ -351,7 +335,6 @@ class ClienteTableData extends DataClass
       id: Value(id),
       nome: Value(nome),
       cPF: Value(cPF),
-      rua: Value(rua),
       dataNascimento: Value(dataNascimento),
       contato: Value(contato),
     );
@@ -364,7 +347,6 @@ class ClienteTableData extends DataClass
       id: serializer.fromJson<int>(json['id']),
       nome: serializer.fromJson<String>(json['nome']),
       cPF: serializer.fromJson<String>(json['cPF']),
-      rua: serializer.fromJson<String>(json['rua']),
       dataNascimento: serializer.fromJson<DateTime>(json['dataNascimento']),
       contato: $ClienteTableTable.$convertercontato
           .fromJson(serializer.fromJson<String>(json['contato'])),
@@ -377,7 +359,6 @@ class ClienteTableData extends DataClass
       'id': serializer.toJson<int>(id),
       'nome': serializer.toJson<String>(nome),
       'cPF': serializer.toJson<String>(cPF),
-      'rua': serializer.toJson<String>(rua),
       'dataNascimento': serializer.toJson<DateTime>(dataNascimento),
       'contato': serializer
           .toJson<String>($ClienteTableTable.$convertercontato.toJson(contato)),
@@ -388,14 +369,12 @@ class ClienteTableData extends DataClass
           {int? id,
           String? nome,
           String? cPF,
-          String? rua,
           DateTime? dataNascimento,
           Contato? contato}) =>
       ClienteTableData(
         id: id ?? this.id,
         nome: nome ?? this.nome,
         cPF: cPF ?? this.cPF,
-        rua: rua ?? this.rua,
         dataNascimento: dataNascimento ?? this.dataNascimento,
         contato: contato ?? this.contato,
       );
@@ -404,7 +383,6 @@ class ClienteTableData extends DataClass
       id: data.id.present ? data.id.value : this.id,
       nome: data.nome.present ? data.nome.value : this.nome,
       cPF: data.cPF.present ? data.cPF.value : this.cPF,
-      rua: data.rua.present ? data.rua.value : this.rua,
       dataNascimento: data.dataNascimento.present
           ? data.dataNascimento.value
           : this.dataNascimento,
@@ -418,7 +396,6 @@ class ClienteTableData extends DataClass
           ..write('id: $id, ')
           ..write('nome: $nome, ')
           ..write('cPF: $cPF, ')
-          ..write('rua: $rua, ')
           ..write('dataNascimento: $dataNascimento, ')
           ..write('contato: $contato')
           ..write(')'))
@@ -426,7 +403,7 @@ class ClienteTableData extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(id, nome, cPF, rua, dataNascimento, contato);
+  int get hashCode => Object.hash(id, nome, cPF, dataNascimento, contato);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -434,7 +411,6 @@ class ClienteTableData extends DataClass
           other.id == this.id &&
           other.nome == this.nome &&
           other.cPF == this.cPF &&
-          other.rua == this.rua &&
           other.dataNascimento == this.dataNascimento &&
           other.contato == this.contato);
 }
@@ -443,14 +419,12 @@ class ClienteTableCompanion extends UpdateCompanion<ClienteTableData> {
   final Value<int> id;
   final Value<String> nome;
   final Value<String> cPF;
-  final Value<String> rua;
   final Value<DateTime> dataNascimento;
   final Value<Contato> contato;
   const ClienteTableCompanion({
     this.id = const Value.absent(),
     this.nome = const Value.absent(),
     this.cPF = const Value.absent(),
-    this.rua = const Value.absent(),
     this.dataNascimento = const Value.absent(),
     this.contato = const Value.absent(),
   });
@@ -458,19 +432,16 @@ class ClienteTableCompanion extends UpdateCompanion<ClienteTableData> {
     this.id = const Value.absent(),
     required String nome,
     required String cPF,
-    required String rua,
     required DateTime dataNascimento,
     required Contato contato,
   })  : nome = Value(nome),
         cPF = Value(cPF),
-        rua = Value(rua),
         dataNascimento = Value(dataNascimento),
         contato = Value(contato);
   static Insertable<ClienteTableData> custom({
     Expression<int>? id,
     Expression<String>? nome,
     Expression<String>? cPF,
-    Expression<String>? rua,
     Expression<DateTime>? dataNascimento,
     Expression<String>? contato,
   }) {
@@ -478,7 +449,6 @@ class ClienteTableCompanion extends UpdateCompanion<ClienteTableData> {
       if (id != null) 'id': id,
       if (nome != null) 'nome': nome,
       if (cPF != null) 'c_p_f': cPF,
-      if (rua != null) 'rua': rua,
       if (dataNascimento != null) 'data_nascimento': dataNascimento,
       if (contato != null) 'contato': contato,
     });
@@ -488,14 +458,12 @@ class ClienteTableCompanion extends UpdateCompanion<ClienteTableData> {
       {Value<int>? id,
       Value<String>? nome,
       Value<String>? cPF,
-      Value<String>? rua,
       Value<DateTime>? dataNascimento,
       Value<Contato>? contato}) {
     return ClienteTableCompanion(
       id: id ?? this.id,
       nome: nome ?? this.nome,
       cPF: cPF ?? this.cPF,
-      rua: rua ?? this.rua,
       dataNascimento: dataNascimento ?? this.dataNascimento,
       contato: contato ?? this.contato,
     );
@@ -513,9 +481,6 @@ class ClienteTableCompanion extends UpdateCompanion<ClienteTableData> {
     if (cPF.present) {
       map['c_p_f'] = Variable<String>(cPF.value);
     }
-    if (rua.present) {
-      map['rua'] = Variable<String>(rua.value);
-    }
     if (dataNascimento.present) {
       map['data_nascimento'] = Variable<DateTime>(dataNascimento.value);
     }
@@ -532,7 +497,6 @@ class ClienteTableCompanion extends UpdateCompanion<ClienteTableData> {
           ..write('id: $id, ')
           ..write('nome: $nome, ')
           ..write('cPF: $cPF, ')
-          ..write('rua: $rua, ')
           ..write('dataNascimento: $dataNascimento, ')
           ..write('contato: $contato')
           ..write(')'))
@@ -2087,7 +2051,6 @@ typedef $$ClienteTableTableCreateCompanionBuilder = ClienteTableCompanion
   Value<int> id,
   required String nome,
   required String cPF,
-  required String rua,
   required DateTime dataNascimento,
   required Contato contato,
 });
@@ -2096,7 +2059,6 @@ typedef $$ClienteTableTableUpdateCompanionBuilder = ClienteTableCompanion
   Value<int> id,
   Value<String> nome,
   Value<String> cPF,
-  Value<String> rua,
   Value<DateTime> dataNascimento,
   Value<Contato> contato,
 });
@@ -2138,9 +2100,6 @@ class $$ClienteTableTableFilterComposer
 
   ColumnFilters<String> get cPF => $composableBuilder(
       column: $table.cPF, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<String> get rua => $composableBuilder(
-      column: $table.rua, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<DateTime> get dataNascimento => $composableBuilder(
       column: $table.dataNascimento,
@@ -2191,9 +2150,6 @@ class $$ClienteTableTableOrderingComposer
   ColumnOrderings<String> get cPF => $composableBuilder(
       column: $table.cPF, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get rua => $composableBuilder(
-      column: $table.rua, builder: (column) => ColumnOrderings(column));
-
   ColumnOrderings<DateTime> get dataNascimento => $composableBuilder(
       column: $table.dataNascimento,
       builder: (column) => ColumnOrderings(column));
@@ -2219,9 +2175,6 @@ class $$ClienteTableTableAnnotationComposer
 
   GeneratedColumn<String> get cPF =>
       $composableBuilder(column: $table.cPF, builder: (column) => column);
-
-  GeneratedColumn<String> get rua =>
-      $composableBuilder(column: $table.rua, builder: (column) => column);
 
   GeneratedColumn<DateTime> get dataNascimento => $composableBuilder(
       column: $table.dataNascimento, builder: (column) => column);
@@ -2277,7 +2230,6 @@ class $$ClienteTableTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<String> nome = const Value.absent(),
             Value<String> cPF = const Value.absent(),
-            Value<String> rua = const Value.absent(),
             Value<DateTime> dataNascimento = const Value.absent(),
             Value<Contato> contato = const Value.absent(),
           }) =>
@@ -2285,7 +2237,6 @@ class $$ClienteTableTableTableManager extends RootTableManager<
             id: id,
             nome: nome,
             cPF: cPF,
-            rua: rua,
             dataNascimento: dataNascimento,
             contato: contato,
           ),
@@ -2293,7 +2244,6 @@ class $$ClienteTableTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             required String nome,
             required String cPF,
-            required String rua,
             required DateTime dataNascimento,
             required Contato contato,
           }) =>
@@ -2301,7 +2251,6 @@ class $$ClienteTableTableTableManager extends RootTableManager<
             id: id,
             nome: nome,
             cPF: cPF,
-            rua: rua,
             dataNascimento: dataNascimento,
             contato: contato,
           ),

@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:2788977510478114434",
-      "lastPropertyId": "1:3693507510097424602",
+      "lastPropertyId": "3:7707218393911013609",
       "name": "CustomTheme",
       "properties": [
         {
@@ -19,14 +19,19 @@
     }
   ],
   "lastEntityId": "1:2788977510478114434",
-  "lastIndexId": "0:0",
+  "lastIndexId": "1:999691605206917695",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
-  "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredIndexUids": [
+    999691605206917695
+  ],
+  "retiredPropertyUids": [
+    2246961531175171305,
+    7707218393911013609
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

@@ -22,7 +22,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(1, 2788977510478114434),
       name: 'CustomTheme',
-      lastPropertyId: const obx_int.IdUid(1, 3693507510097424602),
+      lastPropertyId: const obx_int.IdUid(3, 7707218393911013609),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -71,12 +71,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
       lastEntityId: const obx_int.IdUid(1, 2788977510478114434),
-      lastIndexId: const obx_int.IdUid(0, 0),
+      lastIndexId: const obx_int.IdUid(1, 999691605206917695),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [],
-      retiredIndexUids: const [],
-      retiredPropertyUids: const [],
+      retiredIndexUids: const [999691605206917695],
+      retiredPropertyUids: const [2246961531175171305, 7707218393911013609],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -92,7 +92,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           object.id = id;
         },
         objectToFB: (CustomTheme object, fb.Builder fbb) {
-          fbb.startTable(2);
+          fbb.startTable(4);
           fbb.addInt64(0, object.id);
           fbb.finish(fbb.endTable());
           return object.id;
