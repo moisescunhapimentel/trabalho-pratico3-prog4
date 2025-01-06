@@ -26,7 +26,11 @@ class GraficoCard extends ConsumerWidget {
             Intervalo(inicio: max(1, now.month - 5), fim: now.month),
             TipoIntervalo.mensal);
 
-    chamarPagamentosMensalAposConstrucaoDoWidgets(ref, monthReadNotifier);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (pagamentosState is AsyncLoading) {
+        monthReadNotifier();
+      }
+    });
 
     return Card(
       child: Column(
@@ -76,7 +80,9 @@ class GraficoCard extends ConsumerWidget {
                         BarChartData(
                           alignment: BarChartAlignment.spaceAround,
                           barTouchData: BarTouchData(enabled: false),
-                          titlesData: const FlTitlesData(show: true),
+                          titlesData: const FlTitlesData(
+                            show: true,
+                          ),
                           borderData: FlBorderData(show: false),
                           gridData: const FlGridData(show: false),
                           barGroups: keyGroupedData.map(
@@ -104,35 +110,6 @@ class GraficoCard extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  t1() {
-    return BarChart(
-      BarChartData(
-        alignment: BarChartAlignment.spaceAround,
-        maxY: 20,
-        barTouchData: BarTouchData(enabled: false),
-        titlesData: const FlTitlesData(show: true),
-        borderData: FlBorderData(show: false),
-        gridData: const FlGridData(show: false),
-        barGroups: [
-          BarChartGroupData(x: 0, barRods: [
-            BarChartRodData(toY: 6, color: Colors.blue, width: 20)
-          ]),
-          BarChartGroupData(x: 1, barRods: [
-            BarChartRodData(toY: 10, color: Colors.blue, width: 20)
-          ]),
-          BarChartGroupData(x: 2, barRods: [
-            BarChartRodData(toY: 15, color: Colors.blue, width: 20)
-          ]),
-        ],
-      ),
-    );
-  }
-
-  void chamarPagamentosMensalAposConstrucaoDoWidgets(
-      WidgetRef ref, VoidCallback callback) {
-    WidgetsBinding.instance.addPostFrameCallback((_) => callback());
   }
 
   Map<int, double> _getGroupedData(
