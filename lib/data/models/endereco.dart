@@ -53,6 +53,7 @@ class Endereco extends MyDataClass {
     );
   }
 
+  @override
   String toJson() => json.encode(toMap());
 
   factory Endereco.fromJson(String source) =>
