@@ -2376,7 +2376,7 @@ final class $$ImovelTableTableReferences
 
   $$EnderecoTableTableProcessedTableManager get enderecoId {
     final manager = $$EnderecoTableTableTableManager($_db, $_db.enderecoTable)
-        .filter((f) => f.id($_item.enderecoId!));
+        .filter((f) => f.id($_item.enderecoId));
     final item = $_typedResult.readTableOrNull(_enderecoIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -2775,7 +2775,7 @@ final class $$ComodoTableTableReferences
 
   $$ImovelTableTableProcessedTableManager get imovelId {
     final manager = $$ImovelTableTableTableManager($_db, $_db.imovelTable)
-        .filter((f) => f.id($_item.imovelId!));
+        .filter((f) => f.id($_item.imovelId));
     final item = $_typedResult.readTableOrNull(_imovelIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -3039,7 +3039,7 @@ final class $$ContratoTableTableReferences extends BaseReferences<_$BancoDados,
 
   $$ClienteTableTableProcessedTableManager get clienteId {
     final manager = $$ClienteTableTableTableManager($_db, $_db.clienteTable)
-        .filter((f) => f.id($_item.clienteId!));
+        .filter((f) => f.id($_item.clienteId));
     final item = $_typedResult.readTableOrNull(_clienteIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -3052,7 +3052,7 @@ final class $$ContratoTableTableReferences extends BaseReferences<_$BancoDados,
 
   $$ImovelTableTableProcessedTableManager get imovelId {
     final manager = $$ImovelTableTableTableManager($_db, $_db.imovelTable)
-        .filter((f) => f.id($_item.imovelId!));
+        .filter((f) => f.id($_item.imovelId));
     final item = $_typedResult.readTableOrNull(_imovelIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -3501,7 +3501,7 @@ final class $$PagamentoTableTableReferences extends BaseReferences<_$BancoDados,
 
   $$ContratoTableTableProcessedTableManager get contratoId {
     final manager = $$ContratoTableTableTableManager($_db, $_db.contratoTable)
-        .filter((f) => f.id($_item.contratoId!));
+        .filter((f) => f.id($_item.contratoId));
     final item = $_typedResult.readTableOrNull(_contratoIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
