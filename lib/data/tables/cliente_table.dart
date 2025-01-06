@@ -6,12 +6,9 @@ class ClienteTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get nome => text()();
   TextColumn get cPF => text()();
-  TextColumn get rua => text()();
 
   DateTimeColumn get dataNascimento => dateTime()();
 
   TextColumn get contato => text()
       .map(GenericConverter<Contato>((value) => Contato.fromJson(value)))();
-
-  // IntColumn get enderecoId => integer().references(EnderecoTable, #id)();
 }
