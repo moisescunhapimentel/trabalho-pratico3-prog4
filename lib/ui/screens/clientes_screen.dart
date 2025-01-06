@@ -30,10 +30,7 @@ class ClientesScreen extends ConsumerWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ClienteScreen(
-                        nome: cliente.nome,
-                        cpf: cliente.cPF,
-                        contato: cliente.contato,
-                        dataNascimento: cliente.dataNascimento,
+                          clienteId: cliente.id,
                       ),
                     ),
                   );
