@@ -86,4 +86,9 @@ class ContratoDao extends DatabaseAccessor<BancoDados> with _$ContratoDaoMixin {
   Future<int> insert(ContratoTableCompanion contratoTableCompanion) async {
     return await into(contratoTable).insert(contratoTableCompanion);
   }
+
+  Future<void> atualizar(
+      Insertable<ContratoTableData> contratoTableData) async {
+    await update(contratoTable).replace(contratoTableData);
+  }
 }

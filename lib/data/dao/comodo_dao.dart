@@ -51,4 +51,8 @@ class ComodoDao extends DatabaseAccessor<BancoDados> with _$ComodoDaoMixin {
 
     return comodos;
   }
+
+  Future<void> atualizar(Insertable<ComodoTableData> comodoTableData) async {
+    await update(comodoTable).replace(comodoTableData);
+  }
 }

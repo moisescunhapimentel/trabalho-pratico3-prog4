@@ -2,11 +2,10 @@ import 'package:drift/drift.dart';
 import 'package:trabalho3/data/banco_dados.dart';
 import 'package:trabalho3/data/models/cliente.dart';
 import 'package:trabalho3/data/tables/cliente_table.dart';
-import 'package:trabalho3/data/tables/contrato_table.dart';
 
 part 'cliente_dao.g.dart';
 
-@DriftAccessor(tables: [ClienteTable, ContratoTable])
+@DriftAccessor(tables: [ClienteTable])
 class ClienteDao extends DatabaseAccessor<BancoDados> with _$ClienteDaoMixin {
   ClienteDao(super.db);
 
@@ -39,5 +38,9 @@ class ClienteDao extends DatabaseAccessor<BancoDados> with _$ClienteDaoMixin {
         contato: cliente.contato,
         dataNascimento: cliente.dataNascimento,
         contratos: contratos);
+  }
+
+  Future<void> atualizar(Insertable<ClienteTableData> clienteTableData) async {
+    await update(clienteTable).replace(clienteTableData);
   }
 }

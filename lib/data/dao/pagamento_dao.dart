@@ -31,4 +31,9 @@ class PagamentoDao extends DatabaseAccessor<BancoDados>
   Future<int> insert(PagamentoTableCompanion pagamentoTableCompanion) async {
     return await into(pagamentoTable).insert(pagamentoTableCompanion);
   }
+
+  Future<void> atualizar(
+      Insertable<PagamentoTableData> pagamentoTableData) async {
+    await update(pagamentoTable).replace(pagamentoTableData);
+  }
 }
