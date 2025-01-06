@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:trabalho3/ui/constants/colors.dart';
+import 'package:trabalho3/ui/widgets/grafico_card.dart';
+import 'package:trabalho3/ui/widgets/seletor_button.dart';
 
 class EstatisticasScreen extends StatefulWidget {
   const EstatisticasScreen({super.key});
@@ -10,6 +13,14 @@ class EstatisticasScreen extends StatefulWidget {
 class _EstatisticasScreenState extends State<EstatisticasScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    var larguraScreen = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      body: Column(
+        children: [
+          GraficoCard(),
+        ],
+      ),
+    );
   }
 }
