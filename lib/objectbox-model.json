@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:2788977510478114434",
-      "lastPropertyId": "3:7707218393911013609",
+      "lastPropertyId": "5:4796639507557951557",
       "name": "CustomTheme",
       "properties": [
         {
@@ -13,24 +13,33 @@
           "name": "id",
           "type": 6,
           "flags": 1
+        },
+        {
+          "id": "4:1417894816237419654",
+          "name": "brightness",
+          "type": 9
         }
       ],
       "relations": []
     }
   ],
   "lastEntityId": "1:2788977510478114434",
-  "lastIndexId": "1:999691605206917695",
+  "lastIndexId": "4:4833698218233642207",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [
-    999691605206917695
+    999691605206917695,
+    407069690416785271,
+    5953548834582535102,
+    4833698218233642207
   ],
   "retiredPropertyUids": [
     2246961531175171305,
-    7707218393911013609
+    7707218393911013609,
+    4796639507557951557
   ],
   "retiredRelationUids": [],
   "version": 1

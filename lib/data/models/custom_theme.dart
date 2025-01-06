@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:objectbox/objectbox.dart';
+import 'package:trabalho3/ui/enums/brightness_extension.dart';
 
 @Entity()
 class CustomTheme {
   @Id()
   int id;
 
-  Brightness brightness;
+  String brightness;
 
   CustomTheme({
     this.id = 0,
-    this.brightness = Brightness.light,
+    required this.brightness,
   });
+
+  void toggleBrightness() {
+    var newBrightness = BrightnessExtension.byName(brightness);
+    newBrightness =
+        newBrightness == Brightness.dark ? Brightness.light : Brightness.dark;
+    brightness = newBrightness.name;
+  }
 }

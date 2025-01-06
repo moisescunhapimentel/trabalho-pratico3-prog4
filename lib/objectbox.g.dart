@@ -22,14 +22,19 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(1, 2788977510478114434),
       name: 'CustomTheme',
-      lastPropertyId: const obx_int.IdUid(3, 7707218393911013609),
+      lastPropertyId: const obx_int.IdUid(5, 4796639507557951557),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
             id: const obx_int.IdUid(1, 3693507510097424602),
             name: 'id',
             type: 6,
-            flags: 1)
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 1417894816237419654),
+            name: 'brightness',
+            type: 9,
+            flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
@@ -71,12 +76,21 @@ obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
       lastEntityId: const obx_int.IdUid(1, 2788977510478114434),
-      lastIndexId: const obx_int.IdUid(1, 999691605206917695),
+      lastIndexId: const obx_int.IdUid(4, 4833698218233642207),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [],
-      retiredIndexUids: const [999691605206917695],
-      retiredPropertyUids: const [2246961531175171305, 7707218393911013609],
+      retiredIndexUids: const [
+        999691605206917695,
+        407069690416785271,
+        5953548834582535102,
+        4833698218233642207
+      ],
+      retiredPropertyUids: const [
+        2246961531175171305,
+        7707218393911013609,
+        4796639507557951557
+      ],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -92,8 +106,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           object.id = id;
         },
         objectToFB: (CustomTheme object, fb.Builder fbb) {
-          fbb.startTable(4);
+          final brightnessOffset = fbb.writeString(object.brightness);
+          fbb.startTable(6);
           fbb.addInt64(0, object.id);
+          fbb.addOffset(3, brightnessOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -102,7 +118,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final rootOffset = buffer.derefObject(0);
           final idParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          final object = CustomTheme(id: idParam);
+          final brightnessParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 10, '');
+          final object = CustomTheme(id: idParam, brightness: brightnessParam);
 
           return object;
         })
@@ -116,4 +134,8 @@ class CustomTheme_ {
   /// See [CustomTheme.id].
   static final id =
       obx.QueryIntegerProperty<CustomTheme>(_entities[0].properties[0]);
+
+  /// See [CustomTheme.brightness].
+  static final brightness =
+      obx.QueryStringProperty<CustomTheme>(_entities[0].properties[1]);
 }
