@@ -4,7 +4,7 @@ import 'package:trabalho3/ui/widgets/campo_simples_textform.dart';
 import 'package:trabalho3/ui/widgets/padrao_texto_button.dart';
 import 'package:trabalho3/ui/widgets/seletor_button.dart';
 import 'package:trabalho3/data/enums/tipo_intervalo.dart';
-import 'package:trabalho3/providers/formulario_contrato_provider.dart'; 
+import 'package:trabalho3/providers/contrato_providers.dart';
 
 class FormularioContratoScreen extends ConsumerWidget {
   const FormularioContratoScreen({super.key});
@@ -34,7 +34,8 @@ class FormularioContratoScreen extends ConsumerWidget {
                   opcao2: 'Anual',
                   selectedOption: formState.intervaloPagamento.name,
                   funcao: (option) {
-                    formModel.updateIntervaloPagamento(TipoIntervaloExtension.byName(option));
+                    formModel.updateIntervaloPagamento(
+                        TipoIntervaloExtension.byName(option));
                   },
                 ),
                 const SizedBox(height: 20),
@@ -119,7 +120,8 @@ class FormularioContratoScreen extends ConsumerWidget {
                     if (formState.formKey.currentState!.validate()) {
                       formState.formKey.currentState!.save();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Formulário salvo com sucesso!')),
+                        const SnackBar(
+                            content: Text('Formulário salvo com sucesso!')),
                       );
                       Navigator.pop(context);
                     }

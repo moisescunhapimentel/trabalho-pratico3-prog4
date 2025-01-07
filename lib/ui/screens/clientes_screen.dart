@@ -4,14 +4,14 @@ import 'package:trabalho3/ui/screens/cliente_screen.dart';
 import 'package:trabalho3/ui/screens/formulario_cliente_screen.dart';
 import 'package:trabalho3/ui/widgets/icone_flutuante_button.dart';
 import 'package:trabalho3/ui/widgets/cliente_item_card.dart';
-import 'package:trabalho3/providers/clientes_providers.dart';
+import 'package:trabalho3/providers/cliente_providers.dart';
 
 class ClientesScreen extends ConsumerWidget {
   const ClientesScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final clientesAsyncValue = ref.watch(clientesProvider); // Usa o novo provider.
+    final clientesAsyncValue = ref.watch(clientesProvider); 
 
     return Scaffold(
       appBar: AppBar(

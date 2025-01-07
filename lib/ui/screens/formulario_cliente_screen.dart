@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trabalho3/providers/formulario_cliente_provider.dart';
+import 'package:trabalho3/providers/cliente_providers.dart';
 import 'package:trabalho3/ui/widgets/campo_simples_textform.dart';
 import 'package:trabalho3/ui/widgets/padrao_texto_button.dart';
 
