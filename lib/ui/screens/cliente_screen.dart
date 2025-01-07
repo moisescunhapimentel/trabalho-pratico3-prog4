@@ -27,6 +27,10 @@ class ClienteScreen extends ConsumerWidget {
       ),
       body: clienteAsyncValue.when(
         data: (cliente) {
+          if (cliente == null) {
+            return const Center(child: Text('Cliente não encontrado.'));
+          }
+
           return ListView(
             padding: const EdgeInsets.all(20.0),
             children: [
@@ -44,24 +48,6 @@ class ClienteScreen extends ConsumerWidget {
                 descricao: '${cliente.contato.dDD} ${cliente.contato.numero}',
               ),
               const SizedBox(height: 20),
-              const SizedBox(height: 20),
-              const Text('Contratos',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 10),
-              if (cliente.contratos.isEmpty)
-                const Text('Este cliente não tem contratos.')
-              else
-                ...cliente.contratos.map((contrato) {
-                  return ContratoItemCard(
-                    nome: contrato.id.toString(),
-                    parcelas: contrato.intervaloPagamento.toString(),
-                    tipoIntervalo: contrato.intervaloPagamento,
-                    // diaPagamento: contrato.diaPagamento,
-                    dataInicio: contrato.dataInicio,
-                    dataVencimento: contrato.dataFim,
-                    funcao: () {},
-                  );
-                }).toList(),
             ],
           );
         },

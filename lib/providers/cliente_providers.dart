@@ -7,9 +7,9 @@ import 'package:trabalho3/data/models/contato.dart';
 import 'package:trabalho3/providers/banco_dados_provider.dart';
 
 final clienteProvider =
-    FutureProvider.family<Cliente, int>((ref, clienteId) async {
+    FutureProvider.family<ClienteTableData?, int>((ref, clienteId) async {
   final clienteDao = ref.watch(clienteDaoProvider);
-  return clienteDao.obterClienteComContratos(clienteId);
+  return clienteDao.obterClientePeloId(clienteId);
 });
 
 final clienteDaoProvider = Provider<ClienteDao>((ref) {
