@@ -17,7 +17,7 @@ class BarraNavegacaoWidget extends StatefulWidget {
 }
 
 class _BarraNavegacaoWidgetState extends State<BarraNavegacaoWidget> {
-  int _selectIndex = 0;
+  int _selectIndex = 1;
 
   void _onItemTapped(int index) {
     setState(() {
