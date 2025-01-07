@@ -1,13 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trabalho3/data/models/cliente.dart';
-import 'package:trabalho3/data/models/cliente.dart';
 import 'package:trabalho3/data/dao/cliente_dao.dart';
-import 'package:trabalho3/providers/banco_dados_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trabalho3/data/banco_dados.dart';
-import 'package:trabalho3/data/models/cliente.dart';
 import 'package:trabalho3/data/models/contato.dart';
+import 'package:trabalho3/providers/banco_dados_provider.dart';
 
 final clienteProvider =
     FutureProvider.family<Cliente, int>((ref, clienteId) async {
@@ -62,7 +59,7 @@ class ClientesNotifier extends StateNotifier<AsyncValue<List<Cliente>>> {
         );
       }).toList());
     } catch (e, stack) {
-      AsyncError(e, stack);
+      state = AsyncError(e, stack);
     }
   }
 }
@@ -173,10 +170,6 @@ class FormularioClienteNotifier extends StateNotifier<FormularioClienteState> {
     state = state.copyWith(contato: novoContato);
   }
 }
-
-final bancoDadosProvider = Provider<BancoDados>((ref) {
-  return BancoDados();
-});
 
 final formularioClienteProvider =
     StateNotifierProvider<FormularioClienteNotifier, FormularioClienteState>(

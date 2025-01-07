@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:trabalho3/data/enums/tipo_pagamento.dart';
-import 'package:trabalho3/data/models/contrato.dart';
 
 class Pagamento {
   final int id;
