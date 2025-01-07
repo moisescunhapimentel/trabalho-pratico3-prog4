@@ -76,7 +76,6 @@ class FormularioContratoScreen extends ConsumerWidget {
                 const SizedBox(height: 20),
                 TextFormField(
                   controller: formState.valorController,
-                  readOnly: true,
                   decoration: const InputDecoration(
                     labelText: 'Valor',
                     border: OutlineInputBorder(),
