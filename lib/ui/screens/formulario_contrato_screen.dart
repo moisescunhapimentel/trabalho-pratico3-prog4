@@ -75,19 +75,15 @@ class FormularioContratoScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
-                  controller: formState.dataFimController,
+                  controller: formState.valorController,
                   readOnly: true,
                   decoration: const InputDecoration(
                     labelText: 'Valor',
                     border: OutlineInputBorder(),
                   ),
-                  onTap: () {
-                    // adicionar o valor
-                    // formModel.selecionarDataFim(context);
-                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, selecione a data de fim';
+                      return 'Por favor, selecione o valor';
                     }
                     return null;
                   },
