@@ -12,8 +12,8 @@ class ContratoTable extends Table {
   DateTimeColumn get dataInicio => dateTime()();
   DateTimeColumn get dataFim => dateTime()();
 
-  IntColumn get diaPagamento => integer()();
-  IntColumn get mesPagamento => integer().nullable()();
+  // IntColumn get diaPagamento => integer()();
+  // IntColumn get mesPagamento => integer().nullable()();
 
   IntColumn get clienteId => integer().references(ClienteTable, #id)();
   IntColumn get imovelId => integer().references(ImovelTable, #id)();

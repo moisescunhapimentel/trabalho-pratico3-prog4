@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -9,18 +10,20 @@ class Contrato {
   final int id;
   final DateTime dataInicio;
   final DateTime dataFim;
-  final int diaPagamento;
+  final int clienteId;
+  final int imovelId;
+  final double valor;
   final TipoIntervalo intervaloPagamento;
-  final int? mesPagamento;
   final List<Pagamento> pagamentos;
 
   Contrato({
     required this.id,
     required this.dataInicio,
     required this.dataFim,
-    required this.diaPagamento,
+    required this.clienteId,
+    required this.imovelId,
+    required this.valor,
     required this.intervaloPagamento,
-    this.mesPagamento,
     required this.pagamentos,
   });
 
@@ -28,18 +31,20 @@ class Contrato {
     int? id,
     DateTime? dataInicio,
     DateTime? dataFim,
-    int? diaPagamento,
+    int? clienteId,
+    int? imovelId,
+    double? valor,
     TipoIntervalo? intervaloPagamento,
-    int? mesPagamento,
     List<Pagamento>? pagamentos,
   }) {
     return Contrato(
       id: id ?? this.id,
       dataInicio: dataInicio ?? this.dataInicio,
       dataFim: dataFim ?? this.dataFim,
-      diaPagamento: diaPagamento ?? this.diaPagamento,
+      clienteId: clienteId ?? this.clienteId,
+      imovelId: imovelId ?? this.imovelId,
+      valor: valor ?? this.valor,
       intervaloPagamento: intervaloPagamento ?? this.intervaloPagamento,
-      mesPagamento: mesPagamento ?? this.mesPagamento,
       pagamentos: pagamentos ?? this.pagamentos,
     );
   }
@@ -49,9 +54,10 @@ class Contrato {
       'id': id,
       'dataInicio': dataInicio.millisecondsSinceEpoch,
       'dataFim': dataFim.millisecondsSinceEpoch,
-      'diaPagamento': diaPagamento,
+      'clienteId': clienteId,
+      'imovelId': imovelId,
+      'valor': valor,
       'intervaloPagamento': intervaloPagamento.name,
-      'mesPagamento': mesPagamento,
       'pagamentos': pagamentos.map((x) => x.toMap()).toList(),
     };
   }
@@ -61,11 +67,11 @@ class Contrato {
       id: map['id'] as int,
       dataInicio: DateTime.fromMillisecondsSinceEpoch(map['dataInicio'] as int),
       dataFim: DateTime.fromMillisecondsSinceEpoch(map['dataFim'] as int),
-      diaPagamento: map['diaPagamento'] as int,
+      clienteId: map['clienteId'] as int,
+      imovelId: map['imovelId'] as int,
+      valor: map['valor'] as double,
       intervaloPagamento:
           TipoIntervaloExtension.byName(map['intervaloPagamento']),
-      mesPagamento:
-          map['mesPagamento'] != null ? map['mesPagamento'] as int : null,
       pagamentos: List<Pagamento>.from(
         (map['pagamentos'] as List<int>).map<Pagamento>(
           (x) => Pagamento.fromMap(x as Map<String, dynamic>),
@@ -81,7 +87,7 @@ class Contrato {
 
   @override
   String toString() {
-    return 'Contrato(id: $id, dataInicio: $dataInicio, dataFim: $dataFim, diaPagamento: $diaPagamento, intervaloPagamento: $intervaloPagamento, mesPagamento: $mesPagamento, pagamentos: $pagamentos)';
+    return 'Contrato(id: $id, dataInicio: $dataInicio, dataFim: $dataFim, clienteId: $clienteId, imovelId: $imovelId, valor: $valor, intervaloPagamento: $intervaloPagamento, pagamentos: $pagamentos)';
   }
 
   @override
@@ -91,9 +97,10 @@ class Contrato {
     return other.id == id &&
         other.dataInicio == dataInicio &&
         other.dataFim == dataFim &&
-        other.diaPagamento == diaPagamento &&
+        other.clienteId == clienteId &&
+        other.imovelId == imovelId &&
+        other.valor == valor &&
         other.intervaloPagamento == intervaloPagamento &&
-        other.mesPagamento == mesPagamento &&
         listEquals(other.pagamentos, pagamentos);
   }
 
@@ -102,9 +109,10 @@ class Contrato {
     return id.hashCode ^
         dataInicio.hashCode ^
         dataFim.hashCode ^
-        diaPagamento.hashCode ^
+        clienteId.hashCode ^
+        imovelId.hashCode ^
+        valor.hashCode ^
         intervaloPagamento.hashCode ^
-        mesPagamento.hashCode ^
         pagamentos.hashCode;
   }
 }

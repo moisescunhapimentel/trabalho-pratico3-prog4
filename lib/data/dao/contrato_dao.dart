@@ -56,12 +56,15 @@ class ContratoDao extends DatabaseAccessor<BancoDados> with _$ContratoDaoMixin {
       final ContratoTableData contratoTableData = e.readTable(contratoTable);
 
       contratos.add(Contrato(
+        valor: contratoTableData.valor,
+        clienteId: contratoTableData.clienteId,
         id: contratoTableData.id,
         dataInicio: contratoTableData.dataInicio,
         dataFim: contratoTableData.dataFim,
-        diaPagamento: contratoTableData.diaPagamento,
+        imovelId: contratoTableData.imovelId,
+        // diaPagamento: contratoTableData.diaPagamento,
         intervaloPagamento: contratoTableData.tipoIntervalo,
-        mesPagamento: contratoTableData.mesPagamento,
+        // mesPagamento: contratoTableData.mesPagamento,
         pagamentos: [],
       ));
     }
@@ -90,5 +93,10 @@ class ContratoDao extends DatabaseAccessor<BancoDados> with _$ContratoDaoMixin {
   Future<void> atualizar(
       Insertable<ContratoTableData> contratoTableData) async {
     await update(contratoTable).replace(contratoTableData);
+  }
+
+  Future<List<Contrato>> obterTodosContratosComRelacionamento() async {
+    return await obterContratosComRelacionamentoPeloFilter(
+        (tbl) => const Constant(true));
   }
 }
