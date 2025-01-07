@@ -1079,18 +1079,6 @@ class $ContratoTableTable extends ContratoTable
   late final GeneratedColumn<DateTime> dataFim = GeneratedColumn<DateTime>(
       'data_fim', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _diaPagamentoMeta =
-      const VerificationMeta('diaPagamento');
-  @override
-  late final GeneratedColumn<int> diaPagamento = GeneratedColumn<int>(
-      'dia_pagamento', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _mesPagamentoMeta =
-      const VerificationMeta('mesPagamento');
-  @override
-  late final GeneratedColumn<int> mesPagamento = GeneratedColumn<int>(
-      'mes_pagamento', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _clienteIdMeta =
       const VerificationMeta('clienteId');
   @override
@@ -1110,17 +1098,8 @@ class $ContratoTableTable extends ContratoTable
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES imovel_table (id)'));
   @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        tipoIntervalo,
-        valor,
-        dataInicio,
-        dataFim,
-        diaPagamento,
-        mesPagamento,
-        clienteId,
-        imovelId
-      ];
+  List<GeneratedColumn> get $columns =>
+      [id, tipoIntervalo, valor, dataInicio, dataFim, clienteId, imovelId];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1155,20 +1134,6 @@ class $ContratoTableTable extends ContratoTable
     } else if (isInserting) {
       context.missing(_dataFimMeta);
     }
-    if (data.containsKey('dia_pagamento')) {
-      context.handle(
-          _diaPagamentoMeta,
-          diaPagamento.isAcceptableOrUnknown(
-              data['dia_pagamento']!, _diaPagamentoMeta));
-    } else if (isInserting) {
-      context.missing(_diaPagamentoMeta);
-    }
-    if (data.containsKey('mes_pagamento')) {
-      context.handle(
-          _mesPagamentoMeta,
-          mesPagamento.isAcceptableOrUnknown(
-              data['mes_pagamento']!, _mesPagamentoMeta));
-    }
     if (data.containsKey('cliente_id')) {
       context.handle(_clienteIdMeta,
           clienteId.isAcceptableOrUnknown(data['cliente_id']!, _clienteIdMeta));
@@ -1201,10 +1166,6 @@ class $ContratoTableTable extends ContratoTable
           .read(DriftSqlType.dateTime, data['${effectivePrefix}data_inicio'])!,
       dataFim: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}data_fim'])!,
-      diaPagamento: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}dia_pagamento'])!,
-      mesPagamento: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}mes_pagamento']),
       clienteId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}cliente_id'])!,
       imovelId: attachedDatabase.typeMapping
@@ -1229,8 +1190,6 @@ class ContratoTableData extends DataClass
   final double valor;
   final DateTime dataInicio;
   final DateTime dataFim;
-  final int diaPagamento;
-  final int? mesPagamento;
   final int clienteId;
   final int imovelId;
   const ContratoTableData(
@@ -1239,8 +1198,6 @@ class ContratoTableData extends DataClass
       required this.valor,
       required this.dataInicio,
       required this.dataFim,
-      required this.diaPagamento,
-      this.mesPagamento,
       required this.clienteId,
       required this.imovelId});
   @override
@@ -1254,10 +1211,6 @@ class ContratoTableData extends DataClass
     map['valor'] = Variable<double>(valor);
     map['data_inicio'] = Variable<DateTime>(dataInicio);
     map['data_fim'] = Variable<DateTime>(dataFim);
-    map['dia_pagamento'] = Variable<int>(diaPagamento);
-    if (!nullToAbsent || mesPagamento != null) {
-      map['mes_pagamento'] = Variable<int>(mesPagamento);
-    }
     map['cliente_id'] = Variable<int>(clienteId);
     map['imovel_id'] = Variable<int>(imovelId);
     return map;
@@ -1270,10 +1223,6 @@ class ContratoTableData extends DataClass
       valor: Value(valor),
       dataInicio: Value(dataInicio),
       dataFim: Value(dataFim),
-      diaPagamento: Value(diaPagamento),
-      mesPagamento: mesPagamento == null && nullToAbsent
-          ? const Value.absent()
-          : Value(mesPagamento),
       clienteId: Value(clienteId),
       imovelId: Value(imovelId),
     );
@@ -1289,8 +1238,6 @@ class ContratoTableData extends DataClass
       valor: serializer.fromJson<double>(json['valor']),
       dataInicio: serializer.fromJson<DateTime>(json['dataInicio']),
       dataFim: serializer.fromJson<DateTime>(json['dataFim']),
-      diaPagamento: serializer.fromJson<int>(json['diaPagamento']),
-      mesPagamento: serializer.fromJson<int?>(json['mesPagamento']),
       clienteId: serializer.fromJson<int>(json['clienteId']),
       imovelId: serializer.fromJson<int>(json['imovelId']),
     );
@@ -1305,8 +1252,6 @@ class ContratoTableData extends DataClass
       'valor': serializer.toJson<double>(valor),
       'dataInicio': serializer.toJson<DateTime>(dataInicio),
       'dataFim': serializer.toJson<DateTime>(dataFim),
-      'diaPagamento': serializer.toJson<int>(diaPagamento),
-      'mesPagamento': serializer.toJson<int?>(mesPagamento),
       'clienteId': serializer.toJson<int>(clienteId),
       'imovelId': serializer.toJson<int>(imovelId),
     };
@@ -1318,8 +1263,6 @@ class ContratoTableData extends DataClass
           double? valor,
           DateTime? dataInicio,
           DateTime? dataFim,
-          int? diaPagamento,
-          Value<int?> mesPagamento = const Value.absent(),
           int? clienteId,
           int? imovelId}) =>
       ContratoTableData(
@@ -1328,9 +1271,6 @@ class ContratoTableData extends DataClass
         valor: valor ?? this.valor,
         dataInicio: dataInicio ?? this.dataInicio,
         dataFim: dataFim ?? this.dataFim,
-        diaPagamento: diaPagamento ?? this.diaPagamento,
-        mesPagamento:
-            mesPagamento.present ? mesPagamento.value : this.mesPagamento,
         clienteId: clienteId ?? this.clienteId,
         imovelId: imovelId ?? this.imovelId,
       );
@@ -1344,12 +1284,6 @@ class ContratoTableData extends DataClass
       dataInicio:
           data.dataInicio.present ? data.dataInicio.value : this.dataInicio,
       dataFim: data.dataFim.present ? data.dataFim.value : this.dataFim,
-      diaPagamento: data.diaPagamento.present
-          ? data.diaPagamento.value
-          : this.diaPagamento,
-      mesPagamento: data.mesPagamento.present
-          ? data.mesPagamento.value
-          : this.mesPagamento,
       clienteId: data.clienteId.present ? data.clienteId.value : this.clienteId,
       imovelId: data.imovelId.present ? data.imovelId.value : this.imovelId,
     );
@@ -1363,8 +1297,6 @@ class ContratoTableData extends DataClass
           ..write('valor: $valor, ')
           ..write('dataInicio: $dataInicio, ')
           ..write('dataFim: $dataFim, ')
-          ..write('diaPagamento: $diaPagamento, ')
-          ..write('mesPagamento: $mesPagamento, ')
           ..write('clienteId: $clienteId, ')
           ..write('imovelId: $imovelId')
           ..write(')'))
@@ -1372,8 +1304,8 @@ class ContratoTableData extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(id, tipoIntervalo, valor, dataInicio, dataFim,
-      diaPagamento, mesPagamento, clienteId, imovelId);
+  int get hashCode => Object.hash(
+      id, tipoIntervalo, valor, dataInicio, dataFim, clienteId, imovelId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1383,8 +1315,6 @@ class ContratoTableData extends DataClass
           other.valor == this.valor &&
           other.dataInicio == this.dataInicio &&
           other.dataFim == this.dataFim &&
-          other.diaPagamento == this.diaPagamento &&
-          other.mesPagamento == this.mesPagamento &&
           other.clienteId == this.clienteId &&
           other.imovelId == this.imovelId);
 }
@@ -1395,8 +1325,6 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
   final Value<double> valor;
   final Value<DateTime> dataInicio;
   final Value<DateTime> dataFim;
-  final Value<int> diaPagamento;
-  final Value<int?> mesPagamento;
   final Value<int> clienteId;
   final Value<int> imovelId;
   const ContratoTableCompanion({
@@ -1405,8 +1333,6 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
     this.valor = const Value.absent(),
     this.dataInicio = const Value.absent(),
     this.dataFim = const Value.absent(),
-    this.diaPagamento = const Value.absent(),
-    this.mesPagamento = const Value.absent(),
     this.clienteId = const Value.absent(),
     this.imovelId = const Value.absent(),
   });
@@ -1416,15 +1342,12 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
     required double valor,
     required DateTime dataInicio,
     required DateTime dataFim,
-    required int diaPagamento,
-    this.mesPagamento = const Value.absent(),
     required int clienteId,
     required int imovelId,
   })  : tipoIntervalo = Value(tipoIntervalo),
         valor = Value(valor),
         dataInicio = Value(dataInicio),
         dataFim = Value(dataFim),
-        diaPagamento = Value(diaPagamento),
         clienteId = Value(clienteId),
         imovelId = Value(imovelId);
   static Insertable<ContratoTableData> custom({
@@ -1433,8 +1356,6 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
     Expression<double>? valor,
     Expression<DateTime>? dataInicio,
     Expression<DateTime>? dataFim,
-    Expression<int>? diaPagamento,
-    Expression<int>? mesPagamento,
     Expression<int>? clienteId,
     Expression<int>? imovelId,
   }) {
@@ -1444,8 +1365,6 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
       if (valor != null) 'valor': valor,
       if (dataInicio != null) 'data_inicio': dataInicio,
       if (dataFim != null) 'data_fim': dataFim,
-      if (diaPagamento != null) 'dia_pagamento': diaPagamento,
-      if (mesPagamento != null) 'mes_pagamento': mesPagamento,
       if (clienteId != null) 'cliente_id': clienteId,
       if (imovelId != null) 'imovel_id': imovelId,
     });
@@ -1457,8 +1376,6 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
       Value<double>? valor,
       Value<DateTime>? dataInicio,
       Value<DateTime>? dataFim,
-      Value<int>? diaPagamento,
-      Value<int?>? mesPagamento,
       Value<int>? clienteId,
       Value<int>? imovelId}) {
     return ContratoTableCompanion(
@@ -1467,8 +1384,6 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
       valor: valor ?? this.valor,
       dataInicio: dataInicio ?? this.dataInicio,
       dataFim: dataFim ?? this.dataFim,
-      diaPagamento: diaPagamento ?? this.diaPagamento,
-      mesPagamento: mesPagamento ?? this.mesPagamento,
       clienteId: clienteId ?? this.clienteId,
       imovelId: imovelId ?? this.imovelId,
     );
@@ -1494,12 +1409,6 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
     if (dataFim.present) {
       map['data_fim'] = Variable<DateTime>(dataFim.value);
     }
-    if (diaPagamento.present) {
-      map['dia_pagamento'] = Variable<int>(diaPagamento.value);
-    }
-    if (mesPagamento.present) {
-      map['mes_pagamento'] = Variable<int>(mesPagamento.value);
-    }
     if (clienteId.present) {
       map['cliente_id'] = Variable<int>(clienteId.value);
     }
@@ -1517,8 +1426,6 @@ class ContratoTableCompanion extends UpdateCompanion<ContratoTableData> {
           ..write('valor: $valor, ')
           ..write('dataInicio: $dataInicio, ')
           ..write('dataFim: $dataFim, ')
-          ..write('diaPagamento: $diaPagamento, ')
-          ..write('mesPagamento: $mesPagamento, ')
           ..write('clienteId: $clienteId, ')
           ..write('imovelId: $imovelId')
           ..write(')'))
@@ -3036,8 +2943,6 @@ typedef $$ContratoTableTableCreateCompanionBuilder = ContratoTableCompanion
   required double valor,
   required DateTime dataInicio,
   required DateTime dataFim,
-  required int diaPagamento,
-  Value<int?> mesPagamento,
   required int clienteId,
   required int imovelId,
 });
@@ -3048,8 +2953,6 @@ typedef $$ContratoTableTableUpdateCompanionBuilder = ContratoTableCompanion
   Value<double> valor,
   Value<DateTime> dataInicio,
   Value<DateTime> dataFim,
-  Value<int> diaPagamento,
-  Value<int?> mesPagamento,
   Value<int> clienteId,
   Value<int> imovelId,
 });
@@ -3126,12 +3029,6 @@ class $$ContratoTableTableFilterComposer
 
   ColumnFilters<DateTime> get dataFim => $composableBuilder(
       column: $table.dataFim, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<int> get diaPagamento => $composableBuilder(
-      column: $table.diaPagamento, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<int> get mesPagamento => $composableBuilder(
-      column: $table.mesPagamento, builder: (column) => ColumnFilters(column));
 
   $$ClienteTableTableFilterComposer get clienteId {
     final $$ClienteTableTableFilterComposer composer = $composerBuilder(
@@ -3220,14 +3117,6 @@ class $$ContratoTableTableOrderingComposer
   ColumnOrderings<DateTime> get dataFim => $composableBuilder(
       column: $table.dataFim, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get diaPagamento => $composableBuilder(
-      column: $table.diaPagamento,
-      builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<int> get mesPagamento => $composableBuilder(
-      column: $table.mesPagamento,
-      builder: (column) => ColumnOrderings(column));
-
   $$ClienteTableTableOrderingComposer get clienteId {
     final $$ClienteTableTableOrderingComposer composer = $composerBuilder(
         composer: this,
@@ -3293,12 +3182,6 @@ class $$ContratoTableTableAnnotationComposer
 
   GeneratedColumn<DateTime> get dataFim =>
       $composableBuilder(column: $table.dataFim, builder: (column) => column);
-
-  GeneratedColumn<int> get diaPagamento => $composableBuilder(
-      column: $table.diaPagamento, builder: (column) => column);
-
-  GeneratedColumn<int> get mesPagamento => $composableBuilder(
-      column: $table.mesPagamento, builder: (column) => column);
 
   $$ClienteTableTableAnnotationComposer get clienteId {
     final $$ClienteTableTableAnnotationComposer composer = $composerBuilder(
@@ -3391,8 +3274,6 @@ class $$ContratoTableTableTableManager extends RootTableManager<
             Value<double> valor = const Value.absent(),
             Value<DateTime> dataInicio = const Value.absent(),
             Value<DateTime> dataFim = const Value.absent(),
-            Value<int> diaPagamento = const Value.absent(),
-            Value<int?> mesPagamento = const Value.absent(),
             Value<int> clienteId = const Value.absent(),
             Value<int> imovelId = const Value.absent(),
           }) =>
@@ -3402,8 +3283,6 @@ class $$ContratoTableTableTableManager extends RootTableManager<
             valor: valor,
             dataInicio: dataInicio,
             dataFim: dataFim,
-            diaPagamento: diaPagamento,
-            mesPagamento: mesPagamento,
             clienteId: clienteId,
             imovelId: imovelId,
           ),
@@ -3413,8 +3292,6 @@ class $$ContratoTableTableTableManager extends RootTableManager<
             required double valor,
             required DateTime dataInicio,
             required DateTime dataFim,
-            required int diaPagamento,
-            Value<int?> mesPagamento = const Value.absent(),
             required int clienteId,
             required int imovelId,
           }) =>
@@ -3424,8 +3301,6 @@ class $$ContratoTableTableTableManager extends RootTableManager<
             valor: valor,
             dataInicio: dataInicio,
             dataFim: dataFim,
-            diaPagamento: diaPagamento,
-            mesPagamento: mesPagamento,
             clienteId: clienteId,
             imovelId: imovelId,
           ),

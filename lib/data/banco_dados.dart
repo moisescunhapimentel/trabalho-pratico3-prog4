@@ -45,7 +45,11 @@ part 'banco_dados.g.dart';
   ],
 )
 class BancoDados extends _$BancoDados {
-  BancoDados() : super(_openConnection());
+  BancoDados._privateConstructor() : super(_openConnection());
+
+  static final BancoDados _instance = BancoDados._privateConstructor();
+
+  static BancoDados get instance => _instance;
 
   @override
   int get schemaVersion => 1;
