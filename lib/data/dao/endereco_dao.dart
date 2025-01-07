@@ -24,4 +24,9 @@ class EnderecoDao extends DatabaseAccessor<BancoDados> with _$EnderecoDaoMixin {
   Future<void> atualizar(Insertable<Endereco> endereco) async {
     await update(enderecoTable).replace(endereco);
   }
+
+  Future<int> insertAndGetId(EnderecoTableCompanion endereco) async {
+  return into(enderecoTable).insert(endereco);
+}
+
 }

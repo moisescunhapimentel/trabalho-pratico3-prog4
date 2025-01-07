@@ -63,6 +63,30 @@ class ImovelDao extends DatabaseAccessor<BancoDados> with _$ImovelDaoMixin {
       comodos: comodos,
     );
   }
+  
+  Future<Imovel> obterImoveisComEnderecoPeloId(int imovelId) async {
+    final imovel = await obterImovelPeloId(imovelId);
+
+    if (imovel == null) {
+      throw Exception('Imovel não encontrado');
+    }
+
+    final endereco =
+        await db.enderecoDao.obterEnderecoPeloId(imovel.enderecoId);
+
+    if (endereco == null) {
+      throw Exception('Endereço do imóvel não encontrado');
+    }
+
+    return Imovel(
+      id: imovel.id,
+      nome: imovel.nome,
+      descricao: imovel.descricao,
+      endereco: endereco,
+      comodos: [],
+      contratos: [],
+    );
+  }
 
   Future<void> atualizar(Insertable<ImovelTableData> imovelTableData) async {
     await update(imovelTable).replace(imovelTableData);

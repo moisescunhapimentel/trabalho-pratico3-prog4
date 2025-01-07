@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:trabalho3/data/banco_dados.dart';
 import 'package:trabalho3/data/models/imovel.dart';
 import 'package:trabalho3/providers/banco_dados_provider.dart';
 import 'package:trabalho3/data/dao/imovel_dao.dart';
@@ -12,6 +13,13 @@ final imovelProvider =
   final imovelDao = ref.watch(imovelDaoProvider);
   return imovelDao.obterImovelPeloId(imovelId);
 });
+
+final imovelEnderecoProvider =
+    FutureProvider.family<Imovel?, int>((ref, imovelId) async {
+  final imovelDao = ref.watch(imovelDaoProvider);
+  return imovelDao.obterImoveisComEnderecoPeloId(imovelId); 
+});
+
 
 final imovelDaoProvider = Provider<ImovelDao>((ref) {
   return ImovelDao(ref.watch(bancoDadosProvider));
@@ -122,34 +130,39 @@ class FormularioImovelNotifier extends StateNotifier<FormularioImovelState> {
   Future<bool> salvarImovel() async {
     final endereco = criarEndereco();
     final imovel = criarImovel();
-    final enderecoTableCompanion = EnderecoTableCompanion.insert(
-      rua: endereco.rua,
-      bairro: endereco.bairro,
-      numero: endereco.numero,
-      cEP: endereco.cEP,
-    );
-    final imovelTableCompanion = ImovelTableCompanion.insert(
-      nome: imovel.nome,
-      descricao: imovel.descricao,
-      enderecoId: 0,
+
+    final enderecoId = await bancoDados.enderecoDao.insertAndGetId(
+      EnderecoTableCompanion.insert(
+        rua: endereco.rua,
+        bairro: endereco.bairro,
+        numero: endereco.numero,
+        cEP: endereco.cEP,
+      ),
     );
 
     try {
-      await bancoDados.enderecoDao.insert(enderecoTableCompanion);
-      await bancoDados.imovelDao.insert(imovelTableCompanion);
+      final enderecoTableCompanion = EnderecoTableCompanion.insert(
+        rua: endereco.rua,
+        bairro: endereco.bairro,
+        numero: endereco.numero,
+        cEP: endereco.cEP,
+      );
+
+      await bancoDados.imovelDao.insert(
+        ImovelTableCompanion.insert(
+          nome: imovel.nome,
+          descricao: imovel.descricao,
+          enderecoId: enderecoId,
+        ),
+      );
+
       clearForm();
       return true;
     } catch (e) {
       return false;
     }
-
-    
   }
 }
-
-final bancoDadosProvider = Provider<BancoDados>((ref) {
-  return BancoDados();
-});
 
 final formularioImovelProvider =
     StateNotifierProvider<FormularioImovelNotifier, FormularioImovelState>(

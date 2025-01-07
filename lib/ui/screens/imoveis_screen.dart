@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trabalho3/ui/screens/imovel_screen.dart';
 import 'package:trabalho3/ui/widgets/icone_flutuante_button.dart';
-import 'package:trabalho3/ui/widgets/imovel_item_card.dart';
 import 'package:trabalho3/ui/screens/formulario_imovel_screen.dart';
-import 'package:trabalho3/ui/widgets/menu_suspenso_button.dart';
 import 'package:trabalho3/providers/imovel_providers.dart';
+
 
 class ImoveisScreen extends ConsumerWidget {
   const ImoveisScreen({super.key});
@@ -20,6 +20,7 @@ class ImoveisScreen extends ConsumerWidget {
         imoveisNotifier.carregarListaImoveis();
       }
     });
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Imóveis'),
@@ -30,9 +31,16 @@ class ImoveisScreen extends ConsumerWidget {
             itemCount: imoveis.length,
             itemBuilder: (context, index) {
               final imovel = imoveis[index];
+              
               return ListTile(
                 title: Text(imovel.nome),
-                subtitle: Text('Endereço: Desconhecido'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ImovelScreen(imovelId: imovel.id),
+                    ),
+                  );
+                },
               );
             },
           );
@@ -40,7 +48,7 @@ class ImoveisScreen extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, stack) => Center(child: Text('Erro: $e')),
       ),
-       floatingActionButton: IconeFlutuanteButton(
+      floatingActionButton: IconeFlutuanteButton(
         funcao: () {
           Navigator.of(context).push(
             MaterialPageRoute(
