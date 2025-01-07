@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trabalho3/ui/widgets/campo_simples_textform.dart';
 import 'package:trabalho3/ui/widgets/padrao_texto_button.dart';
 import 'package:trabalho3/ui/widgets/seletor_button.dart';
 import 'package:trabalho3/data/enums/tipo_intervalo.dart';
@@ -75,29 +74,24 @@ class FormularioContratoScreen extends ConsumerWidget {
                   },
                 ),
                 const SizedBox(height: 20),
-                CampoSimplesTextform(
-                  controller: formState.diaPagamentoController,
-                  rotulo: 'Dia de Pagamento',
+                TextFormField(
+                  controller: formState.dataFimController,
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Valor',
+                    border: OutlineInputBorder(),
+                  ),
+                  onTap: () {
+                    // adicionar o valor
+                    // formModel.selecionarDataFim(context);
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, insira o dia de pagamento';
+                      return 'Por favor, selecione a data de fim';
                     }
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
-                if (formState.intervaloPagamento == TipoIntervalo.anual)
-                  CampoSimplesTextform(
-                    controller: formState.mesPagamentoController,
-                    rotulo: 'Mês de Pagamento',
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, insira o mês de pagamento';
-                      }
-                      return null;
-                    },
-                  ),
-                const SizedBox(height: 20),
               ],
             ),
           ),
