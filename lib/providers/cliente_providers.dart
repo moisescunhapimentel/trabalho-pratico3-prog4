@@ -9,17 +9,23 @@ import 'package:trabalho3/data/banco_dados.dart';
 import 'package:trabalho3/data/models/cliente.dart';
 import 'package:trabalho3/data/models/contato.dart';
 
-
-final clienteProvider = FutureProvider.family<Cliente, int>((ref, clienteId) async {
+final clienteProvider =
+    FutureProvider.family<Cliente, int>((ref, clienteId) async {
   final clienteDao = ref.watch(clienteDaoProvider);
   return clienteDao.obterClienteComContratos(clienteId);
 });
 
 final clienteDaoProvider = Provider<ClienteDao>((ref) {
-  return ClienteDao(ref.watch(bancoDadosProvider)); 
+  return ClienteDao(ref.watch(bancoDadosProvider));
 });
 
-final clientesProvider = FutureProvider<List<Cliente>>((ref) async {
+final clientesProvider =
+    StateNotifierProvider<ClientesNotifier, AsyncValue<List<Cliente>>>((ref) {
+  final clienteDao = ref.read(clienteDaoProvider);
+  return ClientesNotifier(clienteDao);
+});
+
+final clientesProvider2 = FutureProvider<List<Cliente>>((ref) async {
   final clienteDao = ref.watch(clienteDaoProvider);
 
   final clientesTableData = await clienteDao.obterTodosClientes();
@@ -36,7 +42,30 @@ final clientesProvider = FutureProvider<List<Cliente>>((ref) async {
   }).toList();
 });
 
+class ClientesNotifier extends StateNotifier<AsyncValue<List<Cliente>>> {
+  final ClienteDao clienteDao;
 
+  ClientesNotifier(this.clienteDao) : super(const AsyncValue.loading());
+
+  void carregarListaClientes() async {
+    try {
+      final clientesTableData = await clienteDao.obterTodosClientes();
+
+      state = AsyncData(clientesTableData.map((clienteData) {
+        return Cliente(
+          id: clienteData.id,
+          nome: clienteData.nome,
+          cPF: clienteData.cPF,
+          contato: clienteData.contato,
+          dataNascimento: clienteData.dataNascimento,
+          contratos: [],
+        );
+      }).toList());
+    } catch (e, stack) {
+      AsyncError(e, stack);
+    }
+  }
+}
 
 class FormularioClienteState {
   final TextEditingController nomeController;
@@ -67,7 +96,8 @@ class FormularioClienteState {
       nomeController: nomeController ?? this.nomeController,
       cpfController: cpfController ?? this.cpfController,
       telefoneController: telefoneController ?? this.telefoneController,
-      dataNascimentoController: dataNascimentoController ?? this.dataNascimentoController,
+      dataNascimentoController:
+          dataNascimentoController ?? this.dataNascimentoController,
       contato: contato ?? this.contato,
       dataNascimento: dataNascimento ?? this.dataNascimento,
     );
@@ -96,7 +126,8 @@ class FormularioClienteNotifier extends StateNotifier<FormularioClienteState> {
       lastDate: DateTime.now(),
     );
     if (picked != null) {
-      state.dataNascimentoController.text = picked.toLocal().toString().split(' ')[0];
+      state.dataNascimentoController.text =
+          picked.toLocal().toString().split(' ')[0];
       state = state.copyWith(dataNascimento: picked);
     }
   }
@@ -119,24 +150,24 @@ class FormularioClienteNotifier extends StateNotifier<FormularioClienteState> {
       contratos: [],
     );
   }
-Future<bool> salvarCliente() async {
-  final cliente = criarCliente();
-  final clienteTableCompanion = ClienteTableCompanion.insert(
-    nome: cliente.nome,
-    cPF: cliente.cPF,
-    dataNascimento: cliente.dataNascimento,
-    contato: cliente.contato,
-  );
 
-  try {
-    await bancoDados.clienteDao.insert(clienteTableCompanion);
-    clearForm();
-    return true; // salvamento foi bem-sucedido
-  } catch (e) {
-   
-    return false; 
+  Future<bool> salvarCliente() async {
+    final cliente = criarCliente();
+    final clienteTableCompanion = ClienteTableCompanion.insert(
+      nome: cliente.nome,
+      cPF: cliente.cPF,
+      dataNascimento: cliente.dataNascimento,
+      contato: cliente.contato,
+    );
+
+    try {
+      await bancoDados.clienteDao.insert(clienteTableCompanion);
+      clearForm();
+      return true; // salvamento foi bem-sucedido
+    } catch (e) {
+      return false;
+    }
   }
-}
 
   void atualizarContato(Contato novoContato) {
     state = state.copyWith(contato: novoContato);
@@ -154,4 +185,3 @@ final formularioClienteProvider =
     return FormularioClienteNotifier(bancoDados);
   },
 );
-

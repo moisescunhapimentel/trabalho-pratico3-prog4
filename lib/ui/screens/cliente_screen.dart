@@ -10,7 +10,7 @@ class ClienteScreen extends ConsumerWidget {
 
   const ClienteScreen({
     super.key,
-    required this.clienteId, 
+    required this.clienteId,
   });
 
   String formatDate(DateTime date) {
@@ -44,30 +44,29 @@ class ClienteScreen extends ConsumerWidget {
                 descricao: '${cliente.contato.dDD} ${cliente.contato.numero}',
               ),
               const SizedBox(height: 20),
-
               const SizedBox(height: 20),
-              const Text('Contratos', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text('Contratos',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
-
               if (cliente.contratos.isEmpty)
                 const Text('Este cliente não tem contratos.')
               else
                 ...cliente.contratos.map((contrato) {
                   return ContratoItemCard(
-                    nome: contrato.id.toString(), 
+                    nome: contrato.id.toString(),
                     parcelas: contrato.intervaloPagamento.toString(),
                     tipoIntervalo: contrato.intervaloPagamento,
                     diaPagamento: contrato.diaPagamento,
                     dataVencimento: contrato.dataFim,
-                    funcao: () {
-                    },
+                    funcao: () {},
                   );
                 }).toList(),
             ],
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()), 
-        error: (error, stackTrace) => Center(child: Text('Erro ao carregar cliente: $error')),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stackTrace) =>
+            Center(child: Text('Erro ao carregar cliente: $error')),
       ),
     );
   }

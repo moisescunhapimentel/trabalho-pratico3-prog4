@@ -73,8 +73,7 @@ class FormularioClienteScreen extends ConsumerWidget {
                     border: OutlineInputBorder(),
                   ),
                   onTap: () {
-                    formModel.selecionarData(
-                        context); 
+                    formModel.selecionarData(context);
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -95,7 +94,7 @@ class FormularioClienteScreen extends ConsumerWidget {
               children: [
                 PadraoTextoButton(
                   funcao: () {
-                    formModel.clearForm(); 
+                    formModel.clearForm();
                     Navigator.pop(context);
                   },
                   texto: 'Cancelar',
@@ -107,6 +106,9 @@ class FormularioClienteScreen extends ConsumerWidget {
                     if (formState.nomeController.text.isNotEmpty &&
                         formState.cpfController.text.isNotEmpty) {
                       bool sucesso = await formModel.salvarCliente();
+                      ref
+                          .read(clientesProvider.notifier)
+                          .carregarListaClientes();
                       if (sucesso) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(

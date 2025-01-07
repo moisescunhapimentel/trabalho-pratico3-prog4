@@ -11,7 +11,14 @@ class ClientesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final clientesAsyncValue = ref.watch(clientesProvider); 
+    final clientesAsyncValue = ref.watch(clientesProvider);
+    final clientesNotifier = ref.watch(clientesProvider.notifier);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (clientesAsyncValue is AsyncLoading) {
+        clientesNotifier.carregarListaClientes();
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -24,13 +31,13 @@ class ClientesScreen extends ConsumerWidget {
             itemBuilder: (context, index) {
               final cliente = clientes[index];
               return ClienteItemCard(
-                nome: cliente.nome, 
+                nome: cliente.nome,
                 funcao: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ClienteScreen(
-                          clienteId: cliente.id,
+                        clienteId: cliente.id,
                       ),
                     ),
                   );
