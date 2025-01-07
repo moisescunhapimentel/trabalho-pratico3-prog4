@@ -53,7 +53,8 @@ class ClientesScreen extends ConsumerWidget {
         funcao: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => FormularioClienteScreen()),
+            MaterialPageRoute(
+                builder: (context) => const FormularioClienteScreen()),
           );
         },
       ),

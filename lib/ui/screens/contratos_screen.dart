@@ -12,33 +12,35 @@ class ContratosScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Contratos ativos', ),
+        title: const Text(
+          'Contratos ativos',
+        ),
       ),
       body: Container(
-      padding: const EdgeInsets.all(10),
-      child: Column(children: [
-        ContratoItemCard(
-          nome: 'Apartamento em Camocim',
-          parcelas: '3',
-          tipoIntervalo: TipoIntervalo.anual, 
-          diaPagamento: 02,
-          dataVencimento: DateTime(2024, 12, 31),
-          funcao: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ContratoScreen(
-                dataInicio: DateTime(2024, 1, 1),
-                dataFim: DateTime(2024, 12, 31),
-                intervaloPagamento: TipoIntervalo.anual,
-                diaPagamento: 02,
-                mesPagamento: null,
-              )),
-            );
-          },
-        ),
-      ]),
-      
-    ),
+        padding: const EdgeInsets.all(10),
+        child: Column(children: [
+          ContratoItemCard(
+            nome: 'Apartamento em Camocim',
+            parcelas: '3',
+            tipoIntervalo: TipoIntervalo.anual,
+            dataInicio: DateTime(2023),
+            dataVencimento: DateTime(2024, 12, 31),
+            funcao: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ContratoScreen(
+                          dataInicio: DateTime(2024, 1, 1),
+                          dataFim: DateTime(2024, 12, 31),
+                          intervaloPagamento: TipoIntervalo.anual,
+                          diaPagamento: 02,
+                          mesPagamento: null,
+                        )),
+              );
+            },
+          ),
+        ]),
+      ),
       floatingActionButton: IconeFlutuanteButton(
         funcao: () {
           Navigator.push(
@@ -49,7 +51,5 @@ class ContratosScreen extends StatelessWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
-     
-    
   }
 }

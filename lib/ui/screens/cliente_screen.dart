@@ -56,7 +56,8 @@ class ClienteScreen extends ConsumerWidget {
                     nome: contrato.id.toString(),
                     parcelas: contrato.intervaloPagamento.toString(),
                     tipoIntervalo: contrato.intervaloPagamento,
-                    diaPagamento: contrato.diaPagamento,
+                    // diaPagamento: contrato.diaPagamento,
+                    dataInicio: contrato.dataInicio,
                     dataVencimento: contrato.dataFim,
                     funcao: () {},
                   );

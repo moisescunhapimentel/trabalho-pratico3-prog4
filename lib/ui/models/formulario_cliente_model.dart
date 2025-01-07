@@ -4,7 +4,8 @@ class FormularioClienteModel with ChangeNotifier {
   final TextEditingController nomeController = TextEditingController();
   final TextEditingController cpfController = TextEditingController();
   final TextEditingController telefoneController = TextEditingController();
-  final TextEditingController dataNascimentoController = TextEditingController();
+  final TextEditingController dataNascimentoController =
+      TextEditingController();
 
   void disposeControllers() {
     nomeController.dispose();
@@ -22,8 +23,9 @@ class FormularioClienteModel with ChangeNotifier {
     );
 
     if (pickedDate != null) {
-      dataNascimentoController.text = '${pickedDate.day}-${pickedDate.month}-${pickedDate.year}';
-      notifyListeners(); 
+      dataNascimentoController.text =
+          '${pickedDate.day}-${pickedDate.month}-${pickedDate.year}';
+      notifyListeners();
     }
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:trabalho3/ui/constants/colors.dart';
 import 'package:intl/intl.dart';
 import 'package:trabalho3/data/enums/tipo_intervalo.dart';
 
@@ -7,7 +6,7 @@ class ContratoItemCard extends StatelessWidget {
   final String nome;
   final String parcelas;
   final TipoIntervalo tipoIntervalo;
-  final int diaPagamento;
+  final DateTime dataInicio;
   final DateTime dataVencimento;
   final Function() funcao;
   const ContratoItemCard(
@@ -15,7 +14,7 @@ class ContratoItemCard extends StatelessWidget {
       required this.nome,
       required this.parcelas,
       required this.tipoIntervalo,
-      required this.diaPagamento,
+      required this.dataInicio,
       required this.dataVencimento,
       required this.funcao});
 
@@ -34,7 +33,8 @@ class ContratoItemCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      nome, style: Theme.of(context).textTheme.displayLarge,                
+                      nome,
+                      style: Theme.of(context).textTheme.displayLarge,
                     ),
                     const SizedBox(height: 8),
                     Row(
@@ -48,16 +48,14 @@ class ContratoItemCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Dia de pagamento: $diaPagamento',
-                      
+                      'Dia de pagamento: ${dataInicio.day}',
                     ),
                   ],
                 ),
               ),
               // Lado direito: Ícone
               Text(
-                DateFormat('dd/MM/yyyy')
-                    .format(dataVencimento), 
+                DateFormat('dd/MM/yyyy').format(dataVencimento),
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

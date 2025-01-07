@@ -106,9 +106,11 @@ class FormularioClienteScreen extends ConsumerWidget {
                     if (formState.nomeController.text.isNotEmpty &&
                         formState.cpfController.text.isNotEmpty) {
                       bool sucesso = await formModel.salvarCliente();
+
                       ref
                           .read(clientesProvider.notifier)
                           .carregarListaClientes();
+
                       if (sucesso) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
