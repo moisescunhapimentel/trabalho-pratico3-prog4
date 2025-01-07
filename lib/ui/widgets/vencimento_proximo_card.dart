@@ -26,9 +26,8 @@ class VencimentoProximoCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-         // color: surfaceColor,
+          // color: surfaceColor,
           borderRadius: BorderRadius.circular(6),
-          
         ),
         child: Column(
           children: [
@@ -39,33 +38,30 @@ class VencimentoProximoCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        nomeImovel,  style: Theme.of(context).textTheme.displayLarge,
-                        
+                        nomeImovel,
+                        style: Theme.of(context).textTheme.displayLarge,
                       ),
                       const SizedBox(height: 8),
                       Row(
                         children: [
-                          Text('$valorContrato',  style: Theme.of(context).textTheme.bodyMedium),
+                          Text('$valorContrato',
+                              style: Theme.of(context).textTheme.bodyMedium),
                           const SizedBox(width: 4),
                           const Text('|'),
                           const SizedBox(width: 4),
-                          Text(tipoIntervalo.name, style: Theme.of(context).textTheme.bodyMedium),
+                          Text(tipoIntervalo.name,
+                              style: Theme.of(context).textTheme.bodyMedium),
                         ],
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        nomeInquelino,
-                        style: Theme.of(context).textTheme.bodyMedium
-                      ),
+                      Text(nomeInquelino,
+                          style: Theme.of(context).textTheme.bodyMedium),
                     ],
                   ),
                 ),
                 // Lado direito
-                Text(
-                  DateFormat('dd/MM/yyyy')
-                      .format(dataVencimento), 
-                  style: Theme.of(context).textTheme.bodyMedium
-                ),
+                Text(DateFormat('dd/MM/yyyy').format(dataVencimento),
+                    style: Theme.of(context).textTheme.bodyMedium),
               ],
             ),
             PadraoTextoButton(texto: "cobrar", funcao: () {}),

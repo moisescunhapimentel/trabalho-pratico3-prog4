@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trabalho3/providers/theme_provider.dart';
 import 'package:trabalho3/ui/providers/providers.dart';
 import 'package:trabalho3/ui/theme/app_theme.dart';
 import 'package:trabalho3/ui/widgets/barra_navegacao_widget.dart';
