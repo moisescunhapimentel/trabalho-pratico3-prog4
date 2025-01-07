@@ -10,7 +10,7 @@ class ClienteScreen extends ConsumerWidget {
 
   const ClienteScreen({
     super.key,
-    required this.clienteId, // Passando o clienteId
+    required this.clienteId, 
   });
 
   String formatDate(DateTime date) {
@@ -27,7 +27,6 @@ class ClienteScreen extends ConsumerWidget {
       ),
       body: clienteAsyncValue.when(
         data: (cliente) {
-          // Quando os dados do cliente estiverem prontos
           return ListView(
             padding: const EdgeInsets.all(20.0),
             children: [
@@ -46,31 +45,28 @@ class ClienteScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 20),
 
-              // Exibindo os contratos relacionados ao cliente
               const SizedBox(height: 20),
               const Text('Contratos', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
 
-              // Se o cliente tiver contratos, exibe-os
               if (cliente.contratos.isEmpty)
                 const Text('Este cliente não tem contratos.')
               else
                 ...cliente.contratos.map((contrato) {
                   return ContratoItemCard(
-                    nome: contrato.id.toString(), // Exibindo o ID do contrato
+                    nome: contrato.id.toString(), 
                     parcelas: contrato.intervaloPagamento.toString(),
                     tipoIntervalo: contrato.intervaloPagamento,
                     diaPagamento: contrato.diaPagamento,
                     dataVencimento: contrato.dataFim,
                     funcao: () {
-                      // Função para ação ao clicar no contrato
                     },
                   );
                 }).toList(),
             ],
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()), // Enquanto os dados carregam
+        loading: () => const Center(child: CircularProgressIndicator()), 
         error: (error, stackTrace) => Center(child: Text('Erro ao carregar cliente: $error')),
       ),
     );
