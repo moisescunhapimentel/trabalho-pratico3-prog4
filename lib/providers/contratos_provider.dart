@@ -14,7 +14,7 @@ class ContratosNotifier extends StateNotifier<AsyncValue<List<Contrato>>> {
 
   ContratosNotifier(this.contratoDao) : super(const AsyncValue.loading());
 
-  void carregarListaClientes() async {
+  void carregarListaContratos() async {
     try {
       final contratos =
           await contratoDao.obterTodosContratosComRelacionamento();
