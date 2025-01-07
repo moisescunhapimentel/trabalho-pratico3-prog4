@@ -6,7 +6,7 @@ import 'package:trabalho3/data/banco_dados.dart';
 import 'package:trabalho3/data/enums/tipo_intervalo.dart';
 import 'package:trabalho3/data/models/intervalo.dart';
 import 'package:trabalho3/ui/constants/colors.dart';
-import 'package:trabalho3/ui/providers/providers.dart';
+import 'package:trabalho3/providers/providers.dart';
 import 'package:trabalho3/ui/widgets/seletor_button.dart';
 import 'package:fl_chart/fl_chart.dart';
 

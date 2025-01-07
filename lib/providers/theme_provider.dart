@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trabalho3/data/models/custom_theme.dart';
-import 'package:trabalho3/ui/providers/providers.dart';
+import 'package:trabalho3/providers/providers.dart';
 
 final themeNotifierProvider =
     StateNotifierProvider<ThemeNotifier, CustomTheme>((ref) {
