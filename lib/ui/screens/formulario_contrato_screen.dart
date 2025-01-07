@@ -108,6 +108,8 @@ class FormularioContratoScreen extends ConsumerWidget {
                   funcao: () {
                     if (formState.formKey.currentState!.validate()) {
                       formState.formKey.currentState!.save();
+                      formModel.salvarContrato();
+
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                             content: Text('Formulário salvo com sucesso!')),

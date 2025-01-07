@@ -57,7 +57,7 @@ class ContratosScreen extends ConsumerWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ContratoScreen()),
+                                builder: (context) => const ContratoScreen()),
                           );
                         },
                       );

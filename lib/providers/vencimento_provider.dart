@@ -47,7 +47,7 @@ class VencimentoNotifier extends StateNotifier<AsyncValue<List<Vencimento>>> {
       while (proximaData.isBefore(contrato.dataFim) ||
           proximaData.isAtSameMomentAs(contrato.dataFim)) {
         if (proximaData.isAfter(hoje) &&
-            proximaData.isBefore(hoje.add(const Duration(days: 5)))) {
+            proximaData.isAfter(hoje.add(const Duration(days: 5)))) {
           if (quantidadeVencimentos > contrato.pagamentos.length) {
             final cliente =
                 await clienteDao.obterClienteComContratos(contrato.clienteId);

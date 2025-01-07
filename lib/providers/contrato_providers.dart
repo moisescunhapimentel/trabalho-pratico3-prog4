@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trabalho3/data/banco_dados.dart';
 import 'package:trabalho3/data/enums/tipo_intervalo.dart';
+import 'package:trabalho3/providers/banco_dados_provider.dart';
 
 class FormularioContratoState {
   final GlobalKey<FormState> formKey;
@@ -44,7 +46,9 @@ class FormularioContratoState {
 
 class FormularioContratoNotifier
     extends StateNotifier<FormularioContratoState> {
-  FormularioContratoNotifier()
+  final BancoDados bancoDados;
+
+  FormularioContratoNotifier(this.bancoDados)
       : super(FormularioContratoState(
           formKey: GlobalKey<FormState>(),
           dataInicioController: TextEditingController(),
@@ -83,9 +87,31 @@ class FormularioContratoNotifier
       state = state.copyWith(dataFim: picked);
     }
   }
+
+  void clearForm() {
+    state.dataFimController.clear();
+    state.dataInicioController.clear();
+    state.valorController.clear();
+    state = state.copyWith(dataFim: null, dataInicio: null);
+  }
+
+  Future<bool> salvarContrato() async {
+    // final contratoTableCompanion = ContratoTableCompanion.insert();
+
+    try {
+      // await bancoDados.clienteDao.insert(clienteTableCompanion);
+      clearForm();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }
 
 final formularioContratoProvider =
     StateNotifierProvider<FormularioContratoNotifier, FormularioContratoState>(
-  (ref) => FormularioContratoNotifier(),
+  (ref) {
+    final banco = ref.watch(bancoDadosProvider);
+    return FormularioContratoNotifier(banco);
+  },
 );

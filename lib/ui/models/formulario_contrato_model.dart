@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho3/data/enums/tipo_intervalo.dart';
-import 'package:trabalho3/data/models/imovel.dart';
-import 'package:trabalho3/data/models/cliente.dart';
 
 class FormularioContratoModel with ChangeNotifier {
   final TextEditingController dataInicioController = TextEditingController();
@@ -28,7 +26,8 @@ class FormularioContratoModel with ChangeNotifier {
     );
 
     if (pickedDate != null) {
-      dataInicioController.text = '${pickedDate.day}-${pickedDate.month}-${pickedDate.year}';
+      dataInicioController.text =
+          '${pickedDate.day}-${pickedDate.month}-${pickedDate.year}';
       notifyListeners();
     }
   }
@@ -42,7 +41,8 @@ class FormularioContratoModel with ChangeNotifier {
     );
 
     if (pickedDate != null) {
-      dataFimController.text = '${pickedDate.day}-${pickedDate.month}-${pickedDate.year}';
+      dataFimController.text =
+          '${pickedDate.day}-${pickedDate.month}-${pickedDate.year}';
       notifyListeners();
     }
   }
