@@ -58,7 +58,7 @@ class ContratosScreen extends ConsumerWidget {
                     },
                   );
                 },
-                error: (error, stackTrace) {},
+                error: (error, stackTrace) { return Text('Erro: $error'); },
                 loading: () => CircularProgressIndicator()),
           ),
         ]),
