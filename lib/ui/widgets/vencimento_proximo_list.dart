@@ -56,31 +56,6 @@ class VencimentoProximoList extends ConsumerWidget {
             );
           },
           loading: () => const CircularProgressIndicator()),
-
-      // VencimentoProximoCard(
-      //   nomeImovel: 'Casa do João',
-      //   nomeInquelino: 'João',
-      //   valorContrato: 1000,
-      //   tipoIntervalo: TipoIntervalo.mensal,
-      //   dataVencimento: DateTime.now(),
-      //   funcao: () => {},
-      // ),
-      // VencimentoProximoCard(
-      //   nomeImovel: 'Casa do Pedro',
-      //   nomeInquelino: 'Pedro',
-      //   valorContrato: 2000,
-      //   tipoIntervalo: TipoIntervalo.mensal,
-      //   dataVencimento: DateTime.now(),
-      //   funcao: () => {},
-      // ),
-      // VencimentoProximoCard(
-      //   nomeImovel: 'Casa do José',
-      //   nomeInquelino: 'José',
-      //   valorContrato: 3000,
-      //   tipoIntervalo: TipoIntervalo.mensal,
-      //   dataVencimento: DateTime.now(),
-      //   funcao: () => {},
-      // ),
     );
   }
 }
