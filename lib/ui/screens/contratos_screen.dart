@@ -15,6 +15,8 @@ class ContratosScreen extends ConsumerWidget {
     final contratosAsyncValue = ref.watch(contratosProvider);
     final contratosNotifier = ref.watch(contratosProvider.notifier);
 
+    final contratoNotifier = ref.read(contratoProvider.notifier);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (contratosAsyncValue is AsyncLoading) {
         contratosNotifier.carregarListaContratos();
@@ -33,33 +35,39 @@ class ContratosScreen extends ConsumerWidget {
           Expanded(
             child: contratosAsyncValue.when(
                 data: (data) {
+                  if (data.isEmpty) {
+                    return const Center(
+                        child: Text('Sem contratos ativos no momento'));
+                  }
+
                   return ListView.builder(
+                    itemCount: data.length,
                     itemBuilder: (context, index) {
+                      final item = data[index];
+
                       return ContratoItemCard(
-                        parcelas: '10',
-                        nome: 'Apartamento em Camocim',
-                        tipoIntervalo: TipoIntervalo.anual,
-                        dataInicio: DateTime(2023),
-                        dataVencimento: DateTime(2024, 12, 31),
+                        parcelas: item.contrato.pagamentos.length.toString(),
+                        nome: item.imovel.nome,
+                        tipoIntervalo: item.contrato.intervaloPagamento,
+                        dataInicio: item.contrato.dataInicio,
+                        dataVencimento: item.contrato.dataFim,
                         funcao: () {
+                          contratoNotifier.selecionar(item.contrato);
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ContratoScreen(
-                                      dataInicio: DateTime(2024, 1, 1),
-                                      dataFim: DateTime(2024, 12, 31),
-                                      intervaloPagamento: TipoIntervalo.anual,
-                                      diaPagamento: 02,
-                                      mesPagamento: null,
-                                    )),
+                                builder: (context) => ContratoScreen()),
                           );
                         },
                       );
                     },
                   );
                 },
-                error: (error, stackTrace) { return Text('Erro: $error'); },
-                loading: () => CircularProgressIndicator()),
+                error: (error, stackTrace) {
+                  return Text('Erro: $error');
+                },
+                loading: () => const CircularProgressIndicator()),
           ),
         ]),
       ),

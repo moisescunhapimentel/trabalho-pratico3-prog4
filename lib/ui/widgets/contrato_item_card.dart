@@ -39,7 +39,7 @@ class ContratoItemCard extends StatelessWidget {
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        Text('$parcelas parcelas'),
+                        Text('$parcelas parcelas pagas'),
                         const SizedBox(width: 4),
                         const Text('|'),
                         const SizedBox(width: 4),
