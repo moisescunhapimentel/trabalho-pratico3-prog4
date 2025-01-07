@@ -91,7 +91,8 @@ class GraficoCard extends ConsumerWidget {
                                 x: e,
                                 barRods: [
                                   BarChartRodData(
-                                      toY: groupedData[e]!, color: Colors.blue),
+                                      toY: groupedData[e]!,
+                                      color: Colors.green),
                                 ],
                               );
                             },

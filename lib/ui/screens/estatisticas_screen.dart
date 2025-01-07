@@ -13,7 +13,7 @@ class _EstatisticasScreenState extends State<EstatisticasScreen> {
   Widget build(BuildContext context) {
     var larguraScreen = MediaQuery.of(context).size.width;
 
-    return Scaffold(
+    return const Scaffold(
       body: Column(
         children: [
           GraficoCard(),

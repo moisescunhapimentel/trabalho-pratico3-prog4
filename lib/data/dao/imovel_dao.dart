@@ -30,6 +30,10 @@ class ImovelDao extends DatabaseAccessor<BancoDados> with _$ImovelDaoMixin {
     return await into(imovelTable).insert(imovelTableCompanion);
   }
 
+  Future<List<ImovelTableData>> obterTodosMoveis() async {
+    return await (select(imovelTable)).get();
+  }
+
   Future<Imovel> obterImoveisComRelacionamentoPeloId(int imovelId) async {
     final imovel = await obterImovelPeloId(imovelId);
 
